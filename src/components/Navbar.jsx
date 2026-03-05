@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { PRODUCTS } from "../data/constants";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useProducts } from "../hooks/useProducts";
 
 /* ── highlight matched substring ── */
 function Highlight({ text, query }) {
@@ -31,6 +31,8 @@ export default function Navbar({
   const inputRef = useRef(null);
   const wrapperRef = useRef(null);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { products } = useProducts();
 
   const NAV_LINKS = [
     { label: "New Arrivals", to: "/" },
@@ -42,12 +44,14 @@ export default function Navbar({
   /* ── Filter suggestions from PRODUCTS ── */
   const q = query.trim().toLowerCase();
   const suggestions = q
-    ? PRODUCTS.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.variant.toLowerCase().includes(q),
-      ).slice(0, 6)
+    ? products
+        .filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            p.category.toLowerCase().includes(q) ||
+            p.variant.toLowerCase().includes(q),
+        )
+        .slice(0, 6)
     : [];
 
   const showDropdown = expanded && focused && query.trim().length > 0;
@@ -84,9 +88,9 @@ export default function Navbar({
   };
 
   const selectSuggestion = (product) => {
-    setQuery(product.name);
+    setQuery("");
     setFocused(false);
-    onSearch?.(product.name);
+    navigate(`/product/${product.id}`);
   };
 
   const handleKeyDown = (e) => {
@@ -318,6 +322,18 @@ export default function Navbar({
               </div>
             )}
           </div>
+
+          {/* Account button */}
+          <Link
+            to="/login"
+            className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
+            aria-label="Account"
+          >
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </Link>
 
           {/* Cart button */}
           <button

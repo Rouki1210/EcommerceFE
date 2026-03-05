@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
-import { PRODUCTS } from "../data/constants";
+import { useProducts } from "../hooks/useProducts";
 
 function Accordion({ title, children }) {
     const [open, setOpen] = useState(false);
@@ -35,8 +35,9 @@ export default function ProductPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useOutletContext();
+    const { products } = useProducts();
 
-    const product = PRODUCTS.find((p) => p.id === Number(id));
+    const product = products.find((p) => p.id === Number(id));
     const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
     const [added, setAdded] = useState(false);
 

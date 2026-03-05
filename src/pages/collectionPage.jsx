@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { PRODUCTS } from "../data/constants";
 import ProductCard from "../components/ProductCard";
+import { useProducts } from "../hooks/useProducts";
 
 export default function CollectionPage({ gender, title, subtitle }) {
   const { addToCart, openProductModal } = useOutletContext();
+  const { products } = useProducts();
 
-  const baseProducts = PRODUCTS.filter(
+  const baseProducts = products.filter(
     (p) => p.gender === gender || p.gender === "unisex",
   );
 

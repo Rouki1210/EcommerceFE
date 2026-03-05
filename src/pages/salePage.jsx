@@ -1,10 +1,11 @@
 import { useOutletContext } from "react-router-dom";
-import { PRODUCTS } from "../data/constants";
 import ProductCard from "../components/ProductCard";
+import { useProducts } from "../hooks/useProducts";
 
 export default function SalePage() {
   const { addToCart, openProductModal } = useOutletContext();
-  const saleProducts = PRODUCTS.filter((p) => p.originalPrice !== undefined);
+  const { products } = useProducts();
+  const saleProducts = products.filter((p) => p.originalPrice !== undefined);
 
   const maxDiscount = saleProducts.reduce((max, p) => {
     const pct = Math.round(

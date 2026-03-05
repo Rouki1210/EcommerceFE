@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { CATEGORIES, PRODUCTS } from "../data/constants";
+import { CATEGORIES } from "../data/constants";
 import ProductCard from "./ProductCard";
+import { useProducts } from "../hooks/useProducts";
 
 function ProductGrid({ onAddToCart, onViewDetail }) {
+  const { products } = useProducts();
   const [activeCategory, setActiveCategory] = useState("All");
 
   const filtered =
     activeCategory === "All"
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === activeCategory);
+      ? products
+      : products.filter((p) => p.category === activeCategory);
 
   return (
     <section id="products" className="max-w-6xl mx-auto px-6 py-16">
