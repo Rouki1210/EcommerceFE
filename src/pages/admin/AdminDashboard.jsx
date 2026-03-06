@@ -1,8 +1,13 @@
 function AdminDashboard() {
     return (
         <div>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome admin</p>
+            <h2>Dashboard</h2>
+
+            <p>Total Sales: $12,000</p>
+
+            <p>Total Orders: 230</p>
+
+            <p>Total Users: 120</p>
         </div>
     );
 }

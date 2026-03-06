@@ -1,9 +1,11 @@
-function AdminProducts() {
+function AdminOrders() {
     return (
         <div>
-            <h1>Manage Products</h1>
+            <h2>Orders</h2>
+
+            <p>Order management coming soon...</p>
         </div>
     );
 }
 
-export default AdminProducts;
+export default AdminOrders;
