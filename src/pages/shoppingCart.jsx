@@ -86,6 +86,7 @@ function OrderSummary({
   promoCode,
   setPromoCode,
   onApplyPromo,
+  onCheckout,
 }) {
   return (
     <div className="bg-white rounded-3xl shadow-sm p-6 sticky top-6">
@@ -144,8 +145,11 @@ function OrderSummary({
         </span>
       </div>
 
-      <button className="w-full bg-[#2c2c2c] text-white rounded-2xl py-4 text-sm tracking-widest uppercase hover:bg-[#111] hover:tracking-[0.12em] transition-all">
-        Proceed to Checkout →
+      <button
+        onClick={onCheckout}
+        className="w-full bg-[#2c2c2c] text-white rounded-2xl py-4 text-sm tracking-widest uppercase hover:bg-[#111] hover:tracking-[0.12em] transition-all"
+      >
+        Proceed to Delivery →
       </button>
 
       <p className="text-center text-xs text-[#bbb] mt-4 tracking-wide">
@@ -169,10 +173,9 @@ function OrderSummary({
 function SuggestedProducts({ cartIds, onAddToCart }) {
   const [addedIds, setAddedIds] = useState([]);
   const { products } = useProducts();
-  const suggestions = products.filter((p) => !cartIds.includes(p.id)).slice(
-    0,
-    3,
-  );
+  const suggestions = products
+    .filter((p) => !cartIds.includes(p.id))
+    .slice(0, 3);
   if (!suggestions.length) return null;
 
   const handleAdd = (p) => {
@@ -279,6 +282,12 @@ export default function ShoppingCart() {
 
   const applyPromo = () => {
     if (promoCode.toUpperCase() === "SAVE10") setPromoApplied(true);
+  };
+
+  const handleCheckout = () => {
+    navigate("/checkout", {
+      state: { cart, subtotal, discount, shipping, total, promoApplied },
+    });
   };
 
   // Recompute live from current cart (in case user edits after arriving)
@@ -395,6 +404,7 @@ export default function ShoppingCart() {
               promoCode={promoCode}
               setPromoCode={setPromoCode}
               onApplyPromo={applyPromo}
+              onCheckout={handleCheckout}
             />
           </div>
         </div>
