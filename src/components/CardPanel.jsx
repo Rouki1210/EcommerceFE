@@ -120,12 +120,12 @@ const handleCheckout = () => {
                     ) : (
                         <div className="bg-white rounded-3xl overflow-hidden">
                             {cart.map((item, i) => (
-                                <div key={item.id}>
+                                <div key={item.cartItemId}>
                                     <CartItem
                                         item={item}
                                         onUpdateQty={onUpdateQty}
                                         onRemove={handleRemove}
-                                        isRemoving={removingId === item.id}
+                                        isRemoving={removingId === item.cartItemId}
                                     />
                                     {i < cart.length - 1 && <div className="mx-4 h-px bg-[#f2f2f2]" />}
                                 </div>

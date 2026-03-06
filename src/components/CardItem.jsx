@@ -21,7 +21,7 @@ function CartItem({ item, onUpdateQty, onRemove, isRemoving }) {
                         <p className="text-xs text-[#aaa]">{item.variant}</p>
                     </div>
                     <button
-                        onClick={() => onRemove(item.id)}
+                        onClick={() => onRemove(item.cartItemId)}
                         className="text-[#ccc] text-lg hover:text-[#c0392b] transition-colors leading-none ml-2"
                     >
                         ×
@@ -32,14 +32,14 @@ function CartItem({ item, onUpdateQty, onRemove, isRemoving }) {
                     {/* Qty stepper */}
                     <div className="flex items-center gap-2 border border-[#e8e8e8] rounded-full px-2 py-0.5">
                         <button
-                            onClick={() => onUpdateQty(item.id, -1)}
+                            onClick={() => onUpdateQty(item.cartItemId, -1)}
                             className="w-5 h-5 rounded-full flex items-center justify-center text-sm text-[#555] hover:bg-[#2c2c2c] hover:text-white transition-all"
                         >
                             −
                         </button>
                         <span className="text-xs w-4 text-center">{item.qty}</span>
                         <button
-                            onClick={() => onUpdateQty(item.id, 1)}
+                            onClick={() => onUpdateQty(item.cartItemId, 1)}
                             className="w-5 h-5 rounded-full flex items-center justify-center text-sm text-[#555] hover:bg-[#2c2c2c] hover:text-white transition-all"
                         >
                             +
