@@ -269,7 +269,6 @@ export default function ShoppingCart() {
   };
 
   const addSuggested = (product) => {
-    const cartItemId = `${product.id}__`;
     setCart((prev) => {
       const existing = prev.find((i) => i.cartItemId === cartItemId);
       if (existing)
