@@ -4,12 +4,32 @@ import { useNavigate } from "react-router-dom";
 function ProductCard({ product, onAddToCart }) {
   const [added, setAdded] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [showSizes, setShowSizes] = useState(false);
   const navigate = useNavigate();
 
-  const handleAdd = (e) => {
+  const needsSizeSelection = product.sizes && product.sizes.length >= 2;
+
+  const handleQuickAdd = (e) => {
     e.stopPropagation();
-    onAddToCart(product);
+    if (needsSizeSelection) {
+      setShowSizes(true);
+    } else {
+      onAddToCart({ ...product, selectedSize: product.sizes?.[0] ?? null });
+      setAdded(true);
+      setTimeout(() => setAdded(false), 1800);
+    }
+  };
+
+  const handleSelectSize = (e, size) => {
+    e.stopPropagation();
+    const colorPart = product.variant?.split(" / ")[0] ?? product.name;
+    onAddToCart({
+      ...product,
+      variant: `${colorPart} / ${size}`,
+      selectedSize: size,
+    });
     setAdded(true);
+    setShowSizes(false);
     setTimeout(() => setAdded(false), 1800);
   };
 
@@ -26,7 +46,10 @@ function ProductCard({ product, onAddToCart }) {
         transform: hovered ? "translateY(-4px)" : "none",
       }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setShowSizes(false);
+      }}
       onClick={goToDetail}
     >
       {/* Badge */}
@@ -53,39 +76,106 @@ function ProductCard({ product, onAddToCart }) {
           }}
         />
 
-        {/* Hover overlay — two action buttons */}
+        {/* Hover overlay */}
         <div
-          className="absolute inset-x-0 bottom-0 p-3 flex gap-2"
+          className="absolute inset-x-0 bottom-0 p-3"
           style={{
             opacity: hovered ? 1 : 0,
             transform: hovered ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.3s ease, transform 0.3s ease",
           }}
         >
-          {/* View Details */}
-          <button
-            onClick={(e) => { e.stopPropagation(); goToDetail(); }}
-            className="flex-1 py-2.5 rounded-xl text-xs tracking-widest uppercase font-medium transition-all"
-            style={{
-              background: "rgba(245,240,235,0.92)",
-              color: "#2c2c2c",
-              backdropFilter: "blur(4px)",
-            }}
-          >
-            Details
-          </button>
+          {/* Size picker */}
+          {showSizes && !added ? (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "rgba(245,240,235,0.96)",
+                backdropFilter: "blur(4px)",
+                borderRadius: "14px",
+                padding: "8px 10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "1.5px",
+                  textTransform: "uppercase",
+                  color: "#9a8c7e",
+                  marginBottom: "7px",
+                  textAlign: "center",
+                }}
+              >
+                Select Size
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "5px",
+                  justifyContent: "center",
+                }}
+              >
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={(e) => handleSelectSize(e, size)}
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: "20px",
+                      fontSize: "10px",
+                      fontWeight: 500,
+                      border: "1px solid #2c2c2c",
+                      background: "transparent",
+                      color: "#2c2c2c",
+                      cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#2c2c2c";
+                      e.currentTarget.style.color = "#fff";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "#2c2c2c";
+                    }}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              {/* View Details */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToDetail();
+                }}
+                className="flex-1 py-2.5 rounded-xl text-xs tracking-widest uppercase font-medium transition-all"
+                style={{
+                  background: "rgba(245,240,235,0.92)",
+                  color: "#2c2c2c",
+                  backdropFilter: "blur(4px)",
+                }}
+              >
+                Details
+              </button>
 
-          {/* Quick Add */}
-          <button
-            onClick={handleAdd}
-            className="flex-1 py-2.5 rounded-xl text-xs tracking-widest uppercase font-medium transition-all"
-            style={{
-              background: added ? "#3a7a4a" : "#2c2c2c",
-              color: "#fff",
-            }}
-          >
-            {added ? "Added ✓" : "Quick Add"}
-          </button>
+              {/* Quick Add */}
+              <button
+                onClick={handleQuickAdd}
+                className="flex-1 py-2.5 rounded-xl text-xs tracking-widest uppercase font-medium transition-all"
+                style={{
+                  background: added ? "#3a7a4a" : "#2c2c2c",
+                  color: "#fff",
+                }}
+              >
+                {added ? "Added ✓" : "Quick Add"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
