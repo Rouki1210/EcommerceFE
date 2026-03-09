@@ -1,17 +1,22 @@
+import { useNavigate, useLocation } from "react-router-dom";
+
 const navItems = [
-    { label: "Dashboard", icon: "⬡" },
-    { label: "Products", icon: "◈" },
-    { label: "Orders", icon: "◎", badge: 5 },
-    { label: "Users", icon: "◉" },
-    { label: "Analytics", icon: "◇" },
-    { label: "Settings", icon: "⚙" },
+    { label: "Dashboard", icon: "⬡", path: "/admin/dashboard" },
+    { label: "Products",  icon: "◈", path: "/admin/products" },
+    { label: "Orders",    icon: "◎", path: "/admin/orders", badge: 5 },
+    { label: "Users",     icon: "◉", path: "/admin/users" },
+    { label: "Analytics", icon: "◇", path: "/admin/analytics" },
+    { label: "Settings",  icon: "⚙", path: "/admin/settings" },
 ];
 
-export default function Sidebar({ activeNav, setActiveNav }) {
+export default function Sidebar() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const activeNav = navItems.find(i => location.pathname.startsWith(i.path))?.label || "Dashboard";
     return (
         <aside style={{
             width: 240, minHeight: "100vh",
-            background: "rgba(10,10,18,0.9)",
+            background: "#1a1a2e",
             borderRight: "1px solid rgba(255,255,255,0.06)",
             display: "flex", flexDirection: "column",
             position: "relative", zIndex: 10,
@@ -45,7 +50,7 @@ export default function Sidebar({ activeNav, setActiveNav }) {
                     <div
                         key={item.label}
                         className="nav-item"
-                        onClick={() => setActiveNav(item.label)}
+                        onClick={() => navigate(item.path)}
                         style={{
                             display: "flex", alignItems: "center", gap: 12,
                             padding: "11px 14px", borderRadius: 10, marginBottom: 4,

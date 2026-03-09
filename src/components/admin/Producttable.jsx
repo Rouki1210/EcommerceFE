@@ -1,14 +1,14 @@
 export default function ProductTable({ products = [], onEdit, onDelete }) {
     return (
         <div style={{
-            background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
             borderRadius: 16, overflow: "hidden",
         }}>
             {/* Header */}
             <div style={{
                 display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-                padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                background: "rgba(255,255,255,0.02)",
+                padding: "16px 24px", borderBottom: "1px solid rgba(0,0,0,0.05)",
+                background: "#f8fafc",
             }}>
                 {["Product", "Category", "Price", "Stock", "Actions"].map(h => (
                     <div key={h} style={{ color: "#334155", fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>{h}</div>
@@ -18,7 +18,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
             {products.map((prod, i) => (
                 <div key={prod.id} className="order-row" style={{
                     display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-                    padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.03)",
+                    padding: "14px 24px", borderBottom: "1px solid rgba(0,0,0,0.04)",
                     transition: "background 0.2s ease",
                     animation: `fadeSlideUp 0.4s ease ${i * 0.07}s both`,
                 }}>
@@ -32,7 +32,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
                                 <img src={prod.image} alt={prod.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             )}
                         </div>
-                        <span style={{ color: "#e2e8f0", fontSize: 13, fontWeight: 600 }}>{prod.name}</span>
+                        <span style={{ color: "#1e293b", fontSize: 13, fontWeight: 600 }}>{prod.name}</span>
                     </div>
                     <div style={{ color: "#64748b", fontSize: 12, display: "flex", alignItems: "center" }}>{prod.category}</div>
                     <div style={{ color: "#eab308", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center" }}>

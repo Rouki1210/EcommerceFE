@@ -3,19 +3,19 @@ export default function Header({ title, subtitle }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
             <div>
                 {subtitle && (
-                    <div style={{ color: "#475569", fontSize: 11, letterSpacing: 3, marginBottom: 6 }}>
+                    <div style={{ color: "#94a3b8", fontSize: 11, letterSpacing: 3, marginBottom: 6 }}>
                         {subtitle.toUpperCase()}
                     </div>
                 )}
                 <h1 style={{
-                    fontFamily: "Syne, sans-serif", color: "#f1f5f9",
+                    fontFamily: "Syne, sans-serif", color: "#0f172a",
                     fontSize: 28, fontWeight: 800, letterSpacing: -0.5,
                 }}>{title}</h1>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{
-                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)",
                     borderRadius: 10, padding: "9px 16px", display: "flex", alignItems: "center", gap: 8,
                     color: "#64748b", fontSize: 12, cursor: "pointer",
                 }}>

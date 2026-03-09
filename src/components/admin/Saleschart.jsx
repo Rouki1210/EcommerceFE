@@ -35,14 +35,14 @@ const CustomTooltip = ({ active, payload, label }) => {
 export function AreaSalesChart() {
     return (
         <div style={{
-            background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
             borderRadius: 16, padding: "24px 20px",
             animation: "fadeSlideUp 0.6s ease 0.45s both",
         }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
                 <div>
-                    <div style={{ color: "#475569", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>PERFORMANCE</div>
-                    <h3 style={{ fontFamily: "Syne, sans-serif", color: "#f1f5f9", fontSize: 16, fontWeight: 700 }}>Sales & Profit</h3>
+                    <div style={{ color: "#94a3b8", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>PERFORMANCE</div>
+                    <h3 style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 16, fontWeight: 700 }}>Sales & Profit</h3>
                 </div>
                 <div style={{ display: "flex", gap: 16 }}>
                     {[{ label: "Sales", color: "#eab308" }, { label: "Profit", color: "#60a5fa" }].map(l => (
@@ -80,13 +80,13 @@ export function AreaSalesChart() {
 export function BarOrdersChart() {
     return (
         <div style={{
-            background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
             borderRadius: 16, padding: "24px 20px",
             animation: "fadeSlideUp 0.6s ease 0.5s both",
         }}>
             <div style={{ marginBottom: 24 }}>
-                <div style={{ color: "#475569", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>MONTHLY</div>
-                <h3 style={{ fontFamily: "Syne, sans-serif", color: "#f1f5f9", fontSize: 16, fontWeight: 700 }}>Orders Volume</h3>
+                <div style={{ color: "#94a3b8", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>MONTHLY</div>
+                <h3 style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 16, fontWeight: 700 }}>Orders Volume</h3>
             </div>
             <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={salesData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }} barSize={16}>

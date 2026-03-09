@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
-export default function AdminLayout({ children, activeNav, setActiveNav }) {
+export default function AdminLayout() {
     const [mounted, setMounted] = useState(false);
+
+    const [activeNav, setActiveNav] = useState("Dashboard");
 
     useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
 
     return (
         <div style={{
             display: "flex", height: "100vh", width: "100%",
-            background: "#080810", overflow: "hidden", position: "relative",
+            background: "#f4f6fb", overflow: "hidden", position: "relative",
             fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
         }}>
             {/* Ambient blobs */}
@@ -31,7 +34,7 @@ export default function AdminLayout({ children, activeNav, setActiveNav }) {
                 position: "relative", zIndex: 1,
                 opacity: mounted ? 1 : 0, transition: "opacity 0.3s ease",
             }}>
-                {children}
+                <Outlet />
             </main>
         </div>
     );

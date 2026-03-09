@@ -16,14 +16,14 @@ const statusColors = {
 export default function Recentorders() {
     return (
         <div style={{
-            background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
             borderRadius: 16, padding: "24px",
             animation: "fadeSlideUp 0.6s ease 0.55s both",
         }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
                 <div>
                     <div style={{ color: "#475569", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>LATEST</div>
-                    <h3 style={{ fontFamily: "Syne, sans-serif", color: "#f1f5f9", fontSize: 16, fontWeight: 700 }}>Recent Orders</h3>
+                    <h3 style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 16, fontWeight: 700 }}>Recent Orders</h3>
                 </div>
                 <button style={{
                     background: "rgba(234,179,8,0.08)", border: "1px solid rgba(234,179,8,0.2)",
@@ -35,7 +35,7 @@ export default function Recentorders() {
             {/* Header */}
             <div style={{
                 display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr",
-                padding: "0 8px 10px", borderBottom: "1px solid rgba(255,255,255,0.05)",
+                padding: "0 8px 10px", borderBottom: "1px solid rgba(0,0,0,0.05)",
             }}>
                 {["Customer", "Product", "Amount", "Status"].map(h => (
                     <div key={h} style={{ color: "#334155", fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>{h}</div>
@@ -45,7 +45,7 @@ export default function Recentorders() {
             {recentOrders.map((order, i) => (
                 <div key={i} className="order-row" style={{
                     display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr",
-                    padding: "12px 8px", borderBottom: "1px solid rgba(255,255,255,0.03)",
+                    padding: "12px 8px", borderBottom: "1px solid rgba(0,0,0,0.04)",
                     cursor: "pointer", borderRadius: 8, transition: "background 0.2s ease",
                     animation: `fadeSlideUp 0.4s ease ${0.6 + i * 0.07}s both`,
                 }}>
@@ -58,12 +58,12 @@ export default function Recentorders() {
                             color: "#eab308", fontSize: 11, fontWeight: 700,
                         }}>{order.avatar}</div>
                         <div>
-                            <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>{order.customer}</div>
+                            <div style={{ color: "#1e293b", fontSize: 12, fontWeight: 600 }}>{order.customer}</div>
                             <div style={{ color: "#475569", fontSize: 10 }}>{order.id}</div>
                         </div>
                     </div>
                     <div style={{ color: "#64748b", fontSize: 12, display: "flex", alignItems: "center" }}>{order.product}</div>
-                    <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center" }}>{order.amount}</div>
+                    <div style={{ color: "#1e293b", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center" }}>{order.amount}</div>
                     <div style={{ display: "flex", alignItems: "center" }}>
             <span style={{
                 fontSize: 10, fontWeight: 600, padding: "3px 10px", borderRadius: 20,

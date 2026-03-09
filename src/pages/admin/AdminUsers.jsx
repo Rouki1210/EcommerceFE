@@ -28,7 +28,7 @@ export default function AdminUsers() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
                 <Header title="Users" subtitle="Management" />
                 <div style={{
-                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)",
                     borderRadius: 10, padding: "9px 16px", display: "flex", alignItems: "center", gap: 8,
                 }}>
                     <span style={{ color: "#475569", fontSize: 13 }}>🔍</span>
@@ -37,21 +37,21 @@ export default function AdminUsers() {
                         placeholder="Search users..."
                         style={{
                             background: "transparent", border: "none", outline: "none",
-                            color: "#e2e8f0", fontSize: 12, width: 160,
+                            color: "#1e293b", fontSize: 12, width: 160,
                         }}
                     />
                 </div>
             </div>
 
             <div style={{
-                background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+                background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
                 borderRadius: 16, overflow: "hidden",
             }}>
                 {/* Table Header */}
                 <div style={{
                     display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr 1fr",
-                    padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    background: "rgba(255,255,255,0.02)",
+                    padding: "16px 24px", borderBottom: "1px solid rgba(0,0,0,0.05)",
+                    background: "#f8fafc",
                 }}>
                     {["User", "Email", "Role", "Orders", "Spent", "Status"].map(h => (
                         <div key={h} style={{ color: "#334155", fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>{h}</div>
@@ -61,7 +61,7 @@ export default function AdminUsers() {
                 {filtered.map((user, i) => (
                     <div key={user.id} className="order-row" style={{
                         display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr 1fr 1fr",
-                        padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.03)",
+                        padding: "14px 24px", borderBottom: "1px solid rgba(0,0,0,0.04)",
                         transition: "background 0.2s ease",
                         animation: `fadeSlideUp 0.4s ease ${i * 0.07}s both`,
                     }}>
@@ -74,7 +74,7 @@ export default function AdminUsers() {
                                 color: "#eab308", fontSize: 12, fontWeight: 700,
                             }}>{user.avatar}</div>
                             <div>
-                                <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>{user.name}</div>
+                                <div style={{ color: "#1e293b", fontSize: 12, fontWeight: 600 }}>{user.name}</div>
                                 <div style={{ color: "#475569", fontSize: 10 }}>Joined {user.joined}</div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@ export default function AdminUsers() {
                   background: roleColors[user.role].bg, color: roleColors[user.role].text,
               }}>{user.role}</span>
                         </div>
-                        <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center" }}>{user.orders}</div>
+                        <div style={{ color: "#1e293b", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center" }}>{user.orders}</div>
                         <div style={{ color: "#eab308", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center" }}>{user.spent}</div>
                         <div style={{ display: "flex", alignItems: "center" }}>
               <span style={{

@@ -8,19 +8,19 @@ const topProducts = [
 export default function Topproducts() {
     return (
         <div style={{
-            background: "rgba(15,15,25,0.8)", border: "1px solid rgba(255,255,255,0.07)",
+            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
             borderRadius: 16, padding: "24px",
             animation: "fadeSlideUp 0.6s ease 0.6s both",
         }}>
             <div style={{ marginBottom: 20 }}>
                 <div style={{ color: "#475569", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>RANKING</div>
-                <h3 style={{ fontFamily: "Syne, sans-serif", color: "#f1f5f9", fontSize: 16, fontWeight: 700 }}>Top Products</h3>
+                <h3 style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 16, fontWeight: 700 }}>Top Products</h3>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {topProducts.map((prod, i) => (
                     <div key={i} style={{
-                        background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)",
+                        background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)",
                         borderRadius: 12, padding: "14px 16px",
                         animation: `fadeSlideUp 0.4s ease ${0.65 + i * 0.08}s both`,
                     }}>
@@ -33,7 +33,7 @@ export default function Topproducts() {
                                     display: "flex", alignItems: "center", justifyContent: "center",
                                     color: "#eab308", fontSize: 10, fontWeight: 800,
                                 }}>#{i + 1}</div>
-                                <span style={{ color: "#e2e8f0", fontSize: 13, fontWeight: 600 }}>{prod.name}</span>
+                                <span style={{ color: "#1e293b", fontSize: 13, fontWeight: 600 }}>{prod.name}</span>
                             </div>
                             <span style={{ fontSize: 10, fontWeight: 700, color: prod.trend > 0 ? "#34d399" : "#f87171" }}>
                 {prod.trend > 0 ? "↑" : "↓"} {Math.abs(prod.trend)}%
