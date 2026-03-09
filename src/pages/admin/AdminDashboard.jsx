@@ -1,4 +1,4 @@
-import StatsCard from "../../components/admin/StatsCard";
+/*import StatsCard from "../../components/admin/StatsCard";
 import {
     LineChart,
     Line,
@@ -44,4 +44,5 @@ export default function Dashboard() {
 
         </div>
     );
-}
+}*/
+

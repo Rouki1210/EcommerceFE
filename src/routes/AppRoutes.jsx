@@ -10,11 +10,11 @@ import RegisterPage from "../pages/registerPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
-import AdminLayout from "../components/admin/AdminLayout.jsx";
-import AdminDashboard from "../pages/admin/AdminDashboard";
-import AdminProducts from "../pages/admin/AdminProducts";
-import AdminOrders from "../pages/admin/AdminOrders";
-// import AdminUsers from "../pages/admin/AdminUsers";
+//import AdminLayout from "../components/admin/AdminLayout.jsx";
+//import AdminDashboard from "../pages/admin/AdminDashboard";
+//import AdminProducts from "../pages/admin/AdminProducts";
+//import AdminOrders from "../pages/admin/AdminOrders";
+//import AdminUsers from "../pages/admin/AdminUsers";
 
 function AppRoutes() {
   return (
@@ -51,7 +51,7 @@ function AppRoutes() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
+          {/*<Route path="/admin" element={<AdminLayout />}>
 
               <Route path="dashboard" element={<AdminDashboard />} />
 
@@ -61,7 +61,7 @@ function AppRoutes() {
 
 
 
-          </Route>
+          </Route>*/}
       </Routes>
     </BrowserRouter>
   );
