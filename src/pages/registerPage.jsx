@@ -172,12 +172,24 @@ export default function RegisterPage() {
           onSubmit={(e) => e.preventDefault()}
           style={{ display: "flex", flexDirection: "column", gap: "18px" }}
         >
-          {/* Full name */}
+          {/* First name */}
           <div>
-            <label style={labelStyle}>Full Name</label>
+            <label style={labelStyle}>First Name</label>
             <input
               type="text"
-              placeholder="Your full name"
+              placeholder="Your first name"
+              style={inputStyle}
+              onFocus={(e) => (e.target.style.borderColor = "#c8a96e")}
+              onBlur={(e) => (e.target.style.borderColor = "#e8e2db")}
+            />
+          </div>
+
+          {/* Last name */}
+          <div>
+            <label style={labelStyle}>Last Name</label>
+            <input
+              type="text"
+              placeholder="Your last name"
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = "#c8a96e")}
               onBlur={(e) => (e.target.style.borderColor = "#e8e2db")}
@@ -199,13 +211,13 @@ export default function RegisterPage() {
           {/* Password */}
           <div>
             <label style={labelStyle}>Password</label>
-            <PasswordInput placeholder="Min. 8 characters" />
+            <PasswordInput placeholder="Min 8 characters" />
           </div>
 
           {/* Confirm password */}
           <div>
             <label style={labelStyle}>Confirm Password</label>
-            <PasswordInput placeholder="Repeat your password" />
+            <PasswordInput placeholder="Confirm your password" />
           </div>
 
           {/* Terms */}
