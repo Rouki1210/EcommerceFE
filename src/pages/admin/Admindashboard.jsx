@@ -1,36 +1,48 @@
-import StatsCard from "../../components/admin/StatsCard";
-import { AreaSalesChart, BarOrdersChart } from "../../components/admin/Saleschart";
-import Recentorders from "../../components/admin/Recentorders";
-import Topproducts from "../../components/admin/Topproducts";
-import Header from "../../components/admin/Header";
+/*import StatsCard from "../../components/admin/StatsCard";
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip
+} from "recharts";
 
-const stats = [
-    { title: "Total Revenue", value: "$12,300", change: "+18.2%", up: true,  icon: "💰", sub: "vs last month", delay: 0.15 },
-    { title: "Total Orders",  value: "230",     change: "+7.4%",  up: true,  icon: "📦", sub: "vs last month", delay: 0.25 },
-    { title: "Active Users",  value: "1,200",   change: "-2.1%",  up: false, icon: "👤", sub: "vs last month", delay: 0.35 },
+const data = [
+    { month: "Jan", sales: 400 },
+    { month: "Feb", sales: 900 },
+    { month: "Mar", sales: 1200 },
+    { month: "Apr", sales: 2000 }
 ];
 
-export default function Admindashboard() {
+export default function Dashboard() {
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-            <Header title="Admin Dashboard" subtitle="Overview" />
+        <div className="space-y-6">
 
-            {/* Stats */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
-                {stats.map((s, i) => <StatsCard key={i} {...s} />)}
+            <div className="grid grid-cols-3 gap-6">
+
+                <StatsCard title="Revenue" value="$12,300" />
+                <StatsCard title="Orders" value="230" />
+                <StatsCard title="Users" value="1,200" />
+
             </div>
 
-            {/* Charts */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 20 }}>
-                <AreaSalesChart />
-                <BarOrdersChart />
+            <div className="bg-white p-6 rounded shadow">
+
+                <h2 className="mb-4 font-bold">
+                    Sales
+                </h2>
+
+                <LineChart width={600} height={300} data={data}>
+                    <XAxis dataKey="month"/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Line dataKey="sales"/>
+                </LineChart>
+
             </div>
 
-            {/* Bottom */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 20 }}>
-                <Recentorders />
-                <Topproducts />
-            </div>
         </div>
     );
-}
+}*/
+
