@@ -4,43 +4,52 @@ import ProductModal from "../../components/admin/ProductModal";
 
 const mockProducts = [
     {
-        id: 1,
-        name: "Nike Air",
-        price: 120,
-        stock: 10,
-        image: "https://via.placeholder.com/50",
-    },
-    {
-        id: 2,
-        name: "Adidas Boost",
-        price: 150,
-        stock: 8,
-        image: "https://via.placeholder.com/50",
-    },
+        id:1,
+        name:"Nike Air",
+        price:120,
+        stock:10,
+        image:"https://via.placeholder.com/100"
+    }
 ];
 
-function AdminProducts() {
-    const [products] = useState(mockProducts);
+export default function Products(){
 
-    const [editing, setEditing] = useState(null);
+    const [editing,setEditing] = useState(null);
 
-    return (
+    return(
+
         <div>
-            <h2>Products</h2>
+
+            <div className="flex justify-between mb-4">
+
+                <h1 className="text-xl font-bold">
+                    Products
+                </h1>
+
+                <button
+                    onClick={()=>setEditing({})}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                    Add Product
+                </button>
+
+            </div>
 
             <ProductTable
-                products={products}
-                onEdit={(p) => setEditing(p)}
+                products={mockProducts}
+                onEdit={setEditing}
             />
 
             {editing && (
+
                 <ProductModal
                     product={editing}
-                    onClose={() => setEditing(null)}
+                    onClose={()=>setEditing(null)}
                 />
+
             )}
+
         </div>
+
     );
 }
-
-export default AdminProducts;

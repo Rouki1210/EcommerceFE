@@ -1,45 +1,64 @@
 import { useState } from "react";
 
-function ProductModal({ product, onClose }) {
-    const [name, setName] = useState(product.name);
-    const [price, setPrice] = useState(product.price);
+export default function ProductModal({ product, onClose }) {
 
-    function handleSave() {
-        console.log("Updated product:", name, price);
+    const [name, setName] = useState(product?.name || "");
+    const [price, setPrice] = useState(product?.price || "");
+
+    function saveProduct() {
+
+        console.log({
+            name,
+            price
+        });
+
         onClose();
     }
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                top: "30%",
-                left: "40%",
-                background: "white",
-                padding: "20px",
-                border: "1px solid #ccc",
-            }}
-        >
-            <h2>Edit Product</h2>
 
-            <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
 
-            <br />
+            <div className="bg-white p-6 rounded w-96">
 
-            <input
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-            />
+                <h2 className="text-xl mb-4">
+                    Product
+                </h2>
 
-            <br />
+                <input
+                    className="border p-2 w-full mb-3"
+                    value={name}
+                    onChange={(e)=>setName(e.target.value)}
+                    placeholder="Product name"
+                />
 
-            <button onClick={handleSave}>Save</button>
-            <button onClick={onClose}>Cancel</button>
+                <input
+                    className="border p-2 w-full mb-3"
+                    value={price}
+                    onChange={(e)=>setPrice(e.target.value)}
+                    placeholder="Price"
+                />
+
+                <div className="flex gap-2">
+
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        onClick={saveProduct}
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        className="border px-4 py-2"
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
     );
 }
-
-export default ProductModal;

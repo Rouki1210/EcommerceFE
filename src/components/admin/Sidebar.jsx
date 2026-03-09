@@ -1,33 +1,29 @@
 import { Link } from "react-router-dom";
 
-function Sidebar() {
+export default function Sidebar() {
     return (
-        <div
-            style={{
-                width: "230px",
-                background: "#111",
-                color: "white",
-                minHeight: "100vh",
-                padding: "20px",
-            }}
-        >
-            <h2>Admin Panel</h2>
+        <div className="w-64 bg-gray-900 text-white min-h-screen">
 
-            <ul style={{ listStyle: "none", padding: 0 }}>
-                <li>
-                    <Link to="/admin/dashboard">Dashboard</Link>
-                </li>
+            <div className="p-6 text-xl font-bold">
+                Admin
+            </div>
 
-                <li>
-                    <Link to="/admin/products">Products</Link>
-                </li>
+            <nav className="flex flex-col gap-2 p-4">
 
-                <li>
-                    <Link to="/admin/orders">Orders</Link>
-                </li>
-            </ul>
+                <Link to="/admin/dashboard" className="hover:bg-gray-700 p-2 rounded">
+                    Dashboard
+                </Link>
+
+                <Link to="/admin/products" className="hover:bg-gray-700 p-2 rounded">
+                    Products
+                </Link>
+
+                <Link to="/admin/orders" className="hover:bg-gray-700 p-2 rounded">
+                    Orders
+                </Link>
+
+            </nav>
+
         </div>
     );
 }
-
-export default Sidebar;
