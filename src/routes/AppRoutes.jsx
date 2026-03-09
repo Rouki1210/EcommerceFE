@@ -13,6 +13,7 @@ import AdminLayout from "../components/admin/AdminLayout.jsx";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminProducts from "../pages/admin/AdminProducts";
 import AdminOrders from "../pages/admin/AdminOrders";
+import OurStoryPage from "../pages/ourStoryPage";
 // import AdminUsers from "../pages/admin/AdminUsers";
 
 function AppRoutes() {
@@ -50,17 +51,15 @@ function AppRoutes() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<AdminLayout />}>
 
-              <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
 
-              <Route path="products" element={<AdminProducts />} />
+          <Route path="products" element={<AdminProducts />} />
 
-              <Route path="orders" element={<AdminOrders />} />
+          <Route path="orders" element={<AdminOrders />} />
 
-
-
-          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
