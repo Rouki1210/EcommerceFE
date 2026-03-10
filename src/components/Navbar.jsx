@@ -325,7 +325,7 @@ export default function Navbar({
 
           {/* Account button */}
           <Link
-            to="/login"
+            to="/register"
             className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
             aria-label="Account"
           >

@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
@@ -16,9 +17,18 @@ import OurStoryPage from "../pages/ourStoryPage";
 //import AdminOrders from "../pages/admin/AdminOrders";
 //import AdminUsers from "../pages/admin/AdminUsers";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function AppRoutes() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -51,7 +61,7 @@ function AppRoutes() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-          {/*<Route path="/admin" element={<AdminLayout />}>
+        {/*<Route path="/admin" element={<AdminLayout />}>
 
               <Route path="dashboard" element={<AdminDashboard />} />
 
