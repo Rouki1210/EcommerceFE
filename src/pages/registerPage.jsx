@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../features/auth/authSlice";
+import { registerApi } from "../api/authApi";
 
 function PasswordInput({ placeholder, value, onChange }) {
   const [show, setShow] = useState(false);
@@ -95,7 +98,68 @@ const labelStyle = {
   marginBottom: "6px",
 };
 
+const errorStyle = {
+  color: "#c0392b",
+  fontSize: "11px",
+  marginTop: "4px",
+};
+
 export default function RegisterPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirm: "",
+    terms: false,
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  function setField(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  }
+
+  function validate() {
+    const e = {};
+    if (!form.firstName.trim()) { e.firstName = "First name is required"; return e; }
+    if (!form.lastName.trim()) { e.lastName = "Last name is required"; return e; }
+    if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+      { e.email = "Invalid email address"; return e; }
+    if (form.password.length < 8)
+      { e.password = "Password must be at least 8 characters"; return e; }
+    if (form.password !== form.confirm) { e.confirm = "Passwords do not match"; return e; }
+    if (!form.terms) { e.terms = "You must agree to the Terms & Conditions"; return e; }
+    return e;
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setLoading(true);
+    setApiError("");
+    try {
+      const fullName = `${form.firstName} ${form.lastName}`.trim();
+      const data = await registerApi(fullName, form.email, form.password);
+      dispatch(loginSuccess(data));
+      navigate("/");
+    } catch (err) {
+      setApiError(
+        err.response?.data?.message || "Registration failed. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div
       style={{
@@ -167,9 +231,27 @@ export default function RegisterPage() {
           Create Account
         </h1>
 
+        {/* API Error Banner */}
+        {apiError && (
+          <div
+            style={{
+              background: "#fdf0f0",
+              border: "1px solid #e8c0c0",
+              borderRadius: "8px",
+              padding: "12px 14px",
+              marginBottom: "18px",
+              fontSize: "13px",
+              color: "#c0392b",
+            }}
+          >
+            {apiError}
+          </div>
+        )}
+
         {/* Form */}
         <form
-          onSubmit={(e) => e.preventDefault()}
+          noValidate 
+          onSubmit={handleSubmit}
           style={{ display: "flex", flexDirection: "column", gap: "18px" }}
         >
           {/* First name */}
@@ -178,10 +260,20 @@ export default function RegisterPage() {
             <input
               type="text"
               placeholder="Your first name"
-              style={inputStyle}
+              value={form.firstName}
+              onChange={(e) => setField("firstName", e.target.value)}
+              style={{
+                ...inputStyle,
+                borderColor: errors.firstName ? "#c0392b" : "#e8e2db",
+              }}
               onFocus={(e) => (e.target.style.borderColor = "#c8a96e")}
-              onBlur={(e) => (e.target.style.borderColor = "#e8e2db")}
+              onBlur={(e) =>
+                (e.target.style.borderColor = errors.firstName
+                  ? "#c0392b"
+                  : "#e8e2db")
+              }
             />
+            {errors.firstName && <p style={errorStyle}>{errors.firstName}</p>}
           </div>
 
           {/* Last name */}
@@ -190,10 +282,13 @@ export default function RegisterPage() {
             <input
               type="text"
               placeholder="Your last name"
+              value={form.lastName}
+              onChange={(e) => setField("lastName", e.target.value)}
               style={inputStyle}
               onFocus={(e) => (e.target.style.borderColor = "#c8a96e")}
               onBlur={(e) => (e.target.style.borderColor = "#e8e2db")}
             />
+            {errors.lastName && <p style={errorStyle}>{errors.lastName}</p>}
           </div>
 
           {/* Email */}
@@ -202,31 +297,50 @@ export default function RegisterPage() {
             <input
               type="email"
               placeholder="your@email.com"
-              style={inputStyle}
+              value={form.email}
+              onChange={(e) => setField("email", e.target.value)}
+              style={{
+                ...inputStyle,
+                borderColor: errors.email ? "#c0392b" : "#e8e2db",
+              }}
               onFocus={(e) => (e.target.style.borderColor = "#c8a96e")}
-              onBlur={(e) => (e.target.style.borderColor = "#e8e2db")}
+              onBlur={(e) =>
+                (e.target.style.borderColor = errors.email
+                  ? "#c0392b"
+                  : "#e8e2db")
+              }
             />
+            {errors.email && <p style={errorStyle}>{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div>
             <label style={labelStyle}>Password</label>
-            <PasswordInput placeholder="Min 8 characters" />
+            <PasswordInput
+              placeholder="Min 8 characters"
+              value={form.password}
+              onChange={(e) => setField("password", e.target.value)}
+            />
+            {errors.password && <p style={errorStyle}>{errors.password}</p>}
           </div>
 
           {/* Confirm password */}
           <div>
             <label style={labelStyle}>Confirm Password</label>
-            <PasswordInput placeholder="Confirm your password" />
+            <PasswordInput
+              placeholder="Confirm your password"
+              value={form.confirm}
+              onChange={(e) => setField("confirm", e.target.value)}
+            />
+            {errors.confirm && <p style={errorStyle}>{errors.confirm}</p>}
           </div>
 
           {/* Terms */}
-          <label
+          <div
             style={{
               display: "flex",
               alignItems: "flex-start",
               gap: "10px",
-              cursor: "pointer",
               fontSize: "12px",
               color: "#777",
               lineHeight: 1.5,
@@ -234,10 +348,13 @@ export default function RegisterPage() {
           >
             <input
               type="checkbox"
+              checked={form.terms}
+              onChange={(e) => setField("terms", e.target.checked)}
               style={{
                 marginTop: "2px",
                 accentColor: "#2c2c2c",
                 flexShrink: 0,
+                cursor: "pointer",
               }}
             />
             I agree to the{" "}
@@ -252,15 +369,17 @@ export default function RegisterPage() {
             >
               Privacy Policy
             </span>
-          </label>
+          </div>
+          {errors.terms && <p style={errorStyle}>{errors.terms}</p>}
 
           {/* Submit */}
           <button
             type="submit"
+            disabled={loading}
             style={{
               marginTop: "4px",
               padding: "13px",
-              background: "#2c2c2c",
+              background: loading ? "#888" : "#2c2c2c",
               color: "white",
               border: "none",
               borderRadius: "8px",
@@ -268,13 +387,17 @@ export default function RegisterPage() {
               letterSpacing: "2px",
               textTransform: "uppercase",
               fontWeight: 500,
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               transition: "background 0.2s",
             }}
-            onMouseEnter={(e) => (e.target.style.background = "#111")}
-            onMouseLeave={(e) => (e.target.style.background = "#2c2c2c")}
+            onMouseEnter={(e) => {
+              if (!loading) e.target.style.background = "#111";
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) e.target.style.background = "#2c2c2c";
+            }}
           >
-            Create Account
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

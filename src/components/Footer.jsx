@@ -11,7 +11,7 @@ const FOOTER_LINKS = {
 const FOOTER_COLS = [
   {
     title: "Shop",
-    links: ["New Arrivals", "Women", "Men", "Accessories", "Sale"],
+    links: ["New Arrivals", "Women", "Men", "Sale"],
   },
   {
     title: "Help",
