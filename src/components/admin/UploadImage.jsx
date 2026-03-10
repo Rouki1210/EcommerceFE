@@ -1,3 +1,5 @@
+// Re-export ImageUpload for backward compatibility
+export { default } from "./ImageUpload";
 // function UploadImage({ setImage }) {
 //
 //     function handleUpload(e) {
