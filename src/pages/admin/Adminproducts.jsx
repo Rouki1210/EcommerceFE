@@ -64,7 +64,7 @@ export default function Adminproducts() {
                         color: "#64748b", fontSize: 12,
                         boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
                     }}>
-                        <span>📅</span> Mar 2026
+                        <span>📅</span> {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
                     </div>
                     <NotificationBell />
                     <button onClick={openAdd} style={{

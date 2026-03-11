@@ -1,5 +1,10 @@
 import NotificationBell from "./NotificationBell";
 
+const formatDate = () => {
+    const now = new Date();
+    return now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+};
+
 export default function Header({ title, subtitle }) {
     return (
         <div style={{
@@ -23,10 +28,10 @@ export default function Header({ title, subtitle }) {
                     background: "#fff", border: "1px solid rgba(0,0,0,0.08)",
                     borderRadius: 10, padding: "9px 16px",
                     display: "flex", alignItems: "center", gap: 8,
-                    color: "#64748b", fontSize: 12, cursor: "pointer",
+                    color: "#64748b", fontSize: 12,
                     boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
                 }}>
-                    <span>📅</span> Mar 2026
+                    <span>📅</span> {formatDate()}
                 </div>
                 <NotificationBell />
             </div>
