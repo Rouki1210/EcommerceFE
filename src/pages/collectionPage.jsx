@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { useProducts } from "../hooks/useProducts";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function CollectionPage({ gender, title, subtitle }) {
+  usePageTitle(title);
   const { addToCart, openProductModal } = useOutletContext();
   const { products } = useProducts();
 

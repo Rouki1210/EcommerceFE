@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useOutletContext, useLocation, useNavigate } from "react-router-dom";
 import { SHIPPING_THRESHOLD } from "../data/constants";
 import { useProducts } from "../hooks/useProducts";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 function CartRow({ item, onUpdateQty, onRemove, isRemoving }) {
   return (
@@ -173,6 +174,7 @@ function OrderSummary({
 function SuggestedProducts({ cartIds, onAddToCart }) {
   const [addedIds, setAddedIds] = useState([]);
   const { products } = useProducts();
+  usePageTitle("Shopping Cart");
   const suggestions = products
     .filter((p) => !cartIds.includes(p.id))
     .slice(0, 3);

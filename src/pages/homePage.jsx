@@ -4,9 +4,12 @@ import MarqueeStrip from "../components/MarqueeStrip";
 import ProductGrid from "../components/Productgrid";
 import EditorialBanner from "../components/Editorialbanner";
 import { useCategories } from "../data/useCategories";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function HomePage() {
   const { addToCart, openCart, openProductModal } = useOutletContext();
+
+  usePageTitle("Home");
 
   const scrollToProducts = () =>
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
