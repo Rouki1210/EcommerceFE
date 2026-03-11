@@ -48,7 +48,7 @@ export default function Navbar({
         .filter(
           (p) =>
             p.name.toLowerCase().includes(q) ||
-            p.category.toLowerCase().includes(q) ||
+            (typeof p.category === "object" ? p.category?.name : p.category)?.toLowerCase().includes(q) ||
             p.variant.toLowerCase().includes(q),
         )
         .slice(0, 6)
@@ -273,7 +273,7 @@ export default function Navbar({
                               </p>
                               <p className="text-[11px] text-[#aaa] mt-0.5">
                                 <Highlight
-                                  text={product.category}
+                                  text={typeof product.category === "object" ? product.category?.name : product.category}
                                   query={query}
                                 />
                                 {" · "}
@@ -325,7 +325,7 @@ export default function Navbar({
 
           {/* Account button */}
           <Link
-            to="/login"
+            to="/register"
             className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
             aria-label="Account"
           >

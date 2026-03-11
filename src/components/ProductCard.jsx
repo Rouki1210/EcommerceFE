@@ -182,7 +182,7 @@ function ProductCard({ product, onAddToCart }) {
       {/* Info */}
       <div className="px-4 py-3">
         <p className="text-[10px] tracking-widest text-[#aaa] uppercase mb-0.5">
-          {product.category}
+          {typeof product.category === "object" ? product.category?.name : product.category}
         </p>
         <div className="flex items-center justify-between">
           <p className="heading text-[15px] text-[#2c2c2c] leading-snug">

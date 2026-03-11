@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate,useLocation } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
@@ -9,6 +10,7 @@ import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
+import OurStoryPage from "../pages/ourStoryPage";
 import AdminLayout from "../components/admin/AdminLayout";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
@@ -18,6 +20,14 @@ import Adminorders from "../pages/admin/Adminorders";
 import Adminusers from "../pages/admin/Adminusers";
 import Adminanalytics from "../pages/admin/Adminanalytics";
 import Adminsettings from "../pages/admin/Adminsettings";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function AppRoutes() {
     return (

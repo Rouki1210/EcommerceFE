@@ -106,7 +106,7 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           {/* Category + badge */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span style={{ fontSize: "11px", color: "#9a8c7e", letterSpacing: "2px", textTransform: "uppercase" }}>
-              {product.category}
+              {typeof product.category === "object" ? product.category?.name : product.category}
             </span>
             {product.badge && (
               <span

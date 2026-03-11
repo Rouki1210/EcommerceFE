@@ -5,7 +5,7 @@ export function useCategories() {
         const [category, setCategory] = useState([]);
 
     useEffect(() => {
-        axios.get("https://localhost:7287/api/Category")
+        axios.get("http://localhost:8080/api/categories")
             .then((res) => {
                 if (res.data && res.data.success === true) {
                     console.log("API response:", res.data);
