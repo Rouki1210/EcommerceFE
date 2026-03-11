@@ -25,11 +25,17 @@ export default function AdminUsers() {
 
     return (
         <div style={{ animation: "fadeSlideUp 0.5s ease both" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
-                <Header title="Users" subtitle="Management" />
+
+            {/* Header — full width, date+bell góc phải */}
+            <Header title="Users" subtitle="Management" />
+
+            {/* Search bar — riêng một hàng, căn phải */}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20, marginTop: -8 }}>
                 <div style={{
                     background: "#ffffff", border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: 10, padding: "9px 16px", display: "flex", alignItems: "center", gap: 8,
+                    borderRadius: 10, padding: "9px 16px",
+                    display: "flex", alignItems: "center", gap: 8,
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
                 }}>
                     <span style={{ color: "#475569", fontSize: 13 }}>🔍</span>
                     <input
@@ -37,12 +43,13 @@ export default function AdminUsers() {
                         placeholder="Search users..."
                         style={{
                             background: "transparent", border: "none", outline: "none",
-                            color: "#1e293b", fontSize: 12, width: 160,
+                            color: "#1e293b", fontSize: 12, width: 180,
                         }}
                     />
                 </div>
             </div>
 
+            {/* Table */}
             <div style={{
                 background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
                 borderRadius: 16, overflow: "hidden",
