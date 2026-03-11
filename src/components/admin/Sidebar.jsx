@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { DiCssTricks } from "react-icons/di";
 
 const navItems = [
-    { label: "Dashboard", icon: "⬡", path: "/admin/dashboard" },
+    { label: "Dashboard", icon: <DiCssTricks />, path: "/admin/dashboard" },
     { label: "Products",  icon: "◈", path: "/admin/products" },
     { label: "Orders",    icon: "◎", path: "/admin/orders", badge: 5 },
     { label: "Users",     icon: "◉", path: "/admin/users" },
