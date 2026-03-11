@@ -12,7 +12,6 @@ import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
 import AdminLayout from "../components/admin/AdminLayout";
-import OurStoryPage from "../pages/ourStoryPage";
 import Admindashboard from "../pages/admin/Admindashboard";
 import Adminproducts from "../pages/admin/Adminproducts";
 import Adminorders from "../pages/admin/Adminorders";

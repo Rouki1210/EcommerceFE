@@ -32,7 +32,7 @@ function CartRow({ item, onUpdateQty, onRemove, isRemoving }) {
             </p>
             <p className="text-xs text-[#aaa] mt-0.5">{item.variant}</p>
             <p className="text-[10px] tracking-widest uppercase text-[#c8a96e] mt-1">
-              {item.category}
+              {typeof item.category === "object" ? item.category?.name : item.category}
             </p>
           </div>
           <button
@@ -215,7 +215,7 @@ function SuggestedProducts({ cartIds, onAddToCart }) {
             </div>
             <div className="p-3">
               <p className="text-[10px] tracking-widest uppercase text-[#c8a96e]">
-                {p.category}
+                {typeof p.category === "object" ? p.category?.name : p.category}
               </p>
               <p className="heading text-[13px] text-[#2c2c2c] leading-snug mt-0.5">
                 {p.name}
