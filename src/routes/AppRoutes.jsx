@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate,useLocation } from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
@@ -10,6 +10,7 @@ import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
+import OurStoryPage from "../pages/ourStoryPage";
 import AdminLayout from "../components/admin/AdminLayout";
 import Admindashboard from "../pages/admin/Admindashboard";
 import Adminproducts from "../pages/admin/Adminproducts";
