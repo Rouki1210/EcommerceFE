@@ -170,8 +170,8 @@ export default function AdminLogin() {
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
                             <label style={{ color: "#475569", fontSize: 11, fontWeight: 600 }}>Password</label>
                             <span style={{ color: "#eab308", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>
-                Forgot password?
-              </span>
+                                Forgot password?
+                            </span>
                         </div>
                         <div style={{ position: "relative" }}>
                             <input
@@ -182,10 +182,6 @@ export default function AdminLogin() {
                                 placeholder="••••••••"
                                 style={{ ...inp, paddingRight: 44 }}
                             />
-                            <button onClick={() => setShowPass(!showPass)} style={{
-                                position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-                                background: "none", border: "none", cursor: "pointer", color: "#94a3b8", fontSize: 14,
-                            }}>{showPass ? "🙈" : "👁"}</button>
                         </div>
                     </div>
 

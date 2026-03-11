@@ -39,7 +39,7 @@ export default function ProductPage() {
     const { addToCart } = useOutletContext();
     const { products } = useProducts();
 
-    const product = products.find((p) => p.id === Number(id));
+    const product = products.find((p) => String(p.id) === String(id));
     const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
     const [added, setAdded] = useState(false);
 
@@ -119,7 +119,7 @@ export default function ProductPage() {
                     <div className="fade-in" style={{ animationDelay: "0.08s" }}>
 
                         {/* Category + Name */}
-                        <p className="text-xs tracking-widest uppercase text-[#c8a96e] mb-2">{product.category}</p>
+                        <p className="text-xs tracking-widest uppercase text-[#c8a96e] mb-2">{typeof product.category === "object" ? product.category?.name : product.category}</p>
                         <h1 className="heading text-4xl text-[#2c2c2c] leading-tight mb-1">{product.name}</h1>
                         <p className="text-sm text-[#aaa] mb-5">{product.variant}</p>
 

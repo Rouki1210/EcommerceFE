@@ -67,7 +67,7 @@ export default function Adminproducts() {
                         background: "linear-gradient(135deg, #eab308, #f59e0b)",
                         border: "none", color: "#000", fontSize: 12, fontWeight: 700,
                         padding: "10px 20px", borderRadius: 10, cursor: "pointer",
-                        boxShadow: "0 4px 15px rgba(234,179,8,0.3)",
+                        boxShadow: "0 4px 15px rgba(234,179,8,0.3)", letterSpacing: 0.3,
                     }}>+ Add Product</button>
                 </div>
             </div>
