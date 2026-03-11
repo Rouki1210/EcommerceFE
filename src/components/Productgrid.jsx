@@ -10,7 +10,10 @@ function ProductGrid({ onAddToCart, onViewDetail }) {
   const filtered =
     activeCategory === "All"
       ? products
-      : products.filter((p) => p.category === activeCategory);
+      : products.filter((p) => {
+          const cat = typeof p.category === "object" ? p.category?.name : p.category;
+          return cat === activeCategory;
+        });
 
   return (
     <section id="products" className="max-w-6xl mx-auto px-6 py-16">
