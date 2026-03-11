@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 function Accordion({ title, children }) {
+    usePageTitle(title);
     const [open, setOpen] = useState(false);
     return (
         <div className="border-t border-[#ece7e0]">

@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { DiCssTricks } from "react-icons/di";
 
 const navItems = [
-    { label: "Dashboard", icon: "⬡", path: "/admin/dashboard" },
+    { label: "Dashboard", icon: <DiCssTricks />, path: "/admin/dashboard" },
     { label: "Products",  icon: "◈", path: "/admin/products" },
     { label: "Orders",    icon: "◎", path: "/admin/orders", badge: 5 },
     { label: "Users",     icon: "◉", path: "/admin/users" },
@@ -87,7 +88,7 @@ export default function Sidebar() {
                 ))}
             </nav>
 
-            {/* User Profile */}
+            {/* User Profile + Logout */}
             <div style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{
@@ -101,7 +102,21 @@ export default function Sidebar() {
                         <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>Admin User</div>
                         <div style={{ color: "#475569", fontSize: 10 }}>admin@shop.com</div>
                     </div>
-                    <div style={{ marginLeft: "auto", color: "#475569", cursor: "pointer", fontSize: 16 }}>⋯</div>
+                    {/* Logout */}
+                    <button
+                        onClick={() => {
+                            localStorage.removeItem("adminAuth");
+                            navigate("/admin/login");
+                        }}
+                        title="Logout"
+                        style={{
+                            marginLeft: "auto", background: "rgba(248,113,113,0.1)",
+                            border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8,
+                            width: 30, height: 30, cursor: "pointer", fontSize: 13,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            color: "#f87171", transition: "all 0.2s",
+                        }}
+                    >⏻</button>
                 </div>
             </div>
         </aside>
