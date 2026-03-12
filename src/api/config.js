@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = axios.create({
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "http://localhost:8080",
   headers: {
     "Content-Type": "application/json",
   },
@@ -26,7 +26,7 @@ baseUrl.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 baseUrl.interceptors.response.use(
@@ -54,7 +54,7 @@ baseUrl.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default baseUrl;

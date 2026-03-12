@@ -148,8 +148,11 @@ export default function RegisterPage() {
     setLoading(true);
     setApiError("");
     try {
-      const fullName = `${form.firstName} ${form.lastName}`.trim();
-      const data = await registerApi(fullName, form.email, form.password);
+      const firstName = form.firstName.trim();
+      const lastName = form.lastName.trim();
+      const email = form.email.trim();
+      const password = form.password;
+      const data = await registerApi(firstName, lastName, email, password);
       dispatch(loginSuccess(data));
       navigate("/");
     } catch (err) {
