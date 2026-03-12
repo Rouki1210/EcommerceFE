@@ -1,13 +1,20 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { DiCssTricks } from "react-icons/di";
+import { HiStop } from "react-icons/hi";
+import { TbNoDerivatives } from "react-icons/tb";
+import { FaUserShield } from "react-icons/fa6";
+import { IoMdAnalytics } from "react-icons/io";
+import { IoMdSettings } from "react-icons/io";
+
+
 
 const navItems = [
     { label: "Dashboard", icon: <DiCssTricks />, path: "/admin/dashboard" },
-    { label: "Products",  icon: "◈", path: "/admin/products" },
-    { label: "Orders",    icon: "◎", path: "/admin/orders", badge: 5 },
-    { label: "Users",     icon: "◉", path: "/admin/users" },
-    { label: "Analytics", icon: "◇", path: "/admin/analytics" },
-    { label: "Settings",  icon: "⚙", path: "/admin/settings" },
+    { label: "Products",  icon: <HiStop />, path: "/admin/products" },
+    { label: "Orders",    icon: <TbNoDerivatives />, path: "/admin/orders", badge: 5 },
+    { label: "Users",     icon: <FaUserShield />, path: "/admin/users" },
+    { label: "Analytics", icon: <IoMdAnalytics />, path: "/admin/analytics" },
+    { label: "Settings",  icon: <IoMdSettings />, path: "/admin/settings" },
 ];
 
 export default function Sidebar() {
@@ -36,10 +43,10 @@ export default function Sidebar() {
                         animation: "float 3s ease-in-out infinite",
                     }}>A</div>
                     <div>
-                        <div style={{ fontFamily: "Syne, sans-serif", color: "#fff", fontSize: 16, fontWeight: 800, letterSpacing: 1 }}>
-                            ADMINEX
+                        <div style={{ fontFamily: "Syne, sans-serif", color: "#fff", fontSize: 13, fontWeight: 800, letterSpacing: 0.5 }}>
+                            ADMIN PAGE
                         </div>
-                        <div style={{ color: "#475569", fontSize: 10, letterSpacing: 2 }}>CONTROL PANEL</div>
+                        <div style={{ color: "#475569", fontSize: 9, letterSpacing: 1.5 }}>ECOMMERCE</div>
                     </div>
                 </div>
             </div>
@@ -69,15 +76,15 @@ export default function Sidebar() {
                             }} />
                         )}
                         <span style={{ fontSize: 14, color: activeNav === item.label ? "#eab308" : "#475569" }}>
-              {item.icon}
-            </span>
+                            {item.icon}
+                        </span>
                         <span style={{
                             fontSize: 13, fontWeight: activeNav === item.label ? 600 : 400,
                             color: activeNav === item.label ? "#eab308" : "#64748b",
                             letterSpacing: 0.3,
                         }}>
-              {item.label}
-            </span>
+                            {item.label}
+                        </span>
                         {item.badge && (
                             <span style={{
                                 marginLeft: "auto", background: "rgba(234,179,8,0.2)", color: "#eab308",
@@ -102,7 +109,6 @@ export default function Sidebar() {
                         <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>Admin User</div>
                         <div style={{ color: "#475569", fontSize: 10 }}>admin@shop.com</div>
                     </div>
-                    {/* Logout */}
                     <button
                         onClick={() => {
                             localStorage.removeItem("adminAuth");
