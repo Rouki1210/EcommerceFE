@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiAlertTriangle } from "react-icons/fi";
 
 export default function AdminLogin() {
     const [form, setForm] = useState({ email: "", password: "" });
@@ -69,7 +68,7 @@ export default function AdminLogin() {
                 display: "flex", flexDirection: "column",
                 justifyContent: "space-between",
                 padding: "48px 56px",
-                position: "relative", overflow: "hidden",
+position: "relative", overflow: "hidden",
             }}>
                 {/* Decorative circles */}
                 <div style={{
@@ -123,34 +122,14 @@ export default function AdminLogin() {
                         letterSpacing: -1, margin: "0 0 20px",
                     }}>
                         Your store,<br />
-                        <span style={{ color: "#d97706" }}>fully in control.</span>
+<span style={{ color: "#d97706" }}>fully in control.</span>
                     </h2>
 
                     <p style={{ color: "#78350f", fontSize: 13, lineHeight: 1.8, maxWidth: 320, margin: 0 }}>
                         Manage products, track orders, and grow your ecommerce business from one powerful dashboard.
                     </p>
 
-                    {/* Stats row */}
-                    <div style={{ display: "flex", gap: 16, marginTop: 36 }}>
-                        {[
-                            { value: "1.2K", label: "Orders", icon: "📦" },
-                            { value: "$48K", label: "Revenue", icon: "💰" },
-                            { value: "3.4K", label: "Customers", icon: "👥" },
-                        ].map((s, i) => (
-                            <div key={i} className="stat-card" style={{
-                                flex: 1, background: "rgba(255,255,255,0.7)",
-                                border: "1px solid rgba(234,179,8,0.3)",
-                                borderRadius: 14, padding: "14px 16px",
-                                backdropFilter: "blur(8px)",
-                                transition: "transform 0.2s",
-                                cursor: "default",
-                            }}>
-                                <div style={{ fontSize: 18, marginBottom: 4 }}>{s.icon}</div>
-                                <div style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 18, fontWeight: 800 }}>{s.value}</div>
-                                <div style={{ color: "#92400e", fontSize: 10, fontWeight: 600, letterSpacing: 0.5 }}>{s.label}</div>
-                            </div>
-                        ))}
-                    </div>
+
                 </div>
 
                 {/* Bottom: trust badges */}
@@ -164,75 +143,7 @@ export default function AdminLogin() {
                         ))}
                     </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          <div
-            style={{
-              marginTop: 40,
-              color: "rgba(255,255,255,0.4)",
-              fontSize: 12,
-              lineHeight: 1.8,
-              maxWidth: 280,
-            }}
-          >
-            Manage your store, track orders,
-            <br />
-            and grow your business — all in one place.
-          </div>
-        </div>
-      </div>
-
-      {/* RIGHT PANEL — Form */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 48,
-          background: "#fff",
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: 400,
-            animation: "fadeSlideUp 0.5s ease 0.1s both",
-          }}
-        >
-          {/* Header */}
-          <div style={{ marginBottom: 36 }}>
-            <div
-              style={{
-                color: "#9a8c7e",
-                fontSize: 11,
-                letterSpacing: 2,
-                marginBottom: 8,
-              }}
-            >
-              WELCOME BACK
             </div>
-            <h1
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#2c2c2c",
-                fontSize: 28,
-                fontWeight: 700,
-                margin: 0,
-                letterSpacing: -0.3,
-              }}
-            >
-              Sign in to your
-              <br />
-              admin account
-            </h1>
-            <p style={{ color: "#9a8c7e", fontSize: 13, marginTop: 10 }}>
-              Enter your credentials to continue
-            </p>
-          </div>
 
             {/* RIGHT PANEL — Form */}
             <div style={{
@@ -271,7 +182,7 @@ export default function AdminLogin() {
                         </label>
                         <input
                             className="login-input"
-                            type="email" value={form.email}
+type="email" value={form.email}
                             onChange={e => setForm({ ...form, email: e.target.value })}
                             onKeyDown={e => e.key === "Enter" && handleSubmit()}
                             placeholder="admin@shop.com"
@@ -318,7 +229,7 @@ export default function AdminLogin() {
 
                     <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
                         <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
-                        <span style={{ color: "#cbd5e1", fontSize: 11 }}>DEMO ACCESS</span>
+<span style={{ color: "#cbd5e1", fontSize: 11 }}>DEMO ACCESS</span>
                         <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
                     </div>
 
@@ -351,146 +262,8 @@ export default function AdminLogin() {
                             ← Back to shop
                         </a>
                     </div>
-                </div>
+                </div>  
             </div>
-          </div>
-
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "13px",
-              background: loading ? "#9a8c7e" : "#2c2c2c",
-              border: "none",
-              borderRadius: 12,
-              cursor: loading ? "not-allowed" : "pointer",
-              color: "#fff",
-              fontWeight: 700,
-              fontSize: 13,
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              boxShadow: loading ? "none" : "0 4px 20px rgba(44,44,44,0.2)",
-              transition: "all 0.2s",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-            }}
-          >
-            {loading ? (
-              <>
-                <span
-                  style={{
-                    display: "inline-block",
-                    animation: "spin 1s linear infinite",
-                  }}
-                >
-                  ⟳
-                </span>{" "}
-                Signing in...
-              </>
-            ) : (
-              "Sign In →"
-            )}
-          </button>
-
-          {/* Divider */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              margin: "24px 0",
-            }}
-          >
-            <div style={{ flex: 1, height: 1, background: "#e8e2db" }} />
-            <span style={{ color: "#b5a99b", fontSize: 11 }}>DEMO ACCESS</span>
-            <div style={{ flex: 1, height: 1, background: "#e8e2db" }} />
-          </div>
-
-          {/* Demo credentials */}
-          <div
-            style={{
-              background: "#faf8f5",
-              borderRadius: 12,
-              padding: "14px 16px",
-              border: "1px solid #e8e2db",
-              display: "flex",
-              gap: 24,
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  color: "#9a8c7e",
-                  fontSize: 9,
-                  letterSpacing: 1.5,
-                  marginBottom: 4,
-                }}
-              >
-                EMAIL
-              </div>
-              <div style={{ color: "#2c2c2c", fontSize: 12, fontWeight: 600 }}>
-                admin@shop.com
-              </div>
-            </div>
-            <div style={{ width: 1, background: "#e2e8f0" }} />
-            <div>
-              <div
-                style={{
-                  color: "#9a8c7e",
-                  fontSize: 9,
-                  letterSpacing: 1.5,
-                  marginBottom: 4,
-                }}
-              >
-                PASSWORD
-              </div>
-              <div style={{ color: "#2c2c2c", fontSize: 12, fontWeight: 600 }}>
-                admin123
-              </div>
-            </div>
-            <button
-              onClick={() =>
-                setForm({ email: "admin@shop.com", password: "admin123" })
-              }
-              style={{
-                marginLeft: "auto",
-                background: "rgba(200,169,110,0.1)",
-                border: "1px solid rgba(200,169,110,0.25)",
-                color: "#9a7840",
-                fontSize: 10,
-                fontWeight: 700,
-                padding: "4px 10px",
-                borderRadius: 6,
-                cursor: "pointer",
-                alignSelf: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Fill ↗
-            </button>
-          </div>
-
-          {/* Back */}
-          <div style={{ textAlign: "center", marginTop: 28 }}>
-            <a
-              href="/"
-              style={{
-                color: "#9a8c7e",
-                fontSize: 11,
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                textDecoration: "none",
-              }}
-            >
-              ← Back to store
-            </a>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

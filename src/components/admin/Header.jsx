@@ -6,9 +6,6 @@ const formatDate = () => {
 };
 
 export default function Header({ title, subtitle }) {
-    const today = new Date().toLocaleDateString("en-GB", {
-        day: "2-digit", month: "short", year: "numeric",
-    });
 
     return (
         <div style={{
@@ -43,7 +40,5 @@ export default function Header({ title, subtitle }) {
                 <NotificationBell />
             </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
