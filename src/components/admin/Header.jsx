@@ -30,6 +30,7 @@ export default function Header({ title, subtitle }) {
 
             {/* Right: date + bell */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+
                 <div style={{
                     background: "#fff", border: "1px solid rgba(0,0,0,0.08)",
                     borderRadius: 10, padding: "9px 16px",
