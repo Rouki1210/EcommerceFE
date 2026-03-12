@@ -4,11 +4,13 @@ import Sidebar from "./Sidebar";
 import { NotificationProvider } from "../../context/NotificationContext";
 
 export default function AdminLayout() {
-    const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-    const [activeNav, setActiveNav] = useState("Dashboard");
+  const [activeNav, setActiveNav] = useState("Dashboard");
 
-    useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
+  useEffect(() => {
+    setTimeout(() => setMounted(true), 100);
+  }, []);
 
     return (
         <NotificationProvider>

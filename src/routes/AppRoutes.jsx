@@ -32,6 +32,7 @@ function ScrollToTop() {
 function AppRoutes() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <Routes>
 
                 {/* User routes */}
@@ -62,6 +63,7 @@ function AppRoutes() {
                     <Route path="/product/:id" element={<ProductPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="/order-tracking" element={<OrderTracking />} />
+                    <Route path="/our-story" element={<OurStoryPage />} />
                 </Route>
 
                 {/* Auth routes */}
