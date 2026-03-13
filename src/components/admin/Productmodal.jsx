@@ -43,17 +43,17 @@ export default function ProductModal({ product, onClose, onSave }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.4)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:100 }}
+                style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.4)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:100, padding:"16px", overflowY:"auto" }}
             >
                 <motion.div
                     initial={{ opacity:0, scale:0.94, y:24 }}
                     animate={{ opacity:1, scale:1,    y:0  }}
                     exit={{    opacity:0, scale:0.94, y:24 }}
                     transition={{ duration:0.3, ease:[0.25,0.46,0.45,0.94] }}
-                    style={{ background:"#fff", borderRadius:20, width:"860px", maxWidth:"95vw", boxShadow:"0 24px 60px rgba(0,0,0,0.18)", display:"flex", flexDirection:"column", maxHeight:"92vh" }}
+                    style={{ background:"#fff", borderRadius:20, width:"min(860px, calc(100vw - 280px))", maxWidth:"98vw", minWidth:0, boxShadow:"0 24px 60px rgba(0,0,0,0.18)", display:"flex", flexDirection:"column", maxHeight:"calc(100vh - 32px)", margin:"auto" }}
                 >
                     {/* Header */}
-                    <div style={{ padding:"20px 28px 0", borderBottom:"1px solid rgba(0,0,0,0.06)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0 }}>
+                    <div style={{ padding:"20px 20px 0", borderBottom:"1px solid rgba(0,0,0,0.06)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, flexWrap:"wrap", gap:10 }}>
                         <div>
                             <div style={{ fontFamily:"Syne,sans-serif", color:"#0f172a", fontSize:18, fontWeight:800 }}>{form.id ? "Edit Product" : "Add Product"}</div>
                             <div style={{ color:"#94a3b8", fontSize:11, marginTop:2 }}>Fill in all product information</div>
@@ -74,13 +74,13 @@ export default function ProductModal({ product, onClose, onSave }) {
                     </div>
 
                     {/* Body */}
-                    <div style={{ padding:"20px 28px", overflowY:"auto", flex:1 }}>
+                    <div style={{ padding:"20px", overflowY:"auto", flex:1 }}>
                         <AnimatePresence mode="wait">
                             <motion.div key={tab} initial={{ opacity:0, x:10 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-10 }} transition={{ duration:0.2 }}>
 
                                 {/* BASIC TAB */}
                                 {tab==="basic" && (
-                                    <div style={{ display:"grid", gridTemplateColumns:"200px 1fr", gap:24 }}>
+                                    <div style={{ display:"grid", gridTemplateColumns:"min(200px, 35%) 1fr", gap:20 }}>
                                         {/* Image upload */}
                                         <div>
                                             <label style={lbl}>PRODUCT IMAGE</label>
@@ -193,7 +193,7 @@ export default function ProductModal({ product, onClose, onSave }) {
                     </div>
 
                     {/* Footer */}
-                    <div style={{ padding:"16px 28px", borderTop:"1px solid rgba(0,0,0,0.06)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:"#fafafa", borderRadius:"0 0 20px 20px" }}>
+                    <div style={{ padding:"14px 20px", borderTop:"1px solid rgba(0,0,0,0.06)", display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:"#fafafa", borderRadius:"0 0 20px 20px", flexWrap:"wrap", gap:10 }}>
                         <div style={{ color:"#94a3b8", fontSize:11 }}>{form.name ? `📦 ${form.name}` : "No product name yet"}{form.price ? ` · $${form.price}` : ""}</div>
                         <div style={{ display:"flex", gap:10 }}>
                             <motion.button whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }} onClick={onClose} style={{ background:"transparent", border:"1px solid rgba(0,0,0,0.1)", color:"#64748b", padding:"9px 20px", borderRadius:10, cursor:"pointer", fontSize:12, fontWeight:500 }}>Cancel</motion.button>
