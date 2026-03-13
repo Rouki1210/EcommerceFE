@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "./Sidebar";
 import { NotificationProvider } from "../../context/NotificationContext";
 
+const pageVariants = {
+    initial: { opacity: 0, y: 16, scale: 0.99 },
+    animate: { opacity: 1, y: 0,  scale: 1,    transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } },
+    exit:    { opacity: 0, y: -8, scale: 0.99, transition: { duration: 0.2,  ease: "easeIn" } },
+};
+
 export default function AdminLayout() {
     const [mounted, setMounted] = useState(false);
-
     const [activeNav, setActiveNav] = useState("Dashboard");
+    const location = useLocation();
 
     useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
 
@@ -34,9 +41,20 @@ export default function AdminLayout() {
                 <main style={{
                     flex: 1, overflowY: "auto", padding: "32px 36px",
                     position: "relative", zIndex: 1,
-                    opacity: mounted ? 1 : 0, transition: "opacity 0.3s ease",
+                    opacity: mounted ? 1 : 0, transition: "opacity 0.4s ease",
                 }}>
-                    <Outlet />
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={location.pathname}
+                            variants={pageVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            style={{ height: "100%" }}
+                        >
+                            <Outlet />
+                        </motion.div>
+                    </AnimatePresence>
                 </main>
             </div>
         </NotificationProvider>
