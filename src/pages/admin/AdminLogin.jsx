@@ -69,7 +69,7 @@ export default function AdminLogin() {
                 display: "flex", flexDirection: "column",
                 justifyContent: "space-between",
                 padding: "48px 56px",
-                position: "relative", overflow: "hidden",
+position: "relative", overflow: "hidden",
             }}>
                 {/* Decorative circles */}
                 <div style={{
@@ -123,34 +123,14 @@ export default function AdminLogin() {
                         letterSpacing: -1, margin: "0 0 20px",
                     }}>
                         Your store,<br />
-                        <span style={{ color: "#d97706" }}>fully in control.</span>
+<span style={{ color: "#d97706" }}>fully in control.</span>
                     </h2>
 
                     <p style={{ color: "#78350f", fontSize: 13, lineHeight: 1.8, maxWidth: 320, margin: 0 }}>
                         Manage products, track orders, and grow your ecommerce business from one powerful dashboard.
                     </p>
 
-                    {/* Stats row */}
-                    <div style={{ display: "flex", gap: 16, marginTop: 36 }}>
-                        {[
-                            { value: "1.2K", label: "Orders", icon: "📦" },
-                            { value: "$48K", label: "Revenue", icon: "💰" },
-                            { value: "3.4K", label: "Customers", icon: "👥" },
-                        ].map((s, i) => (
-                            <div key={i} className="stat-card" style={{
-                                flex: 1, background: "rgba(255,255,255,0.7)",
-                                border: "1px solid rgba(234,179,8,0.3)",
-                                borderRadius: 14, padding: "14px 16px",
-                                backdropFilter: "blur(8px)",
-                                transition: "transform 0.2s",
-                                cursor: "default",
-                            }}>
-                                <div style={{ fontSize: 18, marginBottom: 4 }}>{s.icon}</div>
-                                <div style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 18, fontWeight: 800 }}>{s.value}</div>
-                                <div style={{ color: "#92400e", fontSize: 10, fontWeight: 600, letterSpacing: 0.5 }}>{s.label}</div>
-                            </div>
-                        ))}
-                    </div>
+
                 </div>
 
                 {/* Bottom: trust badges */}
@@ -271,7 +251,7 @@ export default function AdminLogin() {
                         </label>
                         <input
                             className="login-input"
-                            type="email" value={form.email}
+type="email" value={form.email}
                             onChange={e => setForm({ ...form, email: e.target.value })}
                             onKeyDown={e => e.key === "Enter" && handleSubmit()}
                             placeholder="admin@shop.com"
@@ -318,7 +298,7 @@ export default function AdminLogin() {
 
                     <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0" }}>
                         <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
-                        <span style={{ color: "#cbd5e1", fontSize: 11 }}>DEMO ACCESS</span>
+<span style={{ color: "#cbd5e1", fontSize: 11 }}>DEMO ACCESS</span>
                         <div style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
                     </div>
 
@@ -351,7 +331,7 @@ export default function AdminLogin() {
                             ← Back to shop
                         </a>
                     </div>
-                </div>
+                </div>  
             </div>
           </div>
 
