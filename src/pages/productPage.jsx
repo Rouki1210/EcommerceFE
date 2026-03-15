@@ -37,13 +37,23 @@ export default function ProductPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useOutletContext();
-    const { products } = useProducts();
-
+    const { products, loading } = useProducts();
     const product = products.find((p) => String(p.id) === String(id));
     const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
     const [added, setAdded] = useState(false);
 
     /* ── Not found ── */
+    if (loading) {
+    return (
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-[#aaa]">
+            <div className="w-10 h-10 rounded-full border-2 border-[#e8e2db] border-t-[#c8a96e]"
+                style={{ animation: "spin 0.8s linear infinite" }} />
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            <p className="text-xs tracking-widest uppercase">Loading...</p>
+        </div>
+    );
+    }
+
     if (!product) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-[#888]">
