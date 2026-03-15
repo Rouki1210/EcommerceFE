@@ -40,7 +40,5 @@ export default function Header({ title, subtitle }) {
                 <NotificationBell />
             </div>
         </div>
-      </div>
-    </div>
   );
 }
