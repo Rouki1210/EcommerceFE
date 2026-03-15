@@ -3,7 +3,7 @@ import baseUrl from "./config";
 export const loginApi = (email, password) =>
   baseUrl
     .post("/auth/login", { email, password })
-    .then((res) => res.accessToken);
+    .then((res) => res.data);
 
 export const registerApi = (firstName, lastName, email, password) =>
   baseUrl

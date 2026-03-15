@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import UserDropdown from "./userDropdown";
 import { useProducts } from "../hooks/useProducts";
 
 /* ── highlight matched substring ── */
@@ -33,6 +35,7 @@ export default function Navbar({
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { products } = useProducts();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const NAV_LINKS = [
     { label: "New Arrivals", to: "/" },
@@ -324,16 +327,20 @@ export default function Navbar({
           </div>
 
           {/* Account button */}
-          <Link
-            to="/register"
-            className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
-            aria-label="Account"
-          >
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </Link>
+          {isAuthenticated ? (
+            <UserDropdown />
+          ) : (
+            <Link
+              to="/login"
+              className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
+              aria-label="Account"
+            >
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </Link>
+          )}
 
           {/* Cart button */}
           <button
