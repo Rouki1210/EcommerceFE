@@ -6,92 +6,43 @@ const topProducts = [
 ];
 
 export default function Topproducts() {
-  return (
-    <div
-      style={{
-        background: "#ffffff",
-        border: "1px solid #e8e2db",
-        borderRadius: 16,
-        padding: "24px",
-        animation: "fadeSlideUp 0.6s ease 0.6s both",
-      }}
-    >
-      <div style={{ marginBottom: 20 }}>
-        <div
-          style={{
-            color: "#9a8c7e",
-            fontSize: 10,
-            letterSpacing: 2,
-            marginBottom: 4,
-          }}
-        >
-          RANKING
-        </div>
-        <h3
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            color: "#2c2c2c",
-            fontSize: 16,
-            fontWeight: 600,
-          }}
-        >
-          Top Products
-        </h3>
-      </div>
+    return (
+        <div className="bg-white border border-black/[0.07] rounded-2xl p-6 shadow-sm" style={{ animation: "fadeSlideUp 0.6s ease 0.6s both" }}>
+            <div className="mb-5">
+                <div className="text-slate-400 text-[10px] tracking-[2px] mb-1 uppercase">Ranking</div>
+                <h3 className="text-slate-900 text-base font-bold m-0">Top Products</h3>
+            </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        {topProducts.map((prod, i) => (
-          <div
-            key={i}
-            style={{
-              background: "rgba(44,44,44,0.03)",
-              border: "1px solid #e8e2db",
-              borderRadius: 12,
-              padding: "14px 16px",
-              animation: `fadeSlideUp 0.4s ease ${0.65 + i * 0.08}s both`,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 10,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div
-                  style={{
-                    width: 26,
-                    height: 26,
-                    borderRadius: 7,
-                    background: `rgba(200,169,110,${0.15 - i * 0.02})`,
-                    border: "1px solid rgba(200,169,110,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#c8a96e",
-                    fontSize: 10,
-                    fontWeight: 800,
-                  }}
-                >
-                  #{i + 1}
-                </div>
-                <span
-                  style={{ color: "#2c2c2c", fontSize: 13, fontWeight: 600 }}
-                >
-                  {prod.name}
-                </span>
-              </div>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  color: prod.trend > 0 ? "#34d399" : "#f87171",
-                }}
-              >
+            <div className="flex flex-col gap-3.5">
+                {topProducts.map((prod, i) => (
+                    <div
+                        key={i}
+                        className="bg-black/[0.02] border border-black/[0.06] rounded-xl px-4 py-3.5"
+                        style={{ animation: `fadeSlideUp 0.4s ease ${0.65 + i * 0.08}s both` }}
+                    >
+                        <div className="flex justify-between items-center mb-2.5">
+                            <div className="flex items-center gap-2.5">
+                                <div className="w-7 h-7 rounded-lg flex items-center justify-center text-yellow-400 text-[10px] font-black border border-yellow-400/25 bg-yellow-400/10">
+                                    #{i + 1}
+                                </div>
+                                <span className="text-slate-800 text-[13px] font-semibold">{prod.name}</span>
+                            </div>
+                            <span className={`text-[10px] font-bold ${prod.trend > 0 ? "text-emerald-400" : "text-red-400"}`}>
                 {prod.trend > 0 ? "↑" : "↓"} {Math.abs(prod.trend)}%
               </span>
+                        </div>
+                        <div className="flex justify-between mb-2">
+                            <span className="text-slate-500 text-[11px]">{prod.sold} sold</span>
+                            <span className="text-slate-500 text-[11px]">{prod.revenue}</span>
+                        </div>
+                        <div className="h-[3px] bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                                className="h-full rounded-full"
+                                style={{ width: `${(prod.sold / 150) * 100}%`, background: "linear-gradient(90deg, #eab308, #f59e0b)", boxShadow: "0 0 8px rgba(234,179,8,0.4)" }}
+                            />
+                        </div>
+                    </div>
+                ))}
             </div>
             <div
               style={{

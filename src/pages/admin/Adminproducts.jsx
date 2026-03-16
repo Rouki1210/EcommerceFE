@@ -1,28 +1,31 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ProductTable from "../../components/admin/ProductTable";
 import ProductModal from "../../components/admin/ProductModal";
 import NotificationBell from "../../components/admin/NotificationBell";
 import { useNotification } from "../../context/NotificationContext";
-
-const mockProducts = [
-    { id: 1, name: "Nike Air Max",    price: 120, stock: 10, category: "Sneakers", image: "https://via.placeholder.com/48" },
-    { id: 2, name: "Adidas Ultra",    price: 90,  stock: 25, category: "Running",  image: "https://via.placeholder.com/48" },
-    { id: 3, name: "Puma RS-X",       price: 85,  stock: 4,  category: "Lifestyle",image: "https://via.placeholder.com/48" },
-    { id: 4, name: "New Balance 574", price: 110, stock: 18, category: "Classics", image: "https://via.placeholder.com/48" },
-];
+import { getProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from "../../api/productApi";
 
 export default function Adminproducts() {
-    const [products, setProducts] = useState(mockProducts);
-    const [editing, setEditing]   = useState(null);
-    const [search, setSearch]     = useState("");
+    const [products, setProducts]   = useState([]);
+    const [editing, setEditing]     = useState(null);
+    const [search, setSearch]       = useState("");
     const [filterCat, setFilterCat] = useState("All");
-    const { addNotification }     = useNotification();
+    const [loading, setLoading]     = useState(true);
+    const [error, setError]         = useState(null);
+    const { addNotification }       = useNotification();
 
-    const categories = ["All", ...new Set(products.map(p => p.category))];
+    useEffect(() => {
+        getProducts()
+            .then(data => setProducts(data))
+            .catch(err => setError(err.message))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const categories = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
 
     const filtered = useMemo(() => products.filter(p => {
-        const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.category.toLowerCase().includes(search.toLowerCase());
+        const q = search.toLowerCase();
+        const matchSearch = p.name?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q);
         const matchCat = filterCat === "All" || p.category === filterCat;
         return matchSearch && matchCat;
     }), [products, search, filterCat]);
@@ -31,128 +34,113 @@ export default function Adminproducts() {
     const openEdit   = (p) => setEditing({ ...p });
     const closeModal = () => setEditing(null);
 
-    const saveProduct = (form) => {
+    const saveProduct = async (form) => {
         const isNew = !form.id;
-        if (isNew) {
-            setProducts(prev => [...prev, { ...form, id: Date.now(), image: form.image || "https://via.placeholder.com/48" }]);
-            addNotification({ type: "product", title: "Product Added", message: `Admin just added "${form.name || "a new product"}" to the store`, icon: "🛍" });
-        } else {
-            setProducts(prev => prev.map(p => p.id === form.id ? form : p));
-            addNotification({ type: "product", title: "Product Updated", message: `"${form.name}" has been updated`, icon: "✏️" });
+        try {
+            let saved;
+            if (isNew) {
+                saved = await createProduct(form);
+                if (form.imageFile && saved?.id) {
+                    const imgRes = await uploadProductImage(saved.id, form.imageFile);
+                    saved = { ...saved, image: imgRes.imageUrl };
+                }
+                setProducts(prev => [...prev, saved]);
+                addNotification({ type: "product", title: "Product Added", message: `Admin just added "${saved.name}" to the store`, icon: "🛍" });
+            } else {
+                saved = await updateProduct(form.id, form);
+                if (form.imageFile) {
+                    const imgRes = await uploadProductImage(form.id, form.imageFile);
+                    saved = { ...saved, image: imgRes.imageUrl };
+                }
+                setProducts(prev => prev.map(p => p.id === form.id ? saved : p));
+                addNotification({ type: "product", title: "Product Updated", message: `"${saved.name}" has been updated`, icon: "✏️" });
+            }
+        } catch (err) {
+            alert("Error: " + err.message);
         }
         closeModal();
     };
 
-    return (
-        <div style={{ animation: "fadeSlideUp 0.5s ease both" }}>
+    const handleDelete = async (id) => {
+        if (!window.confirm("Delete this product?")) return;
+        try {
+            await deleteProduct(id);
+            setProducts(prev => prev.filter(p => p.id !== id));
+        } catch (err) {
+            alert("Error: " + err.message);
+        }
+    };
 
+    const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+
+    return (
+        <div className="animate-[fadeSlideUp_0.5s_ease_both]">
             {/* Top bar */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 24 }}>
+            <div className="flex justify-between items-end mb-6">
                 <div>
-                    <div style={{ color: "#94a3b8", fontSize: 11, letterSpacing: 3, marginBottom: 6 }}>MANAGEMENT</div>
-                    <h1 style={{ fontFamily: "Syne, sans-serif", color: "#0f172a", fontSize: 28, fontWeight: 800, letterSpacing: -0.5, margin: 0 }}>
-                        Products
-                    </h1>
+                    <div className="text-slate-400 text-[11px] tracking-[3px] mb-1.5 uppercase">Management</div>
+                    <h1 className="text-slate-900 text-[28px] font-extrabold tracking-tight m-0">Products</h1>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{
-                        background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderRadius: 10,
-                        padding: "9px 16px", display: "flex", alignItems: "center", gap: 8,
-                        color: "#64748b", fontSize: 12, boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                    }}>
-                        <span>📅</span> {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                <div className="flex items-center gap-3">
+                    <div className="bg-white border border-black/[0.08] rounded-xl px-4 py-2 flex items-center gap-2 text-slate-500 text-xs shadow-sm">
+                        <span>📅</span> {today}
                     </div>
                     <NotificationBell />
-                    <button onClick={openAdd} style={{
-                        background: "linear-gradient(135deg, #eab308, #f59e0b)",
-                        border: "none", color: "#000", fontSize: 12, fontWeight: 700,
-                        padding: "10px 20px", borderRadius: 10, cursor: "pointer",
-                        boxShadow: "0 4px 15px rgba(234,179,8,0.3)", letterSpacing: 0.3,
-                    }}>+ Add Product</button>
+                    <button onClick={openAdd}
+                            className="border-none text-black text-xs font-bold px-5 py-2.5 rounded-xl cursor-pointer shadow-lg shadow-yellow-400/30 hover:shadow-yellow-400/50 transition-shadow"
+                            style={{ background: "linear-gradient(135deg, #eab308, #f59e0b)" }}
+                    >+ Add Product</button>
                 </div>
             </div>
 
-            {/* Search + Filter bar */}
-            <div style={{
-                display: "flex", alignItems: "center", gap: 12, marginBottom: 20,
-            }}>
-                {/* Search input */}
-                <div style={{
-                    flex: 1, maxWidth: 340,
-                    background: "#fff", border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: 10, padding: "10px 14px",
-                    display: "flex", alignItems: "center", gap: 10,
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-                    transition: "border 0.2s",
-                }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    <input
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
-                        placeholder="Search by name or category..."
-                        style={{
-                            border: "none", outline: "none", background: "transparent",
-                            color: "#0f172a", fontSize: 12, width: "100%",
-                        }}
-                    />
-                    {search && (
-                        <button onClick={() => setSearch("")} style={{
-                            background: "none", border: "none", cursor: "pointer",
-                            color: "#cbd5e1", fontSize: 14, padding: 0, lineHeight: 1,
-                        }}>✕</button>
-                    )}
+            {/* Search + Filter */}
+            <div className="flex items-center gap-3 mb-5">
+                <div className="flex-1 max-w-[340px] bg-white border border-black/[0.08] rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 shadow-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or category..."
+                           className="border-none outline-none bg-transparent text-slate-900 text-xs w-full" />
+                    {search && <button onClick={() => setSearch("")} className="bg-transparent border-none cursor-pointer text-slate-300 text-sm p-0 hover:text-slate-500">✕</button>}
                 </div>
-
-                {/* Category filter pills */}
-                <div style={{ display: "flex", gap: 8 }}>
+                <div className="flex gap-2">
                     {categories.map(cat => (
-                        <button key={cat} onClick={() => setFilterCat(cat)} style={{
-                            padding: "8px 14px", borderRadius: 8, fontSize: 11, fontWeight: 600,
-                            cursor: "pointer", transition: "all 0.15s", border: "1px solid",
-                            background: filterCat === cat ? "#eab308" : "#fff",
-                            color: filterCat === cat ? "#000" : "#64748b",
-                            borderColor: filterCat === cat ? "#eab308" : "rgba(0,0,0,0.08)",
-                            boxShadow: filterCat === cat ? "0 2px 8px rgba(234,179,8,0.3)" : "0 1px 3px rgba(0,0,0,0.04)",
-                        }}>{cat}</button>
+                        <button key={cat} onClick={() => setFilterCat(cat)}
+                                className={`px-3.5 py-2 rounded-lg text-[11px] font-semibold cursor-pointer transition-all border ${
+                                    filterCat === cat
+                                        ? "bg-yellow-400 text-black border-yellow-400 shadow-md shadow-yellow-400/30"
+                                        : "bg-white text-slate-500 border-black/[0.08] hover:border-yellow-400/40"
+                                }`}
+                        >{cat}</button>
                     ))}
                 </div>
-
-                {/* Result count */}
-                <div style={{ marginLeft: "auto", color: "#94a3b8", fontSize: 11 }}>
-                    {filtered.length} / {products.length} products
-                </div>
+                <div className="ml-auto text-slate-400 text-[11px]">{filtered.length} / {products.length} products</div>
             </div>
 
-            {/* Empty state */}
-            {filtered.length === 0 && (
-                <div style={{
-                    background: "#fff", borderRadius: 16, padding: "48px",
-                    textAlign: "center", border: "1px solid rgba(0,0,0,0.07)",
-                }}>
-                    <div style={{ fontSize: 32, marginBottom: 12 }}>🔍</div>
-                    <div style={{ color: "#0f172a", fontWeight: 700, fontSize: 14, marginBottom: 6 }}>No products found</div>
-                    <div style={{ color: "#94a3b8", fontSize: 12 }}>Try a different keyword or category</div>
-                    <button onClick={() => { setSearch(""); setFilterCat("All"); }} style={{
-                        marginTop: 16, background: "rgba(234,179,8,0.1)", border: "1px solid rgba(234,179,8,0.2)",
-                        color: "#b45309", fontSize: 11, fontWeight: 700, padding: "7px 16px",
-                        borderRadius: 8, cursor: "pointer",
-                    }}>Clear filters</button>
+            {/* States */}
+            {loading ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-black/[0.07]">
+                    <div className="text-3xl mb-2 animate-spin inline-block">⟳</div>
+                    <div className="text-slate-400 text-[13px]">Loading products...</div>
                 </div>
+            ) : error ? (
+                <div className="bg-red-50 rounded-2xl p-8 text-center border border-red-200">
+                    <div className="text-red-500 text-[13px] font-semibold">⚠ {error}</div>
+                    <button onClick={() => { setError(null); setLoading(true); getProducts().then(setProducts).catch(e => setError(e.message)).finally(() => setLoading(false)); }}
+                            className="mt-3 bg-red-500 border-none text-white px-4 py-2 rounded-lg cursor-pointer text-xs hover:bg-red-600 transition-colors">Retry</button>
+                </div>
+            ) : filtered.length === 0 ? (
+                <div className="bg-white rounded-2xl p-12 text-center border border-black/[0.07]">
+                    <div className="text-4xl mb-3">🔍</div>
+                    <div className="text-slate-900 font-bold text-sm mb-1.5">No products found</div>
+                    <button onClick={() => { setSearch(""); setFilterCat("All"); }}
+                            className="mt-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-700 text-[11px] font-bold px-4 py-1.5 rounded-lg cursor-pointer hover:bg-yellow-500/20 transition-colors">
+                        Clear filters
+                    </button>
+                </div>
+            ) : (
+                <ProductTable products={filtered} onEdit={openEdit} onDelete={handleDelete} />
             )}
 
-            {filtered.length > 0 && (
-                <ProductTable
-                    products={filtered}
-                    onEdit={openEdit}
-                    onDelete={(id) => setProducts(products.filter(p => p.id !== id))}
-                />
-            )}
-
-            {editing && (
-                <ProductModal product={editing} onClose={closeModal} onSave={saveProduct} />
-            )}
+            {editing && <ProductModal product={editing} onClose={closeModal} onSave={saveProduct} />}
         </div>
     );
 }
