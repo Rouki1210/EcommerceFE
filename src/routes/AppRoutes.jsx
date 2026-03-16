@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate,useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Layout from "../components/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
@@ -8,6 +14,7 @@ import SalePage from "../pages/salePage";
 import ProductPage from "../pages/productPage";
 import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
+import AccountSettingsPage from "../pages/accountSettingsPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
@@ -30,70 +37,69 @@ function ScrollToTop() {
 }
 
 function AppRoutes() {
-    return (
-        <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <Routes>
+        {/* User routes */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/shopping-cart" element={<ShoppingCart />} />
+          <Route
+            path="/women"
+            element={
+              <CollectionPage
+                gender="women"
+                title="Women's Collection"
+                subtitle="Refined essentials for the modern woman"
+              />
+            }
+          />
+          <Route
+            path="/men"
+            element={
+              <CollectionPage
+                gender="men"
+                title="Men's Collection"
+                subtitle="Understated luxury for the discerning man"
+              />
+            }
+          />
+          <Route path="/sale" element={<SalePage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/order-tracking" element={<OrderTracking />} />
+          <Route path="/our-story" element={<OurStoryPage />} />
+          <Route path="/profile" element={<AccountSettingsPage />} />
+        </Route>
 
-                {/* User routes */}
-                <Route element={<Layout />}>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/shopping-cart" element={<ShoppingCart />} />
-                    <Route
-                        path="/women"
-                        element={
-                            <CollectionPage
-                                gender="women"
-                                title="Women's Collection"
-                                subtitle="Refined essentials for the modern woman"
-                            />
-                        }
-                    />
-                    <Route
-                        path="/men"
-                        element={
-                            <CollectionPage
-                                gender="men"
-                                title="Men's Collection"
-                                subtitle="Understated luxury for the discerning man"
-                            />
-                        }
-                    />
-                    <Route path="/sale" element={<SalePage />} />
-                    <Route path="/product/:id" element={<ProductPage />} />
-                    <Route path="/checkout" element={<CheckoutPage />} />
-                    <Route path="/order-tracking" element={<OrderTracking />} />
-                    <Route path="/our-story" element={<OurStoryPage />} />
-                </Route>
+        {/* Auth routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-                {/* Auth routes */}
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+        {/* Admin login — public */}
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-                {/* Admin login — public */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-
-                {/* Admin routes — protected */}
-                <Route
-                    path="/admin"
-                    element={
-                        <ProtectedRoute>
-                            <AdminLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
-                    <Route path="dashboard" element={<Admindashboard />} />
-                    <Route path="products"  element={<Adminproducts />} />
-                    <Route path="orders"    element={<Adminorders />} />
-                    <Route path="users"     element={<Adminusers />} />
-                    <Route path="analytics" element={<Adminanalytics />} />
-                    <Route path="settings"  element={<Adminsettings />} />
-                </Route>
-
-            </Routes>
-        </BrowserRouter>
-    );
+        {/* Admin routes — protected */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<Admindashboard />} />
+          <Route path="products" element={<Adminproducts />} />
+          <Route path="orders" element={<Adminorders />} />
+          <Route path="users" element={<Adminusers />} />
+          <Route path="analytics" element={<Adminanalytics />} />
+          <Route path="settings" element={<Adminsettings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default AppRoutes;
