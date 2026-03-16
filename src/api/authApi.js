@@ -9,3 +9,5 @@ export const registerApi = (firstName, lastName, email, password) =>
   baseUrl
     .post("/auth/register", { firstName, lastName, email, password })
     .then((res) => res.data);
+
+export const loginAdmin = (email, password) => loginApi(email, password);

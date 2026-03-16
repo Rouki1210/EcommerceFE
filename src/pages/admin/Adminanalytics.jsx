@@ -1,24 +1,7 @@
 import Header from "../../components/admin/Header";
 import {
-  FiDollarSign,
-  FiTrendingUp,
-  FiFileText,
-  FiRefreshCw,
-} from "react-icons/fi";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  Legend,
+    ResponsiveContainer, AreaChart, Area, XAxis, YAxis,
+    Tooltip, CartesianGrid, PieChart, Pie, Cell, BarChart, Bar, Legend
 } from "recharts";
 
 const monthlyData = [
@@ -37,7 +20,7 @@ const categoryData = [
     { name: "Classics",  value: 15 },
 ];
 
-const COLORS = ["#c8a96e", "#60a5fa", "#34d399", "#f87171"];
+const COLORS = ["#eab308", "#60a5fa", "#34d399", "#f87171"];
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -113,25 +96,6 @@ export default function Adminanalytics() {
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
-            <span
-              style={{
-                display: "inline-block",
-                marginTop: 12,
-                fontSize: 11,
-                fontWeight: 700,
-                padding: "3px 8px",
-                borderRadius: 6,
-                background: s.up
-                  ? "rgba(52,211,153,0.12)"
-                  : "rgba(248,113,113,0.12)",
-                color: s.up ? "#10b981" : "#ef4444",
-              }}
-            >
-              {s.change}
-            </span>
-          </div>
-        ))}
-      </div>
 
             {/* Orders + Category */}
             <div className="grid gap-5" style={{ gridTemplateColumns: "1.5fr 1fr" }}>
@@ -176,113 +140,6 @@ export default function Adminanalytics() {
                     </div>
                 </div>
             </div>
-            <h3
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#2c2c2c",
-                fontSize: 16,
-                fontWeight: 600,
-              }}
-            >
-              Orders vs New Users
-            </h3>
-          </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart
-              data={monthlyData}
-              margin={{ top: 0, right: 0, left: -10, bottom: 0 }}
-              barSize={12}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(44,44,44,0.06)"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="month"
-                tick={{ fill: "#9a8c7e", fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fill: "#9a8c7e", fontSize: 10 }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: 11, color: "#9a8c7e" }} />
-              <Bar dataKey="orders" fill="#c8a96e" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="users" fill="#60a5fa" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
         </div>
-
-        {/* Pie chart */}
-        <div style={{ ...card, animation: "fadeSlideUp 0.5s ease 0.4s both" }}>
-          <div style={{ marginBottom: 20 }}>
-            <div
-              style={{
-                color: "#9a8c7e",
-                fontSize: 10,
-                letterSpacing: 2,
-                marginBottom: 4,
-              }}
-            >
-              BREAKDOWN
-            </div>
-            <h3
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#2c2c2c",
-                fontSize: 16,
-                fontWeight: 600,
-              }}
-            >
-              Sales by Category
-            </h3>
-          </div>
-          <ResponsiveContainer width="100%" height={180}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                dataKey="value"
-                paddingAngle={4}
-              >
-                {categoryData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(v) => `${v}%`} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div
-            style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 8 }}
-          >
-            {categoryData.map((c, i) => (
-              <div
-                key={i}
-                style={{ display: "flex", alignItems: "center", gap: 6 }}
-              >
-                <div
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 2,
-                    background: COLORS[i],
-                  }}
-                />
-                <span style={{ color: "#9a8c7e", fontSize: 11 }}>
-                  {c.name} {c.value}%
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

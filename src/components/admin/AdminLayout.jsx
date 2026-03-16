@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Sidebar from "./Sidebar";
 import { NotificationProvider } from "../../context/NotificationContext";
 
@@ -14,9 +14,7 @@ export default function AdminLayout() {
     const [mounted, setMounted] = useState(false);
     const location = useLocation();
 
-  useEffect(() => {
-    setTimeout(() => setMounted(true), 100);
-  }, []);
+    useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
 
     return (
         <NotificationProvider>
@@ -34,7 +32,7 @@ export default function AdminLayout() {
                     style={{ opacity: mounted ? 1 : 0 }}
                 >
                     <AnimatePresence mode="wait">
-                        <motion.div
+                        <div
                             key={location.pathname}
                             variants={pageVariants}
                             initial="initial"
@@ -43,7 +41,7 @@ export default function AdminLayout() {
                             className="h-full"
                         >
                             <Outlet />
-                        </motion.div>
+                        </div>
                     </AnimatePresence>
                 </main>
             </div>
