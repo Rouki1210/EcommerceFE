@@ -10,7 +10,11 @@ function SettingRow({ label, desc, children }) {
             </div>
             {children}
         </div>
-    );
+        {desc && <div style={{ color: "#9a8c7e", fontSize: 11 }}>{desc}</div>}
+      </div>
+      {children}
+    </div>
+  );
 }
 
 function Toggle({ value, onChange }) {
@@ -116,6 +120,34 @@ export default function Adminsettings() {
                     </div>
                 </div>
             </div>
+            <SettingRow
+              label="Email Notifications"
+              desc="Receive updates via email"
+            >
+              <Toggle
+                value={notif.email}
+                onChange={(v) => setNotif({ ...notif, email: v })}
+              />
+            </SettingRow>
+            <SettingRow label="New Orders" desc="Alert when new order arrives">
+              <Toggle
+                value={notif.orders}
+                onChange={(v) => setNotif({ ...notif, orders: v })}
+              />
+            </SettingRow>
+            <SettingRow label="New Users" desc="Alert on new registrations">
+              <Toggle
+                value={notif.users}
+                onChange={(v) => setNotif({ ...notif, users: v })}
+              />
+            </SettingRow>
+            <SettingRow label="Weekly Reports" desc="Summary every Monday">
+              <Toggle
+                value={notif.reports}
+                onChange={(v) => setNotif({ ...notif, reports: v })}
+              />
+            </SettingRow>
+          </div>
 
             {/* Save */}
             <div className="flex justify-end">
@@ -131,6 +163,64 @@ export default function Adminsettings() {
                     {saved ? "✓ Saved!" : "Save Changes"}
                 </button>
             </div>
+            <SettingRow
+              label="Two-Factor Auth"
+              desc="Extra layer of protection"
+            >
+              <Toggle
+                value={security.twofa}
+                onChange={(v) => setSecurity({ ...security, twofa: v })}
+              />
+            </SettingRow>
+            <SettingRow label="Active Sessions" desc="Track login sessions">
+              <Toggle
+                value={security.sessions}
+                onChange={(v) => setSecurity({ ...security, sessions: v })}
+              />
+            </SettingRow>
+            <div style={{ marginTop: 16 }}>
+              <button
+                style={{
+                  width: "100%",
+                  background: "rgba(248,113,113,0.08)",
+                  border: "1px solid rgba(248,113,113,0.2)",
+                  color: "#ef4444",
+                  padding: "10px",
+                  borderRadius: 10,
+                  cursor: "pointer",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                Change Password
+              </button>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Save button */}
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button
+          onClick={handleSave}
+          style={{
+            background: saved ? "rgba(52,211,153,0.15)" : "#2c2c2c",
+            border: saved ? "1px solid #34d399" : "1px solid transparent",
+            color: saved ? "#10b981" : "#fff",
+            fontSize: 12,
+            fontWeight: 600,
+            padding: "12px 32px",
+            borderRadius: 12,
+            cursor: "pointer",
+            letterSpacing: "1.5px",
+            textTransform: "uppercase",
+            boxShadow: saved ? "none" : "0 4px 16px rgba(44,44,44,0.2)",
+            transition: "all 0.3s ease",
+          }}
+        >
+          {saved ? "✓ Saved!" : "Save Changes"}
+        </button>
+      </div>
+    </div>
+  );
 }

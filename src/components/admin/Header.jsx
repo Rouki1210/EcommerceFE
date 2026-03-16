@@ -38,5 +38,5 @@ export default function Header({ title, subtitle }) {
                 <NotificationBell />
             </motion.div>
         </div>
-    );
+  );
 }

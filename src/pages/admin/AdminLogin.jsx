@@ -2,6 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAdmin } from "../../api/authApi";
 
+const ADMIN_EMAIL = "admin@shop.com";
+const ADMIN_PASSWORD = "admin123";
+
+const DEMO = { email: ADMIN_EMAIL, password: ADMIN_PASSWORD };
+
+const INPUT_CLS =
+  "login-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 text-[13px] transition-all";
+
 export default function AdminLogin() {
     const [form, setForm]       = useState({ email: "", password: "" });
     const [error, setError]     = useState("");
@@ -155,6 +163,27 @@ export default function AdminLogin() {
                     </div>
                 </div>
             </div>
+            <button
+              onClick={() => setForm(DEMO)}
+              className="ml-auto text-[10px] font-bold px-2.5 py-1 rounded-md cursor-pointer border whitespace-nowrap"
+              style={{
+                background: "rgba(234,179,8,0.1)",
+                borderColor: "rgba(234,179,8,0.25)",
+                color: "#b45309",
+              }}
+            >
+              Fill ↗
+            </button>
+          </div>
+
+          {/* Back */}
+          <div className="text-center mt-7">
+            <a href="/" className="text-slate-400 text-xs no-underline hover:text-slate-600 transition-colors">
+              ← Back to shop
+            </a>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

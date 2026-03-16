@@ -12,7 +12,15 @@ export function useProducts() {
   useEffect(() => {
     if (USE_MOCK) return;
     getProducts()
-      .then((data) => setProducts(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (data && Array.isArray(data.content)) {
+          setProducts(data.content);
+        } else {
+          setProducts([]);
+        }
+      })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, []);

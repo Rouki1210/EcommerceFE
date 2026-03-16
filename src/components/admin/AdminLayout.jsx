@@ -14,7 +14,9 @@ export default function AdminLayout() {
     const [mounted, setMounted] = useState(false);
     const location = useLocation();
 
-    useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
+  useEffect(() => {
+    setTimeout(() => setMounted(true), 100);
+  }, []);
 
     return (
         <NotificationProvider>

@@ -65,9 +65,9 @@ export default function Recentorders() {
               <span className={`w-1.5 h-1.5 rounded-full ${statusDot[order.status]}`} />
                 {order.status}
             </span>
-                    </div>
-                </div>
-            ))}
+          </div>
         </div>
-    );
+      ))}
+    </div>
+  );
 }

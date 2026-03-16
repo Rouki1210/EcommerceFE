@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
 
 function AnimatedNumber({ value }) {
-    const [display, setDisplay] = useState(0);
-    const target = parseFloat(value.replace(/[^0-9.]/g, ""));
-    const prefix = value.includes("$") ? "$" : "";
+  const [display, setDisplay] = useState(0);
+  const target = parseFloat(value.replace(/[^0-9.]/g, ""));
+  const prefix = value.includes("$") ? "$" : "";
 
-    useEffect(() => {
-        let start = 0;
-        const duration = 1200;
-        const step = target / (duration / 16);
-        const timer = setInterval(() => {
-            start += step;
-            if (start >= target) { setDisplay(target); clearInterval(timer); }
-            else setDisplay(Math.floor(start));
-        }, 16);
-        return () => clearInterval(timer);
-    }, []);
+  useEffect(() => {
+    let start = 0;
+    const duration = 1200;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setDisplay(target);
+        clearInterval(timer);
+      } else setDisplay(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, []);
 
-    return <span>{prefix}{display.toLocaleString()}</span>;
+  return (
+    <span>
+      {prefix}
+      {display.toLocaleString()}
+    </span>
+  );
 }
 
 export default function StatsCard({ title, value, change, up, icon, sub, delay = 0 }) {
