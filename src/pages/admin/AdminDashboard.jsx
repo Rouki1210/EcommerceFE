@@ -12,22 +12,19 @@ const stats = [
 
 export default function Admindashboard() {
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+        <div className="flex flex-col gap-7">
             <Header title="Admin Dashboard" subtitle="Overview" />
 
-            {/* Stats */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+            <div className="grid grid-cols-3 gap-5">
                 {stats.map((s, i) => <StatsCard key={i} {...s} />)}
             </div>
 
-            {/* Charts */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 20 }}>
+            <div className="grid gap-5" style={{ gridTemplateColumns: "1.6fr 1fr" }}>
                 <AreaSalesChart />
                 <BarOrdersChart />
             </div>
 
-            {/* Bottom */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 20 }}>
+            <div className="grid gap-5" style={{ gridTemplateColumns: "1.4fr 1fr" }}>
                 <Recentorders />
                 <Topproducts />
             </div>

@@ -1,65 +1,41 @@
 export default function ProductTable({ products = [], onEdit, onDelete }) {
     return (
-        <div style={{
-            background: "#ffffff", border: "1px solid rgba(0,0,0,0.07)",
-            borderRadius: 16, overflow: "hidden",
-        }}>
+        <div className="bg-white border border-black/[0.07] rounded-2xl overflow-hidden">
             {/* Header */}
-            <div style={{
-                display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-                padding: "16px 24px", borderBottom: "1px solid rgba(0,0,0,0.05)",
-                background: "#f8fafc",
-            }}>
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr] px-6 py-4 border-b border-black/5 bg-slate-50">
                 {["Product", "Category", "Price", "Stock", "Actions"].map(h => (
-                    <div key={h} style={{ color: "#334155", fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>{h}</div>
+                    <div key={h} className="text-slate-700 text-[10px] tracking-[1.5px] font-semibold uppercase">{h}</div>
                 ))}
             </div>
 
             {products.map((prod, i) => (
-                <div key={prod.id} className="order-row" style={{
-                    display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-                    padding: "14px 24px", borderBottom: "1px solid rgba(0,0,0,0.04)",
-                    transition: "background 0.2s ease",
-                    animation: `fadeSlideUp 0.4s ease ${i * 0.07}s both`,
-                }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <div style={{
-                            width: 38, height: 38, borderRadius: 8, overflow: "hidden",
-                            background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
-                            flexShrink: 0,
-                        }}>
-                            {prod.image && (
-                                <img src={prod.image} alt={prod.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                            )}
+                <div
+                    key={prod.id}
+                    className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr] px-6 py-3.5 border-b border-black/[0.04] hover:bg-slate-50 transition-colors"
+                    style={{ animation: `fadeSlideUp 0.4s ease ${i * 0.07}s both` }}
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-black/[0.06] bg-slate-100 flex-shrink-0">
+                            {prod.image && <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />}
                         </div>
-                        <span style={{ color: "#1e293b", fontSize: 13, fontWeight: 600 }}>{prod.name}</span>
+                        <span className="text-slate-800 text-[13px] font-semibold">{prod.name}</span>
                     </div>
-                    <div style={{ color: "#64748b", fontSize: 12, display: "flex", alignItems: "center" }}>{prod.category}</div>
-                    <div style={{ color: "#eab308", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center" }}>
-                        ${prod.price}
+                    <div className="text-slate-500 text-xs flex items-center">{prod.category}</div>
+                    <div className="text-yellow-500 text-[13px] font-bold flex items-center">${prod.price}</div>
+                    <div className="flex items-center">
+            <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${
+                prod.stock < 5 ? "bg-red-400/10 text-red-400" : "bg-emerald-400/10 text-emerald-400"
+            }`}>{prod.stock} left</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{
-                fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20,
-                background: prod.stock < 5 ? "rgba(248,113,113,0.1)" : "rgba(52,211,153,0.1)",
-                color: prod.stock < 5 ? "#f87171" : "#34d399",
-            }}>{prod.stock} left</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div className="flex items-center gap-2">
                         <button
                             onClick={() => onEdit && onEdit(prod)}
-                            style={{
-                                background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.2)",
-                                color: "#60a5fa", fontSize: 11, padding: "5px 12px", borderRadius: 7,
-                                cursor: "pointer", fontWeight: 600,
-                            }}>Edit</button>
+                            className="bg-blue-400/10 border border-blue-400/20 text-blue-400 text-[11px] px-3 py-1.5 rounded-lg cursor-pointer font-semibold hover:bg-blue-400/20 transition-colors"
+                        >Edit</button>
                         <button
                             onClick={() => onDelete && onDelete(prod.id)}
-                            style={{
-                                background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)",
-                                color: "#f87171", fontSize: 11, padding: "5px 12px", borderRadius: 7,
-                                cursor: "pointer", fontWeight: 600,
-                            }}>Del</button>
+                            className="bg-red-400/10 border border-red-400/20 text-red-400 text-[11px] px-3 py-1.5 rounded-lg cursor-pointer font-semibold hover:bg-red-400/20 transition-colors"
+                        >Del</button>
                     </div>
                 </div>
             ))}

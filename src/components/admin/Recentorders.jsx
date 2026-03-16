@@ -1,53 +1,44 @@
 import { useNavigate } from "react-router-dom";
 
 const recentOrders = [
-    { id: "#ORD-8821", customer: "Nguyen Van A", product: "Nike Air Max",   amount: "$240", status: "Delivered",  avatar: "N" },
-    { id: "#ORD-8820", customer: "Tran Thi B",   product: "Adidas Ultra",   amount: "$180", status: "Pending",    avatar: "T" },
-    { id: "#ORD-8819", customer: "Le Van C",      product: "Puma RS-X",     amount: "$150", status: "Processing", avatar: "L" },
-    { id: "#ORD-8818", customer: "Pham Thi D",    product: "New Balance",   amount: "$210", status: "Delivered",  avatar: "P" },
-    { id: "#ORD-8817", customer: "Hoang Van E",   product: "Converse All",  amount: "$90",  status: "Cancelled",  avatar: "H" },
+    { id: "#ORD-8821", customer: "Nguyen Van A", product: "Nike Air Max",  amount: "$240", status: "Delivered",  avatar: "N" },
+    { id: "#ORD-8820", customer: "Tran Thi B",   product: "Adidas Ultra",  amount: "$180", status: "Pending",    avatar: "T" },
+    { id: "#ORD-8819", customer: "Le Van C",      product: "Puma RS-X",    amount: "$150", status: "Processing", avatar: "L" },
+    { id: "#ORD-8818", customer: "Pham Thi D",    product: "New Balance",  amount: "$210", status: "Delivered",  avatar: "P" },
+    { id: "#ORD-8817", customer: "Hoang Van E",   product: "Converse All", amount: "$90",  status: "Cancelled",  avatar: "H" },
 ];
 
-const statusColors = {
-    Delivered:  { bg: "rgba(52,211,153,0.15)",  text: "#34d399", dot: "#34d399" },
-    Pending:    { bg: "rgba(251,191,36,0.15)",   text: "#fbbf24", dot: "#fbbf24" },
-    Processing: { bg: "rgba(96,165,250,0.15)",   text: "#60a5fa", dot: "#60a5fa" },
-    Cancelled:  { bg: "rgba(248,113,113,0.15)",  text: "#f87171", dot: "#f87171" },
+const statusStyle = {
+    Delivered:  "bg-emerald-400/15 text-emerald-400",
+    Pending:    "bg-yellow-400/15 text-yellow-400",
+    Processing: "bg-blue-400/15 text-blue-400",
+    Cancelled:  "bg-red-400/15 text-red-400",
+};
+const statusDot = {
+    Delivered: "bg-emerald-400", Pending: "bg-yellow-400",
+    Processing: "bg-blue-400",   Cancelled: "bg-red-400",
 };
 
 export default function Recentorders() {
     const navigate = useNavigate();
 
     return (
-        <div style={{
-            background: "#ffffff", border: "1px solid #e8e2db",
-            borderRadius: 16, padding: "24px",
-            animation: "fadeSlideUp 0.6s ease 0.55s both",
-        }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div className="bg-white border border-black/[0.07] rounded-2xl p-6 shadow-sm" style={{ animation: "fadeSlideUp 0.6s ease 0.55s both" }}>
+            <div className="flex justify-between items-center mb-5">
                 <div>
-                    <div style={{ color: "#9a8c7e", fontSize: 10, letterSpacing: 2, marginBottom: 4 }}>LATEST</div>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#2c2c2c", fontSize: 16, fontWeight: 600, margin: 0 }}>
-                        Recent Orders
-                    </h3>
+                    <div className="text-slate-400 text-[10px] tracking-[2px] mb-1 uppercase">Latest</div>
+                    <h3 className="text-slate-900 text-base font-bold m-0">Recent Orders</h3>
                 </div>
                 <button
                     onClick={() => navigate("/admin/orders")}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(200,169,110,0.2)"; e.currentTarget.style.transform = "scale(1.04)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(200,169,110,0.1)"; e.currentTarget.style.transform = "scale(1)"; }}
-                    style={{
-                        background: "rgba(200,169,110,0.1)", border: "1px solid rgba(200,169,110,0.25)",
-                        color: "#c8a96e", fontSize: 11, padding: "6px 14px", borderRadius: 8,
-                        cursor: "pointer", fontWeight: 600, letterSpacing: 0.5,
-                        transition: "all 0.2s ease",
-                    }}
+                    className="bg-yellow-500/10 border border-yellow-500/25 text-yellow-600 text-[11px] px-3.5 py-1.5 rounded-lg cursor-pointer font-semibold hover:bg-yellow-500/20 transition-all"
                 >View All →</button>
             </div>
 
             {/* Header */}
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr", padding: "0 8px 10px", borderBottom: "1px solid #e8e2db" }}>
+            <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr] px-2 pb-2.5 border-b border-black/[0.06]">
                 {["Customer", "Product", "Amount", "Status"].map(h => (
-                    <div key={h} style={{ color: "#9a8c7e", fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>{h}</div>
+                    <div key={h} className="text-slate-400 text-[10px] tracking-[1.5px] font-semibold uppercase">{h}</div>
                 ))}
             </div>
 
@@ -55,38 +46,23 @@ export default function Recentorders() {
                 <div
                     key={i}
                     onClick={() => navigate("/admin/orders")}
-                    onMouseEnter={e => e.currentTarget.style.background = "rgba(200,169,110,0.05)"}
-                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                    className="order-row"
-                    style={{
-                        display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr",
-                        padding: "12px 8px", borderBottom: "1px solid rgba(44,44,44,0.05)",
-                        cursor: "pointer", borderRadius: 8, transition: "background 0.2s ease",
-                        animation: `fadeSlideUp 0.4s ease ${0.6 + i * 0.07}s both`,
-                    }}
+                    className="grid grid-cols-[2fr_1.5fr_1fr_1fr] px-2 py-3 border-b border-black/[0.04] cursor-pointer rounded-lg hover:bg-slate-50 transition-colors"
+                    style={{ animation: `fadeSlideUp 0.4s ease ${0.6 + i * 0.07}s both` }}
                 >
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{
-                            width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-                            background: "#f5f0eb", border: "1px solid rgba(200,169,110,0.25)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "#c8a96e", fontSize: 11, fontWeight: 700,
-                        }}>{order.avatar}</div>
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-yellow-500 text-[11px] font-bold border border-yellow-500/25 bg-slate-50">
+                            {order.avatar}
+                        </div>
                         <div>
-                            <div style={{ color: "#2c2c2c", fontSize: 12, fontWeight: 600 }}>{order.customer}</div>
-                            <div style={{ color: "#9a8c7e", fontSize: 10 }}>{order.id}</div>
+                            <div className="text-slate-800 text-xs font-semibold">{order.customer}</div>
+                            <div className="text-slate-400 text-[10px]">{order.id}</div>
                         </div>
                     </div>
-                    <div style={{ color: "#9a8c7e", fontSize: 12, display: "flex", alignItems: "center" }}>{order.product}</div>
-                    <div style={{ color: "#2c2c2c", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center" }}>{order.amount}</div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{
-                fontSize: 10, fontWeight: 600, padding: "3px 10px", borderRadius: 20,
-                background: statusColors[order.status].bg,
-                color: statusColors[order.status].text,
-                display: "flex", alignItems: "center", gap: 5,
-            }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: statusColors[order.status].dot, display: "inline-block" }} />
+                    <div className="text-slate-500 text-xs flex items-center">{order.product}</div>
+                    <div className="text-slate-800 text-xs font-semibold flex items-center">{order.amount}</div>
+                    <div className="flex items-center">
+            <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 ${statusStyle[order.status]}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${statusDot[order.status]}`} />
                 {order.status}
             </span>
                     </div>

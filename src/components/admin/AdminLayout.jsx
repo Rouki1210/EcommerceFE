@@ -12,37 +12,25 @@ const pageVariants = {
 
 export default function AdminLayout() {
     const [mounted, setMounted] = useState(false);
-    const [activeNav, setActiveNav] = useState("Dashboard");
     const location = useLocation();
 
     useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
 
     return (
         <NotificationProvider>
-            <div style={{
-                display: "flex", height: "100vh", width: "100%",
-                background: "#f4f6fb", overflow: "hidden", position: "relative",
-                fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
-            }}>
+            <div className="flex h-screen w-full overflow-hidden relative bg-[#f4f6fb]">
                 {/* Ambient blobs */}
-                <div style={{
-                    position: "fixed", top: -200, right: -100, width: 600, height: 600,
-                    background: "radial-gradient(circle, rgba(234,179,8,0.06) 0%, transparent 70%)",
-                    pointerEvents: "none", zIndex: 0,
-                }} />
-                <div style={{
-                    position: "fixed", bottom: -200, left: 100, width: 500, height: 500,
-                    background: "radial-gradient(circle, rgba(96,165,250,0.04) 0%, transparent 70%)",
-                    pointerEvents: "none", zIndex: 0,
-                }} />
+                <div className="fixed -top-48 -right-24 w-[600px] h-[600px] rounded-full pointer-events-none z-0"
+                     style={{ background: "radial-gradient(circle, rgba(234,179,8,0.06) 0%, transparent 70%)" }} />
+                <div className="fixed -bottom-48 left-24 w-[500px] h-[500px] rounded-full pointer-events-none z-0"
+                     style={{ background: "radial-gradient(circle, rgba(96,165,250,0.04) 0%, transparent 70%)" }} />
 
-                <Sidebar activeNav={activeNav} setActiveNav={setActiveNav} />
+                <Sidebar />
 
-                <main style={{
-                    flex: 1, overflowY: "auto", padding: "32px 36px",
-                    position: "relative", zIndex: 1,
-                    opacity: mounted ? 1 : 0, transition: "opacity 0.4s ease",
-                }}>
+                <main
+                    className="flex-1 overflow-y-auto px-9 py-8 relative z-[1] transition-opacity duration-400"
+                    style={{ opacity: mounted ? 1 : 0 }}
+                >
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={location.pathname}
@@ -50,7 +38,7 @@ export default function AdminLayout() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            style={{ height: "100%" }}
+                            className="h-full"
                         >
                             <Outlet />
                         </motion.div>

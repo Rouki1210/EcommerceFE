@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { DiCssTricks } from "react-icons/di";
 import {
     MdOutlineDashboard, MdOutlineInventory2,
     MdOutlineShoppingBag, MdOutlinePeople,
@@ -27,60 +26,43 @@ const itemVariants = {
 };
 
 export default function Sidebar() {
-    const navigate   = useNavigate();
-    const location   = useLocation();
-    const activeNav  = navItems.find(i => location.pathname.startsWith(i.path))?.label || "Dashboard";
+    const navigate  = useNavigate();
+    const location  = useLocation();
+    const activeNav = navItems.find(i => location.pathname.startsWith(i.path))?.label || "Dashboard";
 
     return (
         <motion.aside
             variants={sidebarVariants}
             initial="hidden"
             animate="show"
-            style={{
-                width: 240, minHeight: "100vh",
-                background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)",
-                borderRight: "1px solid rgba(255,255,255,0.06)",
-                display: "flex", flexDirection: "column",
-                position: "relative", zIndex: 10,
-            }}
+            className="w-60 min-h-screen flex flex-col relative z-10 border-r border-white/5"
+            style={{ background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)" }}
         >
-            {/* Top glow */}
-            <div style={{
-                position: "absolute", top: 0, left: 0, right: 0, height: 1,
-                background: "linear-gradient(90deg, transparent, rgba(234,179,8,0.4), transparent)",
-            }} />
+            <div className="absolute top-0 left-0 right-0 h-px"
+                 style={{ background: "linear-gradient(90deg, transparent, rgba(234,179,8,0.4), transparent)" }} />
 
-            {/* Logo */}
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                style={{ padding: "28px 24px 22px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+                className="px-6 pt-7 pb-5 border-b border-white/5"
             >
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div className="flex items-center gap-3">
                     <motion.div
                         animate={{ y: [0, -4, 0] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        style={{
-                            width: 38, height: 38, borderRadius: 12,
-                            background: "linear-gradient(135deg, #eab308, #f59e0b)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 17, fontWeight: 900, color: "#000",
-                            boxShadow: "0 0 20px rgba(234,179,8,0.45)",
-                        }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-base font-black text-black flex-shrink-0"
+                        style={{ background: "linear-gradient(135deg, #eab308, #f59e0b)", boxShadow: "0 0 20px rgba(234,179,8,0.45)" }}
                     >A</motion.div>
                     <div>
-                        <div style={{ fontFamily: "Syne, sans-serif", color: "#fff", fontSize: 13, fontWeight: 800, letterSpacing: 0.5 }}>
-                            ADMIN PAGE
-                        </div>
-                        <div style={{ color: "#64748b", fontSize: 9, letterSpacing: 2 }}>ECOMMERCE</div>
+                        <div className="text-white text-[13px] font-extrabold tracking-wide">ADMIN PAGE</div>
+                        <div className="text-slate-500 text-[9px] tracking-[2px]">ECOMMERCE</div>
                     </div>
                 </div>
             </motion.div>
 
-            {/* Nav */}
-            <nav style={{ padding: "18px 12px", flex: 1 }}>
-                <div style={{ color: "#334155", fontSize: 9, letterSpacing: 3, paddingLeft: 12, marginBottom: 10 }}>MENU</div>
+            <nav className="px-3 py-4 flex-1">
+                <div className="text-slate-700 text-[9px] tracking-[3px] pl-3 mb-2">MENU</div>
                 {navItems.map((item, i) => {
                     const Icon = item.icon;
                     const isActive = activeNav === item.label;
@@ -94,43 +76,27 @@ export default function Sidebar() {
                             whileHover={{ x: 4 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => navigate(item.path)}
-                            style={{
-                                display: "flex", alignItems: "center", gap: 11,
-                                padding: "10px 14px", borderRadius: 12, marginBottom: 3,
-                                cursor: "pointer",
-                                background: isActive ? "rgba(234,179,8,0.12)" : "transparent",
-                                border: isActive ? "1px solid rgba(234,179,8,0.2)" : "1px solid transparent",
-                                position: "relative", transition: "background 0.2s, border 0.2s",
-                            }}
+                            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl mb-1 cursor-pointer relative transition-all duration-200 border ${
+                                isActive ? "bg-yellow-500/10 border-yellow-500/20" : "bg-transparent border-transparent"
+                            }`}
                         >
                             {isActive && (
                                 <motion.div
                                     layoutId="activeIndicator"
-                                    style={{
-                                        position: "absolute", left: 0, top: "50%",
-                                        width: 3, height: 20,
-                                        background: "linear-gradient(180deg, #eab308, #f59e0b)",
-                                        borderRadius: "0 3px 3px 0",
-                                    }}
+                                    className="absolute left-0 w-[3px] h-5 rounded-r-sm"
+                                    style={{ background: "linear-gradient(180deg, #eab308, #f59e0b)", top: "50%", transform: "translateY(-50%)" }}
                                     initial={false}
-                                    animate={{ y: "-50%" }}
                                 />
                             )}
                             <Icon size={17} color={isActive ? "#eab308" : "#475569"} />
-                            <span style={{
-                                fontSize: 13, fontWeight: isActive ? 600 : 400,
-                                color: isActive ? "#eab308" : "#64748b",
-                                letterSpacing: 0.2, flex: 1,
-                            }}>{item.label}</span>
+                            <span className={`text-[13px] flex-1 tracking-[0.2px] ${isActive ? "font-semibold text-yellow-400" : "font-normal text-slate-500"}`}>
+                                {item.label}
+                            </span>
                             {item.badge && (
                                 <motion.span
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    style={{
-                                        background: "rgba(234,179,8,0.2)", color: "#eab308",
-                                        fontSize: 9, fontWeight: 700, padding: "2px 7px",
-                                        borderRadius: 20, letterSpacing: 0.5,
-                                    }}
+                                    className="bg-yellow-500/20 text-yellow-400 text-[9px] font-bold px-2 py-0.5 rounded-full"
                                 >{item.badge}</motion.span>
                             )}
                         </motion.div>
@@ -138,27 +104,21 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            {/* User Profile + Logout */}
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
-                style={{ padding: "16px 20px", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                className="px-5 py-4 border-t border-white/5"
             >
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{
-                        width: 36, height: 36, borderRadius: 10,
-                        background: "linear-gradient(135deg, #1e293b, #334155)",
-                        border: "1px solid rgba(234,179,8,0.3)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#eab308", fontSize: 13, fontWeight: 700,
-                    }}>AD</div>
+                <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-yellow-400 text-xs font-bold border border-yellow-500/30 flex-shrink-0"
+                         style={{ background: "linear-gradient(135deg, #1e293b, #334155)" }}>AD</div>
                     <div>
-                        <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>Admin User</div>
-                        <div style={{ color: "#475569", fontSize: 10 }}>admin@shop.com</div>
+                        <div className="text-slate-200 text-xs font-semibold">Admin User</div>
+                        <div className="text-slate-500 text-[10px]">admin@shop.com</div>
                     </div>
                     <motion.button
-                        whileHover={{ scale: 1.1, background: "rgba(248,113,113,0.2)" }}
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => {
                             localStorage.removeItem("adminAuth");
@@ -166,13 +126,7 @@ export default function Sidebar() {
                             navigate("/admin/login");
                         }}
                         title="Logout"
-                        style={{
-                            marginLeft: "auto", background: "rgba(248,113,113,0.1)",
-                            border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8,
-                            width: 30, height: 30, cursor: "pointer", fontSize: 13,
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "#f87171",
-                        }}
+                        className="ml-auto w-8 h-8 flex items-center justify-center rounded-lg border border-red-400/20 bg-red-400/10 text-red-400 cursor-pointer text-sm"
                     >⏻</motion.button>
                 </div>
             </motion.div>
