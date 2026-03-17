@@ -1,44 +1,42 @@
+
 import NotificationBell from "./NotificationBell";
 
-const formatDate = () => {
-    const now = new Date();
-    return now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-};
-
 export default function Header({ title, subtitle }) {
+    const today = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit", month: "short", year: "numeric",
+    });
 
     return (
-        <div style={{
-            display: "flex", justifyContent: "space-between",
-            alignItems: "flex-start", marginBottom: 28,
-        }}>
-            {/* Left: title */}
-            <div>
+        <div className="flex justify-between items-start mb-7">
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+            >
                 {subtitle && (
-                    <div style={{ color: "#94a3b8", fontSize: 11, letterSpacing: 3, marginBottom: 6 }}>
-                        {subtitle.toUpperCase()}
+                    <div className="text-slate-400 text-[11px] tracking-[3px] mb-1.5 uppercase">
+                        {subtitle}
                     </div>
                 )}
-                <h1 style={{
-                    fontFamily: "Syne, sans-serif", color: "#0f172a",
-                    fontSize: 28, fontWeight: 800, letterSpacing: -0.5, margin: 0,
-                }}>{title}</h1>
-            </div>
+                <h1 className="text-slate-900 text-[28px] font-extrabold tracking-tight m-0">
+                    {title}
+                </h1>
+            </motion.div>
 
-            {/* Right: date + bell */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-
-                <div style={{
-                    background: "#fff", border: "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: 10, padding: "9px 16px",
-                    display: "flex", alignItems: "center", gap: 8,
-                    color: "#64748b", fontSize: 12, whiteSpace: "nowrap",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                }}>
-                    <span>📅</span> {formatDate()}
-                </div>
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="flex items-center gap-3"
+            >
+                <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    className="bg-white border border-black/[0.08] rounded-xl px-4 py-2 flex items-center gap-2 text-slate-500 text-xs shadow-sm whitespace-nowrap cursor-default"
+                >
+                    📅 {today}
+                </motion.div>
                 <NotificationBell />
-            </div>
+            </motion.div>
         </div>
-    );
+  );
 }

@@ -27,104 +27,33 @@ function AnimatedNumber({ value }) {
   );
 }
 
-export default function StatsCard({
-  title,
-  value,
-  change,
-  up,
-  icon,
-  sub,
-  delay = 0,
-}) {
-  return (
-    <div
-      className="stat-card"
-      style={{
-        background: "#ffffff",
-        border: "1px solid #e8e2db",
-        borderRadius: 16,
-        padding: "24px 26px",
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-        position: "relative",
-        overflow: "hidden",
-        boxShadow: "0 2px 12px rgba(44,44,44,0.05)",
-        animation: `fadeSlideUp 0.6s ease ${delay}s both`,
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 2,
-          background:
-            "linear-gradient(90deg, transparent, rgba(200,169,110,0.5), transparent)",
-        }}
-      />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          <div
-            style={{
-              color: "#9a8c7e",
-              fontSize: 11,
-              letterSpacing: 1.5,
-              marginBottom: 10,
-            }}
-          >
-            {title.toUpperCase()}
-          </div>
-          <div
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              color: "#2c2c2c",
-              fontSize: 32,
-              fontWeight: 700,
-              letterSpacing: -1,
-            }}
-          >
-            <AnimatedNumber value={value} />
-          </div>
-        </div>
+export default function StatsCard({ title, value, change, up, icon, sub, delay = 0 }) {
+    return (
         <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 12,
-            background: "rgba(200,169,110,0.1)",
-            border: "1px solid rgba(200,169,110,0.2)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 18,
-          }}
+            className="bg-white border border-black/[0.07] rounded-2xl p-6 cursor-pointer transition-all duration-300 relative overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-md"
+            style={{ animation: `fadeSlideUp 0.6s ease ${delay}s both` }}
         >
-          {icon}
-        </div>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: 6,
-            background: up ? "rgba(52,211,153,0.12)" : "rgba(248,113,113,0.12)",
-            color: up ? "#10b981" : "#ef4444",
-          }}
-        >
+            <div className="absolute top-0 left-0 right-0 h-[2px]"
+                 style={{ background: "linear-gradient(90deg, transparent, rgba(234,179,8,0.5), transparent)" }} />
+
+            <div className="flex justify-between items-start mb-5">
+                <div>
+                    <div className="text-slate-400 text-[11px] tracking-[1.5px] mb-2.5 uppercase">{title}</div>
+                    <div className="text-slate-900 text-[32px] font-extrabold tracking-tight">
+                        <AnimatedNumber value={value} />
+                    </div>
+                </div>
+                <div className="w-11 h-11 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-lg">
+                    {icon}
+                </div>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+        <span className={`text-[11px] font-bold px-2 py-1 rounded-md ${up ? "bg-emerald-500/10 text-emerald-500" : "bg-red-400/10 text-red-400"}`}>
           {change}
         </span>
-        <span style={{ color: "#9a8c7e", fontSize: 11 }}>{sub}</span>
-      </div>
-    </div>
-  );
+                <span className="text-slate-400 text-[11px]">{sub}</span>
+            </div>
+        </div>
+    );
 }

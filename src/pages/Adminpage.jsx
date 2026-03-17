@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AdminLayout from "../components/admin/AdminLayout";
 import Admindashboard from "./admin/Admindashboard";
 import Adminorders from "./admin/Adminorders";

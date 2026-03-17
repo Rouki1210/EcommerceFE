@@ -1,263 +1,134 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  FiGrid,
-  FiPackage,
-  FiClipboard,
-  FiUsers,
-  FiBarChart2,
-  FiSettings,
-} from "react-icons/fi";
+    MdOutlineDashboard, MdOutlineInventory2,
+    MdOutlineShoppingBag, MdOutlinePeople,
+    MdOutlineBarChart, MdOutlineSettings,
+} from "react-icons/md";
 
 const navItems = [
-  { label: "Dashboard", icon: <FiGrid size={15} />, path: "/admin/dashboard" },
-  { label: "Products", icon: <FiPackage size={15} />, path: "/admin/products" },
-  {
-    label: "Orders",
-    icon: <FiClipboard size={15} />,
-    path: "/admin/orders",
-    badge: 5,
-  },
-  { label: "Users", icon: <FiUsers size={15} />, path: "/admin/users" },
-  {
-    label: "Analytics",
-    icon: <FiBarChart2 size={15} />,
-    path: "/admin/analytics",
-  },
-  {
-    label: "Settings",
-    icon: <FiSettings size={15} />,
-    path: "/admin/settings",
-  },
+    { label: "Dashboard", icon: MdOutlineDashboard,   path: "/admin/dashboard" },
+    { label: "Products",  icon: MdOutlineInventory2,  path: "/admin/products" },
+    { label: "Orders",    icon: MdOutlineShoppingBag, path: "/admin/orders", badge: 5 },
+    { label: "Users",     icon: MdOutlinePeople,      path: "/admin/users" },
+    { label: "Analytics", icon: MdOutlineBarChart,    path: "/admin/analytics" },
+    { label: "Settings",  icon: MdOutlineSettings,    path: "/admin/settings" },
 ];
 
+const sidebarVariants = {
+    hidden: { x: -240, opacity: 0 },
+    show:   { x: 0, opacity: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
+
+const itemVariants = {
+    hidden: { x: -20, opacity: 0 },
+    show:   (i) => ({ x: 0, opacity: 1, transition: { delay: 0.1 + i * 0.06, duration: 0.35, ease: "easeOut" } }),
+};
+
 export default function Sidebar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const activeNav =
-    navItems.find((i) => location.pathname.startsWith(i.path))?.label ||
-    "Dashboard";
-  return (
-    <aside
-      style={{
-        width: 240,
-        minHeight: "100vh",
-        background: "#2c2c2c",
-        borderRight: "1px solid rgba(255,255,255,0.08)",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        zIndex: 10,
-        backdropFilter: "blur(20px)",
-        animation: "fadeSlideUp 0.5s ease forwards",
-      }}
-    >
-      {/* Logo */}
-      <div
-        style={{
-          padding: "32px 24px 24px",
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              background: "linear-gradient(135deg, #c8a96e, #b8965e)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 16,
-              fontWeight: 900,
-              color: "#fff",
-              boxShadow: "0 0 20px rgba(200,169,110,0.35)",
-              animation: "float 3s ease-in-out infinite",
-            }}
-          >
-            A
-          </div>
-          <div>
-            <div
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: "#fff",
-                fontSize: 17,
-                fontWeight: 700,
-                letterSpacing: 1,
-              }}
-            >
-              Maison Admin
-            </div>
-            <div
-              style={{
-                color: "rgba(255,255,255,0.38)",
-                fontSize: 10,
-                letterSpacing: 2,
-              }}
-            >
-              CONTROL PANEL
-            </div>
-          </div>
-        </div>
-      </div>
+    const navigate  = useNavigate();
+    const location  = useLocation();
+    const activeNav = navItems.find(i => location.pathname.startsWith(i.path))?.label || "Dashboard";
 
-      {/* Nav */}
-      <nav style={{ padding: "20px 12px", flex: 1 }}>
-        <div
-          style={{
-            color: "rgba(255,255,255,0.28)",
-            fontSize: 9,
-            letterSpacing: 3,
-            paddingLeft: 12,
-            marginBottom: 12,
-          }}
+    return (
+        <motion.aside
+            variants={sidebarVariants}
+            initial="hidden"
+            animate="show"
+            className="w-60 min-h-screen flex flex-col relative z-10 border-r border-white/5"
+            style={{ background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)" }}
         >
-          MENU
-        </div>
-        {navItems.map((item) => (
-          <div
-            key={item.label}
-            className="nav-item"
-            onClick={() => navigate(item.path)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "11px 14px",
-              borderRadius: 10,
-              marginBottom: 4,
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              background:
-                activeNav === item.label
-                  ? "rgba(200,169,110,0.15)"
-                  : "transparent",
-              border:
-                activeNav === item.label
-                  ? "1px solid rgba(200,169,110,0.3)"
-                  : "1px solid transparent",
-              position: "relative",
-            }}
-          >
-            {activeNav === item.label && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  width: 3,
-                  height: 20,
-                  background: "linear-gradient(180deg, #c8a96e, #b8965e)",
-                  borderRadius: "0 3px 3px 0",
-                }}
-              />
-            )}
-            <span
-              style={{
-                fontSize: 14,
-                color:
-                  activeNav === item.label
-                    ? "#c8a96e"
-                    : "rgba(255,255,255,0.42)",
-              }}
-            >
-              {item.icon}
-            </span>
-            <span
-              style={{
-                fontSize: 13,
-                fontWeight: activeNav === item.label ? 600 : 400,
-                color:
-                  activeNav === item.label
-                    ? "#c8a96e"
-                    : "rgba(255,255,255,0.58)",
-                letterSpacing: 0.3,
-              }}
-            >
-              {item.label}
-            </span>
-            {item.badge && (
-              <span
-                style={{
-                  marginLeft: "auto",
-                  background: "rgba(200,169,110,0.2)",
-                  color: "#c8a96e",
-                  fontSize: 9,
-                  fontWeight: 700,
-                  padding: "2px 7px",
-                  borderRadius: 20,
-                  letterSpacing: 0.5,
-                }}
-              >
-                {item.badge}
-              </span>
-            )}
-          </div>
-        ))}
-      </nav>
+            <div className="absolute top-0 left-0 right-0 h-px"
+                 style={{ background: "linear-gradient(90deg, transparent, rgba(234,179,8,0.4), transparent)" }} />
 
-      {/* User Profile + Logout */}
-      <div
-        style={{
-          padding: "16px 20px",
-          borderTop: "1px solid rgba(255,255,255,0.1)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(200,169,110,0.35)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#c8a96e",
-              fontSize: 13,
-              fontWeight: 700,
-            }}
-          >
-            AD
-          </div>
-          <div>
-            <div style={{ color: "#fff", fontSize: 12, fontWeight: 600 }}>
-              Admin User
-            </div>
-            <div style={{ color: "rgba(255,255,255,0.38)", fontSize: 10 }}>
-              admin@shop.com
-            </div>
-          </div>
-          {/* Logout */}
-          <button
-            onClick={() => {
-              localStorage.removeItem("adminAuth");
-              navigate("/admin/login");
-            }}
-            title="Logout"
-            style={{
-              marginLeft: "auto",
-              background: "rgba(248,113,113,0.1)",
-              border: "1px solid rgba(248,113,113,0.2)",
-              borderRadius: 8,
-              width: 30,
-              height: 30,
-              cursor: "pointer",
-              fontSize: 13,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#f87171",
-              transition: "all 0.2s",
-            }}
-          >
-            ⏻
-          </button>
-        </div>
-      </div>
-    </aside>
-  );
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+                className="px-6 pt-7 pb-5 border-b border-white/5"
+            >
+                <div className="flex items-center gap-3">
+                    <motion.div
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-base font-black text-black flex-shrink-0"
+                        style={{ background: "linear-gradient(135deg, #eab308, #f59e0b)", boxShadow: "0 0 20px rgba(234,179,8,0.45)" }}
+                    >A</motion.div>
+                    <div>
+                        <div className="text-white text-[13px] font-extrabold tracking-wide">ADMIN PAGE</div>
+                        <div className="text-slate-500 text-[9px] tracking-[2px]">ECOMMERCE</div>
+                    </div>
+                </div>
+            </motion.div>
+
+            <nav className="px-3 py-4 flex-1">
+                <div className="text-slate-700 text-[9px] tracking-[3px] pl-3 mb-2">MENU</div>
+                {navItems.map((item, i) => {
+                    const Icon = item.icon;
+                    const isActive = activeNav === item.label;
+                    return (
+                        <motion.div
+                            key={item.label}
+                            custom={i}
+                            variants={itemVariants}
+                            initial="hidden"
+                            animate="show"
+                            whileHover={{ x: 4 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => navigate(item.path)}
+                            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl mb-1 cursor-pointer relative transition-all duration-200 border ${
+                                isActive ? "bg-yellow-500/10 border-yellow-500/20" : "bg-transparent border-transparent"
+                            }`}
+                        >
+                            {isActive && (
+                                <motion.div
+                                    layoutId="activeIndicator"
+                                    className="absolute left-0 w-[3px] h-5 rounded-r-sm"
+                                    style={{ background: "linear-gradient(180deg, #eab308, #f59e0b)", top: "50%", transform: "translateY(-50%)" }}
+                                    initial={false}
+                                />
+                            )}
+                            <Icon size={17} color={isActive ? "#eab308" : "#475569"} />
+                            <span className={`text-[13px] flex-1 tracking-[0.2px] ${isActive ? "font-semibold text-yellow-400" : "font-normal text-slate-500"}`}>
+                                {item.label}
+                            </span>
+                            {item.badge && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="bg-yellow-500/20 text-yellow-400 text-[9px] font-bold px-2 py-0.5 rounded-full"
+                                >{item.badge}</motion.span>
+                            )}
+                        </motion.div>
+                    );
+                })}
+            </nav>
+
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                className="px-5 py-4 border-t border-white/5"
+            >
+                <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-yellow-400 text-xs font-bold border border-yellow-500/30 flex-shrink-0"
+                         style={{ background: "linear-gradient(135deg, #1e293b, #334155)" }}>AD</div>
+                    <div>
+                        <div className="text-slate-200 text-xs font-semibold">Admin User</div>
+                        <div className="text-slate-500 text-[10px]">admin@shop.com</div>
+                    </div>
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => {
+                            localStorage.removeItem("adminAuth");
+                            localStorage.removeItem("adminToken");
+                            navigate("/admin/login");
+                        }}
+                        title="Logout"
+                        className="ml-auto w-8 h-8 flex items-center justify-center rounded-lg border border-red-400/20 bg-red-400/10 text-red-400 cursor-pointer text-sm"
+                    >⏻</motion.button>
+                </div>
+            </motion.div>
+        </motion.aside>
+    );
 }
