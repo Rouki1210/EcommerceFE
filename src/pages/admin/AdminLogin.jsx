@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginAdmin } from "../api/authApi";
+import { loginAdmin } from "../../api/authApi";
 
 export default function AdminLogin() {
     const [form, setForm]       = useState({ email: "", password: "" });
