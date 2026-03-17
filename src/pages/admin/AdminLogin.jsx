@@ -155,6 +155,54 @@ export default function AdminLogin() {
                     </div>
                 </div>
             </div>
+            <div
+              style={{ width: 1, background: "#e2e8f0", alignSelf: "stretch" }}
+            />
+            <div>
+              <div
+                style={{
+                  color: "#94a3b8",
+                  fontSize: 9,
+                  letterSpacing: 1.5,
+                  marginBottom: 4,
+                }}
+              >
+                PASSWORD
+              </div>
+              <div style={{ color: "#0f172a", fontSize: 12, fontWeight: 600 }}>
+                admin123
+              </div>
+            </div>
+            <button
+              onClick={() =>
+                setForm({ email: "admin@shop.com", password: "admin123" })
+              }
+              style={{
+                marginLeft: "auto",
+                background: "rgba(234,179,8,0.1)",
+                border: "1px solid rgba(234,179,8,0.25)",
+                color: "#b45309",
+                fontSize: 10,
+                fontWeight: 700,
+                padding: "4px 10px",
+                borderRadius: 6,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Fill ↗
+            </button>
+          </div>
+
+          {/* Back */}
+          <div style={{ textAlign: "center", marginTop: 28 }}>
+            <a
+              href="/"
+              style={{ color: "#94a3b8", fontSize: 12, textDecoration: "none" }}
+            >
+              ← Back to shop
+            </a>
+          </div>
         </div>
     );
 }
