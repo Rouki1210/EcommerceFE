@@ -1,8 +1,8 @@
 const topProducts = [
-  { name: "Nike Air Max", sold: 142, revenue: "$17,040", trend: 12 },
-  { name: "Adidas Ultra", sold: 98, revenue: "$11,760", trend: -3 },
-  { name: "Puma RS-X", sold: 76, revenue: "$9,120", trend: 8 },
-  { name: "New Balance", sold: 65, revenue: "$7,800", trend: 5 },
+    { name: "Nike Air Max", sold: 142, revenue: "$17,040", trend: 12 },
+    { name: "Adidas Ultra",  sold: 98,  revenue: "$11,760", trend: -3 },
+    { name: "Puma RS-X",     sold: 76,  revenue: "$9,120",  trend: 8 },
+    { name: "New Balance",   sold: 65,  revenue: "$7,800",  trend: 5 },
 ];
 
 export default function Topproducts() {
@@ -44,41 +44,6 @@ export default function Topproducts() {
                     </div>
                 ))}
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: 8,
-              }}
-            >
-              <span style={{ color: "#9a8c7e", fontSize: 11 }}>
-                {prod.sold} sold
-              </span>
-              <span style={{ color: "#9a8c7e", fontSize: 11 }}>
-                {prod.revenue}
-              </span>
-            </div>
-            <div
-              style={{
-                height: 3,
-                background: "rgba(44,44,44,0.08)",
-                borderRadius: 2,
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  height: "100%",
-                  borderRadius: 2,
-                  width: `${(prod.sold / 150) * 100}%`,
-                  background: "linear-gradient(90deg, #c8a96e, #b8965e)",
-                  boxShadow: "0 0 8px rgba(200,169,110,0.3)",
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
