@@ -7,9 +7,14 @@ export const loginAdmin = (email, password) =>
   baseUrl.post("/auth/admin/login", { email, password }).then((res) => res.data);
 
 export const registerApi = (firstName, lastName, email, password) =>
-  baseUrl
-    .post("/auth/register", { firstName, lastName, email, password })
-    .then((res) => res.data);
+    baseUrl
+        .post("/auth/register", { firstName, lastName, email, password })
+        .then((res) => res.data);
+
+export const updateProfileApi = ({ firstName, lastName, email }) =>
+    baseUrl
+        .put("/auth/profile", { firstName, lastName, email })
+        .then((res) => res.data);
 
 export const updateProfileApi = ({ firstName, lastName, email }) =>
   baseUrl
