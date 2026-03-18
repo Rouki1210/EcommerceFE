@@ -21,7 +21,7 @@
 }
 
 .auth-logo-text {
-  @apply heading text-xl text-[#2c2c2c];
+  @apply font-serif text-xl text-[#2c2c2c];
 }
 
 .auth-card {
@@ -33,7 +33,7 @@
 }
 
 .auth-card-title {
-  @apply heading text-2xl text-[#2c2c2c] m-0 mb-7;
+  @apply font-serif text-2xl text-[#2c2c2c] m-0 mb-7;
 }
 
 .auth-error-box {
@@ -152,7 +152,7 @@
 }
 
 .section-title {
-  @apply heading text-4xl text-[#2c2c2c] font-bold;
+  @apply font-serif text-4xl text-[#2c2c2c] font-bold;
 }
 
 .section-subtitle {
@@ -220,7 +220,7 @@
 }
 
 .modal-title {
-  @apply heading text-2xl text-[#2c2c2c];
+  @apply font-serif text-2xl text-[#2c2c2c];
 }
 
 .modal-close-btn {
