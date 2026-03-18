@@ -65,15 +65,19 @@ export default function RegisterPage() {
 
   return (
     <>
-      <style>
-        {keyframes}
-        .animate-slideUp {
-          animation: slideUp 0.5s ease both;
-        }
-        .shadow-card-hover {
-          box-shadow: 0 8px 24px rgba(200, 169, 110, 0.12);
-        }
-      </style>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            ${keyframes}
+            .animate-slideUp {
+              animation: slideUp 0.5s ease both;
+            }
+            .shadow-card-hover {
+              box-shadow: 0 8px 24px rgba(200, 169, 110, 0.12);
+            }
+          `,
+        }}
+      />
       <div className="min-h-screen bg-[#f5f0eb] flex flex-col items-center justify-center p-6">
         <Link
           to="/"
