@@ -1,2 +1,5 @@
-// PostCSS config - Tailwind v4 handles CSS processing automatically
-export default {}
+export default {
+  plugins: {
+    tailwindcss: {},
+  },
+}
