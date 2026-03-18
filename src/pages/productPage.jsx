@@ -2,278 +2,454 @@ import { useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { colors, shadows, keyframes, animations } from "../assets/theme/theme";
 
 function Accordion({ title, children }) {
-    usePageTitle(title);
-    const [open, setOpen] = useState(false);
-    return (
-        <div className="border-t border-[#ece7e0]">
-            <button
-                onClick={() => setOpen((v) => !v)}
-                className="w-full flex items-center justify-between py-4 text-sm text-[#2c2c2c] hover:text-[#c8a96e] transition-colors"
-            >
-                <span className="tracking-wide font-medium">{title}</span>
-                <span
-                    className="text-lg leading-none transition-transform duration-300"
-                    style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
-                >
-                    +
-                </span>
-            </button>
-            <div
-                style={{
-                    maxHeight: open ? 400 : 0,
-                    overflow: "hidden",
-                    transition: "max-height 0.35s cubic-bezier(0.22,1,0.36,1)",
-                }}
-            >
-                <div className="pb-4">{children}</div>
-            </div>
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      style={{
+        marginBottom: "1rem",
+        borderBottom: `1px solid ${colors.border}`,
+      }}
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: "100%",
+          padding: "1rem",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontSize: "16px",
+          fontWeight: "600",
+          color: colors.text,
+          transition: "all 0.3s ease",
+        }}
+        onMouseEnter={(e) => (e.target.style.color = colors.gold)}
+        onMouseLeave={(e) => (e.target.style.color = colors.text)}
+      >
+        <span>{title}</span>
+        <span
+          style={{
+            display: "inline-block",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform 0.3s ease",
+            color: colors.gold,
+            fontSize: "20px",
+          }}
+        >
+          +
+        </span>
+      </button>
+      <div
+        style={{
+          maxHeight: open ? "1000px" : "0",
+          overflow: "hidden",
+          transition: "max-height 0.3s ease",
+        }}
+      >
+        <div
+          style={{ padding: "1rem", paddingTop: "0", color: colors.textMuted }}
+        >
+          {children}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default function ProductPage() {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { addToCart } = useOutletContext();
-    const { products, loading } = useProducts();
-    const product = products.find((p) => String(p.id) === String(id));
-    const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
-    const [added, setAdded] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useOutletContext();
+  const { products, loading } = useProducts();
+  const product = products.find((p) => String(p.id) === String(id));
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
+  const [added, setAdded] = useState(false);
 
-    /* ── Not found ── */
-    if (loading) {
+  usePageTitle(product?.name || "Product");
+
+  if (loading) {
     return (
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-[#aaa]">
-            <div className="w-10 h-10 rounded-full border-2 border-[#e8e2db] border-t-[#c8a96e]"
-                style={{ animation: "spin 0.8s linear infinite" }} />
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-            <p className="text-xs tracking-widest uppercase">Loading...</p>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "400px",
+          gap: "1rem",
+        }}
+      >
+        <div
+          style={{
+            width: "40px",
+            height: "40px",
+            border: `3px solid ${colors.border}`,
+            borderTop: `3px solid ${colors.gold}`,
+            borderRadius: "50%",
+            animation: `spin 1s linear infinite`,
+          }}
+        />
+        <p style={{ color: colors.textMuted }}>Loading...</p>
+        <style>{keyframes}</style>
+      </div>
     );
-    }
+  }
 
-    if (!product) {
-        return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-[#888]">
-                <p className="heading text-3xl text-[#2c2c2c]">Product not found</p>
-                <p className="text-sm">The item you're looking for doesn't exist.</p>
-                <button
-                    onClick={() => navigate("/")}
-                    className="mt-2 text-xs tracking-widest uppercase border border-[#2c2c2c] text-[#2c2c2c] px-6 py-2.5 rounded-full hover:bg-[#2c2c2c] hover:text-white transition-all"
-                >
-                    Back to Home
-                </button>
-            </div>
-        );
-    }
-
-    const discount = product.originalPrice
-        ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-        : null;
-
-    const handleAddToCart = () => {
-        const colorPart = product.variant?.split(" / ")[0] ?? product.name;
-        const updatedVariant = selectedSize ? `${colorPart} / ${selectedSize}` : product.variant;
-        addToCart({ ...product, variant: updatedVariant, selectedSize });
-        setAdded(true);
-        setTimeout(() => setAdded(false), 2000);
-    };
-
+  if (!product) {
     return (
-        <>
-            <style>{`
-                @keyframes fadeIn { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
-                .fade-in { animation: fadeIn 0.45s ease both; }
-            `}</style>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "400px",
+          gap: "1.5rem",
+          padding: "2rem",
+        }}
+      >
+        <h1 style={{ fontSize: "24px", fontWeight: "700", color: colors.text }}>
+          Product not found
+        </h1>
+        <p style={{ color: colors.textMuted }}>
+          The item you're looking for doesn't exist.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            padding: "12px 24px",
+            backgroundColor: colors.bgSecondary,
+            color: colors.text,
+            border: `1px solid ${colors.border}`,
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "600",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = colors.border;
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = colors.bgSecondary;
+          }}
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  }
 
-            <div className="max-w-6xl mx-auto px-6 py-10">
+  const discount = product.originalPrice
+    ? Math.round(
+        ((product.originalPrice - product.price) / product.originalPrice) * 100,
+      )
+    : null;
 
-                {/* ── Back button ── */}
-                <button
-                    onClick={() => navigate(-1)}
-                    className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-[#aaa] hover:text-[#2c2c2c] transition-colors mb-8"
+  const handleAddToCart = () => {
+    const colorPart = product.variant?.split(" / ")[0] ?? product.name;
+    const updatedVariant = selectedSize
+      ? `${colorPart} / ${selectedSize}`
+      : product.variant;
+    addToCart({ ...product, variant: updatedVariant, selectedSize });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <>
+      <style>{keyframes}</style>
+      <div
+        style={{
+          padding: "2rem 1rem",
+          maxWidth: "1400px",
+          margin: "0 auto",
+        }}
+      >
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            marginBottom: "2rem",
+            padding: "8px 12px",
+            background: "transparent",
+            border: "none",
+            color: colors.gold,
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "600",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => (e.target.style.color = colors.goldDark)}
+          onMouseLeave={(e) => (e.target.style.color = colors.gold)}
+        >
+          ← Back
+        </button>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "3rem",
+            alignItems: "start",
+          }}
+        >
+          {/* Image Section */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              style={{
+                width: "100%",
+                maxWidth: "500px",
+                height: "auto",
+                borderRadius: "8px",
+                ...shadows.card,
+              }}
+            />
+          </div>
+
+          {/* Info Section */}
+          <div>
+            <p
+              style={{
+                fontSize: "12px",
+                color: colors.gold,
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                marginBottom: "1rem",
+                fontWeight: "600",
+              }}
+            >
+              {product.category}
+            </p>
+
+            <h1
+              style={{
+                fontSize: "32px",
+                fontWeight: "700",
+                color: colors.text,
+                marginBottom: "1rem",
+                lineHeight: 1.3,
+              }}
+            >
+              {product.name}
+            </h1>
+
+            <div style={{ marginBottom: "1.5rem", marginTop: "1rem" }}>
+              {product.originalPrice ? (
+                <div
+                  style={{ display: "flex", gap: "1rem", alignItems: "center" }}
                 >
-                    ← Back
-                </button>
-
-                {/* ── Two-column layout ── */}
-                <div className="grid md:grid-cols-[45%_55%] gap-10 items-start">
-
-                    {/* ── LEFT: Image ── */}
-                    <div className="md:sticky md:top-24 fade-in">
-                        <div className="relative rounded-3xl overflow-hidden bg-[#ece7e0] aspect-[4/5]">
-                            <img
-                                src={product.image}
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                            />
-                            {product.badge && (
-                                <div
-                                    className="absolute top-4 left-4 text-white text-[10px] tracking-widest uppercase px-3 py-1 rounded-full"
-                                    style={{ background: product.badge === "Sale" ? "#c0392b" : "#2c2c2c" }}
-                                >
-                                    {product.badge}
-                                </div>
-                            )}
-                            {discount && (
-                                <div className="absolute top-4 right-4 bg-[#c0392b] text-white text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">
-                                    −{discount}%
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* ── RIGHT: Details ── */}
-                    <div className="fade-in" style={{ animationDelay: "0.08s" }}>
-
-                        {/* Category + Name */}
-                        <p className="text-xs tracking-widest uppercase text-[#c8a96e] mb-2">{typeof product.category === "object" ? product.category?.name : product.category}</p>
-                        <h1 className="heading text-4xl text-[#2c2c2c] leading-tight mb-1">{product.name}</h1>
-                        <p className="text-sm text-[#aaa] mb-5">{product.variant}</p>
-
-                        {/* Price */}
-                        <div className="flex items-baseline gap-3 mb-6">
-                            {product.originalPrice && (
-                                <span className="text-lg text-[#bbb] line-through">${product.originalPrice}</span>
-                            )}
-                            <span
-                                className="heading text-3xl"
-                                style={{ color: product.originalPrice ? "#c0392b" : "#2c2c2c" }}
-                            >
-                                ${product.price}
-                            </span>
-                            {discount && (
-                                <span className="text-xs tracking-widest uppercase bg-[#fdecea] text-[#c0392b] px-2.5 py-1 rounded-full">
-                                    Save {discount}%
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-sm text-[#666] leading-relaxed mb-6">{product.description}</p>
-
-                        {/* Material */}
-                        <div className="flex items-start gap-2 text-sm text-[#555] mb-6 p-3 bg-white rounded-2xl border border-[#ece7e0]">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" strokeWidth="1.5" className="mt-0.5 flex-shrink-0">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-[#c8a96e] mb-0.5">Material</p>
-                                <p>{product.material}</p>
-                            </div>
-                        </div>
-
-                        {/* Size selector */}
-                        {product.sizes && product.sizes.length > 0 && (
-                            <div className="mb-6">
-                                <div className="flex items-center justify-between mb-3">
-                                    <p className="text-xs tracking-widest uppercase text-[#888]">Size</p>
-                                    {selectedSize && (
-                                        <p className="text-xs text-[#c8a96e] tracking-wide">
-                                            Selected: {selectedSize}
-                                        </p>
-                                    )}
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {product.sizes.map((size) => (
-                                        <button
-                                            key={size}
-                                            onClick={() => setSelectedSize(size)}
-                                            className="px-4 py-2 rounded-xl text-xs tracking-widest uppercase transition-all border"
-                                            style={{
-                                                background: selectedSize === size ? "#2c2c2c" : "white",
-                                                color: selectedSize === size ? "#f5f0eb" : "#555",
-                                                borderColor: selectedSize === size ? "#2c2c2c" : "#ddd",
-                                            }}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Add to Cart button */}
-                        <button
-                            onClick={handleAddToCart}
-                            className="w-full py-4 rounded-2xl text-sm tracking-widest uppercase font-medium transition-all mb-4"
-                            style={{
-                                background: added ? "#3a7a4a" : "#2c2c2c",
-                                color: "#fff",
-                            }}
-                        >
-                            {added ? "Added to Cart ✓" : "Add to Cart"}
-                        </button>
-
-                        {/* Trust badges */}
-                        <p className="text-center text-xs text-[#bbb] tracking-wide mb-6">
-                            Free returns · Secure checkout · Free shipping over $300
-                        </p>
-
-                        {/* ── Accordions ── */}
-                        <div className="border-b border-[#ece7e0]">
-
-                            {/* Size Chart */}
-                            {product.sizeChart && (
-                                <Accordion title="Size Chart">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-xs text-[#555]">
-                                            <thead>
-                                                <tr className="border-b border-[#ece7e0]">
-                                                    {product.sizeChart.headers.map((h) => (
-                                                        <th
-                                                            key={h}
-                                                            className="text-left py-2 pr-4 text-[10px] tracking-widest uppercase text-[#aaa] font-normal"
-                                                        >
-                                                            {h}
-                                                        </th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {product.sizeChart.rows.map((row, i) => (
-                                                    <tr
-                                                        key={i}
-                                                        className="border-b border-[#f5f0eb]"
-                                                        style={{ background: i % 2 === 0 ? "transparent" : "#faf8f5" }}
-                                                    >
-                                                        {row.map((cell, j) => (
-                                                            <td
-                                                                key={j}
-                                                                className="py-2.5 pr-4"
-                                                                style={{ fontWeight: j === 0 ? 500 : 400 }}
-                                                            >
-                                                                {cell}
-                                                            </td>
-                                                        ))}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </Accordion>
-                            )}
-
-                            {/* Care Instructions */}
-                            {product.care && (
-                                <Accordion title="Care Instructions">
-                                    <ul className="space-y-2">
-                                        {product.care.split(" · ").map((instruction, i) => (
-                                            <li key={i} className="flex items-start gap-2 text-sm text-[#666]">
-                                                <span className="text-[#c8a96e] mt-0.5 flex-shrink-0">·</span>
-                                                {instruction}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </Accordion>
-                            )}
-                        </div>
-
-                    </div>
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      color: colors.textMuted,
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    ${product.originalPrice.toFixed(2)}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "24px",
+                      fontWeight: "700",
+                      color: colors.text,
+                    }}
+                  >
+                    ${product.price.toFixed(2)}
+                  </span>
+                  {discount && (
+                    <span
+                      style={{
+                        padding: "4px 8px",
+                        backgroundColor: colors.error,
+                        color: "#fff",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Save {discount}%
+                    </span>
+                  )}
                 </div>
+              ) : (
+                <span
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: "700",
+                    color: colors.text,
+                  }}
+                >
+                  ${product.price.toFixed(2)}
+                </span>
+              )}
             </div>
-        </>
-    );
+
+            <p
+              style={{
+                fontSize: "14px",
+                color: colors.textMuted,
+                lineHeight: 1.6,
+                marginBottom: "1.5rem",
+              }}
+            >
+              {product.description ||
+                "Premium quality product with exceptional craftsmanship."}
+            </p>
+
+            {product.sizes && product.sizes.length > 0 && (
+              <div style={{ marginBottom: "1.5rem" }}>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: colors.text,
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  Size
+                </p>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      style={{
+                        minWidth: "50px",
+                        padding: "8px 12px",
+                        backgroundColor:
+                          selectedSize === size ? colors.gold : colors.bgCard,
+                        color:
+                          selectedSize === size ? colors.bgCard : colors.text,
+                        border: `1px solid ${colors.border}`,
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedSize !== size) {
+                          e.target.style.backgroundColor = colors.bgSecondary;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedSize !== size) {
+                          e.target.style.backgroundColor = colors.bgCard;
+                        }
+                      }}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={handleAddToCart}
+              style={{
+                width: "100%",
+                padding: "14px",
+                backgroundColor: colors.gold,
+                color: colors.bgCard,
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "700",
+                transition: "all 0.3s ease",
+                ...shadows.button,
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = colors.goldDark;
+                e.target.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = colors.gold;
+                e.target.style.transform = "translateY(0)";
+              }}
+            >
+              {added ? "✓ Added to Cart" : "Add to Cart"}
+            </button>
+
+            {added && (
+              <p
+                style={{
+                  marginTop: "1rem",
+                  padding: "12px",
+                  backgroundColor: colors.success + "20",
+                  color: colors.success,
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+              >
+                Item added successfully
+              </p>
+            )}
+
+            <div
+              style={{
+                marginTop: "2rem",
+                borderTop: `1px solid ${colors.border}`,
+                paddingTop: "2rem",
+              }}
+            >
+              <Accordion title="Description">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: colors.textMuted,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {product.description}
+                </p>
+              </Accordion>
+              <Accordion title="Specifications">
+                <ul
+                  style={{
+                    fontSize: "14px",
+                    color: colors.textMuted,
+                    lineHeight: 1.8,
+                  }}
+                >
+                  <li>Material: Premium Quality</li>
+                  <li>Care: Machine wash cold</li>
+                  <li>Fit: True to size</li>
+                </ul>
+              </Accordion>
+              <Accordion title="Shipping & Returns">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: colors.textMuted,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  Free shipping on orders over $
+                  {process.env.REACT_APP_SHIPPING_THRESHOLD || 100}. 30-day
+                  returns accepted.
+                </p>
+              </Accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
