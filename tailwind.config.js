@@ -1,8 +1,5 @@
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx,css}"],
   theme: {
     extend: {
       colors: {
@@ -25,7 +22,19 @@ export default {
       animation: {
         slideUp: "slideUp 0.5s ease both",
       },
+      keyframes: {
+        slideUp: {
+          from: {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+      },
     },
   },
   plugins: [],
-}
+};
