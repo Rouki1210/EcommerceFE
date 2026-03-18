@@ -61,11 +61,11 @@
 }
 
 .form-input-default {
-  @apply form-input border-[#e5e5e5];
+  @apply w-full text-sm bg-[#fafafa] px-3.5 py-2.5 border rounded-lg text-[#2c2c2c] outline-none transition-colors border-[#e5e5e5];
 }
 
 .form-input-error {
-  @apply form-input border-[#c0392b];
+  @apply w-full text-sm bg-[#fafafa] px-3.5 py-2.5 border rounded-lg text-[#2c2c2c] outline-none transition-colors border-[#c0392b];
 }
 
 .form-error-text {
@@ -181,7 +181,7 @@
 }
 
 .checkout-form-input {
-  @apply form-input border-[#e5e5e5] w-full;
+  @apply w-full text-sm bg-[#fafafa] px-3.5 py-2.5 border rounded-lg text-[#2c2c2c] outline-none transition-colors border-[#e5e5e5];
 }
 
 /* ─────────────────────────────────────────────────────────
