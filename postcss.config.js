@@ -1,5 +1,3 @@
-export default {
-  plugins: {
-    tailwindcss: {},
-  },
-}
+// Tailwind CSS v4 with Vite doesn't require PostCSS plugin
+// Tailwind is loaded via @import "tailwindcss" in index.css
+export default {};
