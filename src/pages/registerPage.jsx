@@ -76,7 +76,7 @@ export default function RegisterPage() {
           <span className="auth-logo-text">Maison</span>
         </Link>
 
-        <div className="auth-card">
+        <div className="auth-card animate-slideUp">
           <p className="auth-card-label">Join our community</p>
           <h1 className="auth-card-title">Create Account</h1>
 
@@ -91,7 +91,9 @@ export default function RegisterPage() {
                 value={form.firstName}
                 onChange={(e) => setField("firstName", e.target.value)}
                 placeholder="First name"
-                className={errors.firstName ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.firstName ? "form-input-error" : "form-input-default"
+                }
               />
               {errors.firstName && (
                 <p className="form-error-text">{errors.firstName}</p>
@@ -106,7 +108,9 @@ export default function RegisterPage() {
                 value={form.lastName}
                 onChange={(e) => setField("lastName", e.target.value)}
                 placeholder="Last name"
-                className={errors.lastName ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.lastName ? "form-input-error" : "form-input-default"
+                }
               />
               {errors.lastName && (
                 <p className="form-error-text">{errors.lastName}</p>
@@ -121,9 +125,13 @@ export default function RegisterPage() {
                 value={form.email}
                 onChange={(e) => setField("email", e.target.value)}
                 placeholder="your@email.com"
-                className={errors.email ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.email ? "form-input-error" : "form-input-default"
+                }
               />
-              {errors.email && <p className="form-error-text">{errors.email}</p>}
+              {errors.email && (
+                <p className="form-error-text">{errors.email}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -134,7 +142,9 @@ export default function RegisterPage() {
                 value={form.password}
                 onChange={(e) => setField("password", e.target.value)}
                 placeholder="At least 8 characters"
-                className={errors.password ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.password ? "form-input-error" : "form-input-default"
+                }
               />
               {errors.password && (
                 <p className="form-error-text">{errors.password}</p>
@@ -149,7 +159,9 @@ export default function RegisterPage() {
                 value={form.confirm}
                 onChange={(e) => setField("confirm", e.target.value)}
                 placeholder="Re-enter password"
-                className={errors.confirm ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.confirm ? "form-input-error" : "form-input-default"
+                }
               />
               {errors.confirm && (
                 <p className="form-error-text">{errors.confirm}</p>
@@ -178,7 +190,9 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className={loading ? "btn-primary-disabled" : "btn-primary-enabled"}
+              className={
+                loading ? "btn-primary-disabled" : "btn-primary-enabled"
+              }
             >
               {loading ? "Creating account..." : "Create Account"}
             </button>
