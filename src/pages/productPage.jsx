@@ -2,61 +2,30 @@ import { useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { colors, shadows, keyframes, animations } from "../assets/theme/theme";
 
 function Accordion({ title, children }) {
   const [open, setOpen] = useState(false);
   return (
-    <div
-      style={{
-        marginBottom: "1rem",
-        borderBottom: `1px solid ${colors.border}`,
-      }}
-    >
+    <div className="mb-4 border-b border-[#e5e5e5]">
       <button
         onClick={() => setOpen(!open)}
-        style={{
-          width: "100%",
-          padding: "1rem",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          fontSize: "16px",
-          fontWeight: "600",
-          color: colors.text,
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => (e.target.style.color = colors.gold)}
-        onMouseLeave={(e) => (e.target.style.color = colors.text)}
+        className="w-full p-4 bg-transparent border-none cursor-pointer flex justify-between items-center text-base font-semibold text-[#2c2c2c] transition-all hover:text-[#c8a96e]"
       >
         <span>{title}</span>
         <span
-          style={{
-            display: "inline-block",
-            transform: open ? "rotate(45deg)" : "rotate(0deg)",
-            transition: "transform 0.3s ease",
-            color: colors.gold,
-            fontSize: "20px",
-          }}
+          className={`inline-block transition-transform duration-300 text-[#c8a96e] text-xl ${
+            open ? "rotate-45" : "rotate-0"
+          }`}
         >
           +
         </span>
       </button>
       <div
-        style={{
-          maxHeight: open ? "1000px" : "0",
-          overflow: "hidden",
-          transition: "max-height 0.3s ease",
-        }}
+        className={`overflow-hidden transition-all duration-300 ${
+          open ? "max-h-[1000px]" : "max-h-0"
+        }`}
       >
-        <div
-          style={{ padding: "1rem", paddingTop: "0", color: colors.textMuted }}
-        >
-          {children}
-        </div>
+        <div className="p-4 pt-0 text-[#999]">{children}</div>
       </div>
     </div>
   );
@@ -75,70 +44,27 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "400px",
-          gap: "1rem",
-        }}
-      >
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
         <div
-          style={{
-            width: "40px",
-            height: "40px",
-            border: `3px solid ${colors.border}`,
-            borderTop: `3px solid ${colors.gold}`,
-            borderRadius: "50%",
-            animation: `spin 1s linear infinite`,
-          }}
+          className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin"
         />
-        <p style={{ color: colors.textMuted }}>Loading...</p>
-        <style>{keyframes}</style>
+        <p className="text-[#999]">Loading...</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "400px",
-          gap: "1.5rem",
-          padding: "2rem",
-        }}
-      >
-        <h1 style={{ fontSize: "24px", fontWeight: "700", color: colors.text }}>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-8">
+        <h1 className="text-2xl font-bold text-[#2c2c2c]">
           Product not found
         </h1>
-        <p style={{ color: colors.textMuted }}>
+        <p className="text-[#999]">
           The item you're looking for doesn't exist.
         </p>
         <button
           onClick={() => navigate("/")}
-          style={{
-            padding: "12px 24px",
-            backgroundColor: colors.bgSecondary,
-            color: colors.text,
-            border: `1px solid ${colors.border}`,
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: "600",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = colors.border;
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = colors.bgSecondary;
-          }}
+          className="px-6 py-3 bg-[#fafafa] text-[#2c2c2c] border border-[#e5e5e5] rounded-lg cursor-pointer text-sm font-semibold transition-all hover:bg-[#e5e5e5]"
         >
           Back to Home
         </button>
@@ -163,293 +89,128 @@ export default function ProductPage() {
   };
 
   return (
-    <>
-      <style>{keyframes}</style>
-      <div
-        style={{
-          padding: "2rem 1rem",
-          maxWidth: "1400px",
-          margin: "0 auto",
-        }}
+    <div className="p-8 max-w-6xl mx-auto">
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-8 p-2 bg-transparent border-none text-[#c8a96e] cursor-pointer text-sm font-semibold transition-all hover:text-[#8b7355]"
       >
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            marginBottom: "2rem",
-            padding: "8px 12px",
-            background: "transparent",
-            border: "none",
-            color: colors.gold,
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: "600",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => (e.target.style.color = colors.goldDark)}
-          onMouseLeave={(e) => (e.target.style.color = colors.gold)}
-        >
-          ← Back
-        </button>
+        ← Back
+      </button>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "3rem",
-            alignItems: "start",
-          }}
-        >
-          {/* Image Section */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              style={{
-                width: "100%",
-                maxWidth: "500px",
-                height: "auto",
-                borderRadius: "8px",
-                ...shadows.card,
-              }}
-            />
-          </div>
+      <div className="grid grid-cols-2 gap-12 items-start">
+        {/* Image Section */}
+        <div className="flex justify-center items-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full max-w-[500px] h-auto rounded-lg shadow-[0_4px_16px_rgba(200,169,110,0.08)]"
+          />
+        </div>
 
-          {/* Info Section */}
-          <div>
-            <p
-              style={{
-                fontSize: "12px",
-                color: colors.gold,
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                marginBottom: "1rem",
-                fontWeight: "600",
-              }}
-            >
-              {product.category}
-            </p>
+        {/* Info Section */}
+        <div>
+          <p className="text-xs text-[#c8a96e] tracking-widest uppercase mb-4 font-semibold">
+            {product.category}
+          </p>
 
-            <h1
-              style={{
-                fontSize: "32px",
-                fontWeight: "700",
-                color: colors.text,
-                marginBottom: "1rem",
-                lineHeight: 1.3,
-              }}
-            >
-              {product.name}
-            </h1>
+          <h1 className="text-4xl font-bold text-[#2c2c2c] mb-4 leading-tight">
+            {product.name}
+          </h1>
 
-            <div style={{ marginBottom: "1.5rem", marginTop: "1rem" }}>
-              {product.originalPrice ? (
-                <div
-                  style={{ display: "flex", gap: "1rem", alignItems: "center" }}
-                >
-                  <span
-                    style={{
-                      fontSize: "18px",
-                      color: colors.textMuted,
-                      textDecoration: "line-through",
-                    }}
-                  >
-                    ${product.originalPrice.toFixed(2)}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "24px",
-                      fontWeight: "700",
-                      color: colors.text,
-                    }}
-                  >
-                    ${product.price.toFixed(2)}
-                  </span>
-                  {discount && (
-                    <span
-                      style={{
-                        padding: "4px 8px",
-                        backgroundColor: colors.error,
-                        color: "#fff",
-                        borderRadius: "4px",
-                        fontSize: "12px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Save {discount}%
-                    </span>
-                  )}
-                </div>
-              ) : (
+          <div className="mb-6 mt-4">
+            {product.originalPrice ? (
+              <div className="flex gap-4 items-center">
                 <span
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "700",
-                    color: colors.text,
-                  }}
+                  className="text-lg text-[#999] line-through"
+                >
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+                <span
+                  className="text-2xl font-bold text-[#2c2c2c]"
                 >
                   ${product.price.toFixed(2)}
                 </span>
-              )}
-            </div>
-
-            <p
-              style={{
-                fontSize: "14px",
-                color: colors.textMuted,
-                lineHeight: 1.6,
-                marginBottom: "1.5rem",
-              }}
-            >
-              {product.description ||
-                "Premium quality product with exceptional craftsmanship."}
-            </p>
-
-            {product.sizes && product.sizes.length > 0 && (
-              <div style={{ marginBottom: "1.5rem" }}>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    color: colors.text,
-                    marginBottom: "0.75rem",
-                  }}
-                >
-                  Size
-                </p>
-                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      style={{
-                        minWidth: "50px",
-                        padding: "8px 12px",
-                        backgroundColor:
-                          selectedSize === size ? colors.gold : colors.bgCard,
-                        color:
-                          selectedSize === size ? colors.bgCard : colors.text,
-                        border: `1px solid ${colors.border}`,
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (selectedSize !== size) {
-                          e.target.style.backgroundColor = colors.bgSecondary;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (selectedSize !== size) {
-                          e.target.style.backgroundColor = colors.bgCard;
-                        }
-                      }}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+                {discount && (
+                  <span
+                    className="px-2 py-1 bg-[#c0392b] text-white rounded text-xs font-semibold"
+                  >
+                    Save {discount}%
+                  </span>
+                )}
               </div>
-            )}
-
-            <button
-              onClick={handleAddToCart}
-              style={{
-                width: "100%",
-                padding: "14px",
-                backgroundColor: colors.gold,
-                color: colors.bgCard,
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-                fontWeight: "700",
-                transition: "all 0.3s ease",
-                ...shadows.button,
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = colors.goldDark;
-                e.target.style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = colors.gold;
-                e.target.style.transform = "translateY(0)";
-              }}
-            >
-              {added ? "✓ Added to Cart" : "Add to Cart"}
-            </button>
-
-            {added && (
-              <p
-                style={{
-                  marginTop: "1rem",
-                  padding: "12px",
-                  backgroundColor: colors.success + "20",
-                  color: colors.success,
-                  borderRadius: "4px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                }}
+            ) : (
+              <span
+                className="text-2xl font-bold text-[#2c2c2c]"
               >
-                Item added successfully
-              </p>
+                ${product.price.toFixed(2)}
+              </span>
             )}
+          </div>
 
-            <div
-              style={{
-                marginTop: "2rem",
-                borderTop: `1px solid ${colors.border}`,
-                paddingTop: "2rem",
-              }}
-            >
-              <Accordion title="Description">
-                <p
-                  style={{
-                    fontSize: "14px",
-                    color: colors.textMuted,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {product.description}
-                </p>
-              </Accordion>
-              <Accordion title="Specifications">
-                <ul
-                  style={{
-                    fontSize: "14px",
-                    color: colors.textMuted,
-                    lineHeight: 1.8,
-                  }}
-                >
-                  <li>Material: Premium Quality</li>
-                  <li>Care: Machine wash cold</li>
-                  <li>Fit: True to size</li>
-                </ul>
-              </Accordion>
-              <Accordion title="Shipping & Returns">
-                <p
-                  style={{
-                    fontSize: "14px",
-                    color: colors.textMuted,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  Free shipping on orders over $
-                  {process.env.REACT_APP_SHIPPING_THRESHOLD || 100}. 30-day
-                  returns accepted.
-                </p>
-              </Accordion>
+          <p className="text-sm text-[#999] leading-relaxed mb-6">
+            {product.description ||
+              "Premium quality product with exceptional craftsmanship."}
+          </p>
+
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mb-6">
+              <p className="text-sm font-semibold text-[#2c2c2c] mb-3">
+                Size
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`min-w-[50px] px-3 py-2 rounded text-sm font-semibold transition-all border ${
+                      selectedSize === size
+                        ? "filter-button-active"
+                        : "filter-button-inactive"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
+
+          <button
+            onClick={handleAddToCart}
+            className="w-full py-3 px-4 bg-[#c8a96e] text-[#f5f0eb] border-none rounded text-base font-bold transition-all hover:bg-[#8b7355] shadow-[0_4px_12px_rgba(200,169,110,0.2)]"
+          >
+            {added ? "✓ Added to Cart" : "Add to Cart"}
+          </button>
+
+          {added && (
+            <p className="mt-4 p-3 bg-[#27ae60]/20 text-[#27ae60] rounded text-sm font-semibold">
+              Item added successfully
+            </p>
+          )}
+
+          <div className="mt-8 border-t border-[#e5e5e5] pt-8">
+            <Accordion title="Description">
+              <p className="text-sm text-[#999] leading-relaxed">
+                {product.description}
+              </p>
+            </Accordion>
+            <Accordion title="Specifications">
+              <ul className="text-sm text-[#999] leading-relaxed">
+                <li>Material: Premium Quality</li>
+                <li>Care: Machine wash cold</li>
+                <li>Fit: True to size</li>
+              </ul>
+            </Accordion>
+            <Accordion title="Shipping & Returns">
+              <p className="text-sm text-[#999] leading-relaxed">
+                Free shipping on orders over $
+                {process.env.REACT_APP_SHIPPING_THRESHOLD || 100}. 30-day
+                returns accepted.
+              </p>
+            </Accordion>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
