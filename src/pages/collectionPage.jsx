@@ -78,15 +78,11 @@ export default function CollectionPage({ gender, title, subtitle }) {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className="px-4 py-1.5 rounded-full text-xs tracking-widest uppercase transition-all"
-                style={{
-                  background: activeCategory === cat ? "#2c2c2c" : "white",
-                  color: activeCategory === cat ? "#f5f0eb" : "#888",
-                  border:
-                    activeCategory === cat
-                      ? "1px solid #2c2c2c"
-                      : "1px solid #e5e5e5",
-                }}
+                className={`px-4 py-1.5 rounded-full text-xs tracking-widest uppercase transition-all ${
+                  activeCategory === cat
+                    ? "bg-[#2c2c2c] text-[#f5f0eb] border border-[#2c2c2c]"
+                    : "bg-white text-[#888] border border-[#e5e5e5]"
+                }`}
               >
                 {cat}
               </button>
