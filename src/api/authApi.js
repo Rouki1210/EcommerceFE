@@ -16,6 +16,11 @@ export const updateProfileApi = ({ firstName, lastName, email }) =>
         .put("/auth/profile", { firstName, lastName, email })
         .then((res) => res.data);
 
+export const updateProfileApi = ({ firstName, lastName, email }) =>
+  baseUrl
+    .put("/auth/profile", { firstName, lastName, email })
+    .then((res) => res.data);
+
 export const changePasswordApi = ({ currentPassword, newPassword }) =>
     baseUrl
     .put("/auth/change-password", { currentPassword, newPassword })
