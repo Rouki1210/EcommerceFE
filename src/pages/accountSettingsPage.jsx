@@ -154,7 +154,9 @@ export default function AccountSettingsPage() {
                 type="password"
                 value={form.newPassword}
                 onChange={(e) => setField("newPassword", e.target.value)}
-                className={errors.newPassword ? "form-input-error" : "form-input-default"}
+                className={
+                  errors.newPassword ? "form-input-error" : "form-input-default"
+                }
               />
               {errors.newPassword && (
                 <p className="form-error-text">{errors.newPassword}</p>

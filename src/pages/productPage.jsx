@@ -45,9 +45,7 @@ export default function ProductPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <div
-          className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin"
-        />
+        <div className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin" />
         <p className="text-[#999]">Loading...</p>
       </div>
     );
@@ -56,9 +54,7 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-8">
-        <h1 className="text-2xl font-bold text-[#2c2c2c]">
-          Product not found
-        </h1>
+        <h1 className="text-2xl font-bold text-[#2c2c2c]">Product not found</h1>
         <p className="text-[#999]">
           The item you're looking for doesn't exist.
         </p>
@@ -74,7 +70,9 @@ export default function ProductPage() {
 
   const discount = product.originalPrice
     ? Math.round(
-        ((product.originalPrice - product.price) / product.originalPrice) * 100,
+        ((Number(product.originalPrice) - Number(product.price)) /
+          Number(product.originalPrice)) *
+          100,
       )
     : null;
 
@@ -120,29 +118,21 @@ export default function ProductPage() {
           <div className="mb-6 mt-4">
             {product.originalPrice ? (
               <div className="flex gap-4 items-center">
-                <span
-                  className="text-lg text-[#999] line-through"
-                >
-                  ${product.originalPrice.toFixed(2)}
+                <span className="text-lg text-[#999] line-through">
+                  ${Number(product.originalPrice).toFixed(2)}
                 </span>
-                <span
-                  className="text-2xl font-bold text-[#2c2c2c]"
-                >
-                  ${product.price.toFixed(2)}
+                <span className="text-2xl font-bold text-[#2c2c2c]">
+                  ${Number(product.price).toFixed(2)}
                 </span>
                 {discount && (
-                  <span
-                    className="px-2 py-1 bg-[#c0392b] text-white rounded text-xs font-semibold"
-                  >
+                  <span className="px-2 py-1 bg-[#c0392b] text-white rounded text-xs font-semibold">
                     Save {discount}%
                   </span>
                 )}
               </div>
             ) : (
-              <span
-                className="text-2xl font-bold text-[#2c2c2c]"
-              >
-                ${product.price.toFixed(2)}
+              <span className="text-2xl font-bold text-[#2c2c2c]">
+                ${Number(product.price).toFixed(2)}
               </span>
             )}
           </div>
@@ -154,9 +144,7 @@ export default function ProductPage() {
 
           {product.sizes && product.sizes.length > 0 && (
             <div className="mb-6">
-              <p className="text-sm font-semibold text-[#2c2c2c] mb-3">
-                Size
-              </p>
+              <p className="text-sm font-semibold text-[#2c2c2c] mb-3">Size</p>
               <div className="flex gap-2 flex-wrap">
                 {product.sizes.map((size) => (
                   <button
@@ -204,7 +192,7 @@ export default function ProductPage() {
             <Accordion title="Shipping & Returns">
               <p className="text-sm text-[#999] leading-relaxed">
                 Free shipping on orders over $
-                {process.env.REACT_APP_SHIPPING_THRESHOLD || 100}. 30-day
+                {import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD || 100}
                 returns accepted.
               </p>
             </Accordion>

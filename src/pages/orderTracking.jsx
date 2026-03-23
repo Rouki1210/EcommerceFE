@@ -16,9 +16,7 @@ export default function OrderTracking() {
   return (
     <>
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-[#2c2c2c] mb-8">
-          Order Status
-        </h1>
+        <h1 className="text-4xl font-bold text-[#2c2c2c] mb-8">Order Status</h1>
 
         {/* Timeline */}
         <div className="relative py-8 mb-8">
@@ -38,12 +36,18 @@ export default function OrderTracking() {
             {STEPS.map((step, i) => {
               const isDone = i < currentStep;
               const isActive = i === currentStep;
-              const bgColor = isDone ? "bg-[#2c2c2c]" : isActive ? "bg-[#c8a96e]" : "bg-[#e5e5e5]";
-              const borderClass = isDone || isActive ? "" : "border-2 border-[#e5e5e5]";
-              const textColor = isDone || isActive ? "text-white" : "text-[#999]";
+              const bgColor = isDone
+                ? "bg-[#2c2c2c]"
+                : isActive
+                  ? "bg-[#c8a96e]"
+                  : "bg-[#e5e5e5]";
+              const borderClass =
+                isDone || isActive ? "" : "border-2 border-[#e5e5e5]";
+              const textColor =
+                isDone || isActive ? "text-white" : "text-[#999]";
 
               return (
-                <div key={i} className="flex gap-6">
+                <div key={step.label} className="flex gap-6">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-semibold flex-shrink-0 -mt-2 ${bgColor} ${borderClass} ${textColor}`}
                   >
@@ -53,9 +57,7 @@ export default function OrderTracking() {
                     <div className="text-base font-semibold text-[#2c2c2c] mb-1">
                       {step.label}
                     </div>
-                    <div className="text-sm text-[#999]">
-                      {step.sub}
-                    </div>
+                    <div className="text-sm text-[#999]">{step.sub}</div>
                   </div>
                 </div>
               );
@@ -80,9 +82,7 @@ export default function OrderTracking() {
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-[#999] mb-1">
-                  EMAIL
-                </p>
+                <p className="text-xs font-semibold text-[#999] mb-1">EMAIL</p>
                 <p className="text-sm text-[#2c2c2c]">
                   {state.shippingInfo.email}
                 </p>
@@ -96,9 +96,7 @@ export default function OrderTracking() {
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-[#999] mb-1">
-                  PHONE
-                </p>
+                <p className="text-xs font-semibold text-[#999] mb-1">PHONE</p>
                 <p className="text-sm text-[#2c2c2c]">
                   {state.shippingInfo.phone}
                 </p>

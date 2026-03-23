@@ -12,11 +12,6 @@ export const registerApi = (firstName, lastName, email, password) =>
         .then((res) => res.data);
 
 export const updateProfileApi = ({ firstName, lastName, email }) =>
-    baseUrl
-        .put("/auth/profile", { firstName, lastName, email })
-        .then((res) => res.data);
-
-export const updateProfileApi = ({ firstName, lastName, email }) =>
   baseUrl
     .put("/auth/profile", { firstName, lastName, email })
     .then((res) => res.data);

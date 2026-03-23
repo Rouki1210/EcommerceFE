@@ -128,7 +128,14 @@ export default function CheckoutPage() {
         <button
           onClick={() =>
             navigate("/shopping-cart", {
-              state: { cart, subtotal, discount, shipping, total, promoApplied },
+              state: {
+                cart,
+                subtotal,
+                discount,
+                shipping,
+                total,
+                promoApplied,
+              },
             })
           }
           className="btn-back-link mb-3"
@@ -164,9 +171,7 @@ export default function CheckoutPage() {
             </div>
             <span
               className={`text-xs ${
-                step.active
-                  ? "font-semibold text-[#2c2c2c]"
-                  : "text-[#999]"
+                step.active ? "font-semibold text-[#2c2c2c]" : "text-[#999]"
               }`}
             >
               {step.label}
@@ -330,10 +335,7 @@ export default function CheckoutPage() {
             <span>${total.toFixed(2)}</span>
           </div>
 
-          <button
-            type="submit"
-            className="btn-primary-enabled w-full"
-          >
+          <button type="submit" className="btn-primary-enabled w-full">
             Place Order
           </button>
 

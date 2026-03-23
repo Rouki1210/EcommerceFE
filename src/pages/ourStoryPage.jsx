@@ -51,9 +51,7 @@ export default function OurStoryPage() {
     <>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#2c2c2c] to-[#4a3f35] px-6 py-20 text-center text-white">
-        <h1 className="text-5xl font-bold mb-4 leading-tight">
-          Our Story
-        </h1>
+        <h1 className="text-5xl font-bold mb-4 leading-tight">Our Story</h1>
         <p className="text-base text-[#bbb] max-w-2xl mx-auto">
           Simple pieces for considered living. We design, craft, and deliver
           with intention at every step.
@@ -62,15 +60,11 @@ export default function OurStoryPage() {
 
       {/* Values Section */}
       <section className="max-w-4xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">
-          Our Values
-        </h2>
+        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Our Values</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {VALUES.map((value) => (
             <div key={value.title} className="text-center">
-              <div className="text-4xl mb-4">
-                {value.icon}
-              </div>
+              <div className="text-4xl mb-4">{value.icon}</div>
               <h3 className="text-lg font-semibold text-[#2c2c2c] mb-3">
                 {value.title}
               </h3>
@@ -84,9 +78,7 @@ export default function OurStoryPage() {
 
       {/* Timeline Section */}
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#e5e5e5]">
-        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">
-          Timeline
-        </h2>
+        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Timeline</h2>
         <div>
           {MILESTONES.map((m) => (
             <div
