@@ -4,7 +4,7 @@ export const loginApi = (email, password) =>
   baseUrl.post("/auth/login", { email, password }).then((res) => res.data);
 
 export const loginAdmin = (email, password) =>
-  baseUrl.post("/auth/admin/login", { email, password }).then((res) => res.data);
+  baseUrl.post("/admin/auth/login", { email, password }).then((res) => res.data);
 
 export const registerApi = (firstName, lastName, email, password) =>
     baseUrl
@@ -22,6 +22,6 @@ export const updateProfileApi = ({ firstName, lastName, email }) =>
     .then((res) => res.data);
 
 export const changePasswordApi = ({ currentPassword, newPassword }) =>
-  baseUrl
+    baseUrl
     .put("/auth/change-password", { currentPassword, newPassword })
     .then((res) => res.data);
