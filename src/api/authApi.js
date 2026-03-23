@@ -13,10 +13,10 @@ export const registerApi = (firstName, lastName, email, password) =>
 
 export const updateProfileApi = ({ firstName, lastName, email }) =>
   baseUrl
-    .put("/auth/profile", { firstName, lastName, email })
+    .get("/auth/me", { firstName, lastName, email })
     .then((res) => res.data);
 
 export const changePasswordApi = ({ currentPassword, newPassword }) =>
   baseUrl
-    .put("/auth/change-password", { currentPassword, newPassword })
+    .post("/auth/change-password", { currentPassword, newPassword })
     .then((res) => res.data);
