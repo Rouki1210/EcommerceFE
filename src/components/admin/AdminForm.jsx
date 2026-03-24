@@ -15,8 +15,8 @@ const AdminForm = memo(function AdminForm({
 
   return (
     <form onSubmit={handleSubmit} className={`admin-form ${className}`}>
-      {fields.map((field, idx) => (
-        <div key={idx} className="admin-form-group">
+      {fields.map((field) => (
+        <div key={field.name || field.label} className="admin-form-group">
           {/* Label */}
           <label className="admin-form-label">
             {field.label}

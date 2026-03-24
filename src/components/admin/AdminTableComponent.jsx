@@ -26,8 +26,8 @@ const AdminTable = memo(function AdminTable({
         className="admin-table-header"
         style={{ gridTemplateColumns: gridColumns }}
       >
-        {columns.map((col, i) => (
-          <div key={i} className="admin-table-header-cell">
+        {columns.map((col) => (
+          <div key={col.key || col.label} className="admin-table-header-cell">
             {col.label}
           </div>
         ))}
@@ -36,7 +36,7 @@ const AdminTable = memo(function AdminTable({
       {/* Rows */}
       {data.map((row, rowIdx) => (
         <div
-          key={rowIdx}
+          key={row.id || rowIdx}
           onClick={() => onRowClick?.(row)}
           className="admin-table-row"
           style={{ gridTemplateColumns: gridColumns }}
@@ -45,8 +45,11 @@ const AdminTable = memo(function AdminTable({
             renderRow(row, rowIdx, columns)
           ) : (
             <>
-              {columns.map((col, colIdx) => (
-                <div key={colIdx} className="admin-table-cell">
+              {columns.map((col) => (
+                <div
+                  key={`${col.key}-${row.id || rowIdx}`}
+                  className="admin-table-cell"
+                >
                   {row[col.key]}
                 </div>
               ))}

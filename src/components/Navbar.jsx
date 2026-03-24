@@ -6,7 +6,7 @@ import { useProducts } from "../hooks/useProducts";
 
 /* ── highlight matched substring ── */
 function Highlight({ text, query }) {
-  if (!query) return <span>{text}</span>;
+  if (!query || !text) return <span>{text || ""}</span>;
   const idx = text.toLowerCase().indexOf(query.toLowerCase());
   if (idx === -1) return <span>{text}</span>;
   return (
@@ -51,8 +51,10 @@ export default function Navbar({
         .filter(
           (p) =>
             p.name.toLowerCase().includes(q) ||
-            (typeof p.category === "object" ? p.category?.name : p.category)?.toLowerCase().includes(q) ||
-            p.variant.toLowerCase().includes(q),
+            (typeof p.category === "object" ? p.category?.name : p.category)
+              ?.toLowerCase()
+              .includes(q) ||
+            (p.variant || "").toLowerCase().includes(q),
         )
         .slice(0, 6)
     : [];
@@ -276,12 +278,16 @@ export default function Navbar({
                               </p>
                               <p className="text-[11px] text-[#aaa] mt-0.5">
                                 <Highlight
-                                  text={typeof product.category === "object" ? product.category?.name : product.category}
+                                  text={
+                                    typeof product.category === "object"
+                                      ? product.category?.name
+                                      : product.category
+                                  }
                                   query={query}
                                 />
                                 {" · "}
                                 <Highlight
-                                  text={product.variant}
+                                  text={product.variant || ""}
                                   query={query}
                                 />
                               </p>
@@ -335,7 +341,14 @@ export default function Navbar({
               className="w-8 h-8 flex items-center justify-center text-[#888] hover:text-[#2c2c2c] transition-colors flex-shrink-0"
               aria-label="Account"
             >
-              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <svg
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                viewBox="0 0 24 24"
+              >
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
