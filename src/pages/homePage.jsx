@@ -5,6 +5,7 @@ import ProductGrid from "../components/Productgrid";
 import EditorialBanner from "../components/Editorialbanner";
 import { useCategories } from "../data/useCategories";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { colors, shadows, keyframes } from "../assets/theme/theme";
 
 export default function HomePage() {
   const { addToCart, openCart, openProductModal } = useOutletContext();
@@ -17,14 +18,12 @@ export default function HomePage() {
   const categories = useCategories();
   console.log("Fetched categories:", categories);
 
-
   return (
     <>
       <Hero onShopNow={scrollToProducts} />
       <MarqueeStrip />
       <ProductGrid onAddToCart={addToCart} onViewDetail={openProductModal} />
       <EditorialBanner onCtaClick={openCart} />
-
     </>
   );
 }

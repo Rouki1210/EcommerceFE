@@ -23,14 +23,19 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
   const discount =
     product.originalPrice && product.originalPrice > product.price
-      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+      ? Math.round(
+          ((product.originalPrice - product.price) / product.originalPrice) *
+            100,
+        )
       : null;
 
   const careSteps = product.care ? product.care.split(" · ") : [];
 
   const handleAddToCart = () => {
     const colorPart = product.variant?.split(" / ")[0] ?? product.name;
-    const updatedVariant = selectedSize ? `${colorPart} / ${selectedSize}` : product.variant;
+    const updatedVariant = selectedSize
+      ? `${colorPart} / ${selectedSize}`
+      : product.variant;
     onAddToCart({ ...product, variant: updatedVariant, selectedSize });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -88,7 +93,12 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           <img
             src={product.image}
             alt={product.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
           />
         </div>
 
@@ -105,8 +115,17 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
         >
           {/* Category + badge */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "11px", color: "#9a8c7e", letterSpacing: "2px", textTransform: "uppercase" }}>
-              {typeof product.category === "object" ? product.category?.name : product.category}
+            <span
+              style={{
+                fontSize: "11px",
+                color: "#9a8c7e",
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+              }}
+            >
+              {typeof product.category === "object"
+                ? product.category?.name
+                : product.category}
             </span>
             {product.badge && (
               <span
@@ -129,18 +148,32 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           {/* Name */}
           <h2
             className="heading"
-            style={{ fontSize: "26px", fontWeight: 600, color: "#2c2c2c", margin: 0, lineHeight: 1.2 }}
+            style={{
+              fontSize: "26px",
+              fontWeight: 600,
+              color: "#2c2c2c",
+              margin: 0,
+              lineHeight: 1.2,
+            }}
           >
             {product.name}
           </h2>
 
           {/* Variant */}
-          <p style={{ fontSize: "13px", color: "#9a8c7e", margin: 0 }}>{product.variant}</p>
+          <p style={{ fontSize: "13px", color: "#9a8c7e", margin: 0 }}>
+            {product.variant}
+          </p>
 
           {/* Price */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {product.originalPrice && (
-              <span style={{ fontSize: "14px", color: "#b0a090", textDecoration: "line-through" }}>
+              <span
+                style={{
+                  fontSize: "14px",
+                  color: "#b0a090",
+                  textDecoration: "line-through",
+                }}
+              >
                 ${product.originalPrice}
               </span>
             )}
@@ -171,7 +204,14 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
           {/* Description */}
           {product.description && (
-            <p style={{ fontSize: "14px", color: "#5c5248", lineHeight: 1.7, margin: 0 }}>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#5c5248",
+                lineHeight: 1.7,
+                margin: 0,
+              }}
+            >
               {product.description}
             </p>
           )}
@@ -179,20 +219,49 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           {/* Material */}
           {product.material && (
             <div>
-              <span style={{ fontSize: "11px", color: "#9a8c7e", letterSpacing: "1.5px", textTransform: "uppercase" }}>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "#9a8c7e",
+                  letterSpacing: "1.5px",
+                  textTransform: "uppercase",
+                }}
+              >
                 Material
               </span>
-              <p style={{ fontSize: "14px", color: "#2c2c2c", margin: "4px 0 0 0" }}>{product.material}</p>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#2c2c2c",
+                  margin: "4px 0 0 0",
+                }}
+              >
+                {product.material}
+              </p>
             </div>
           )}
 
           {/* Sizes */}
           {product.sizes && product.sizes.length > 0 && (
             <div>
-              <span style={{ fontSize: "11px", color: "#9a8c7e", letterSpacing: "1.5px", textTransform: "uppercase" }}>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "#9a8c7e",
+                  letterSpacing: "1.5px",
+                  textTransform: "uppercase",
+                }}
+              >
                 Size
               </span>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  marginTop: "8px",
+                }}
+              >
                 {product.sizes.map((size) => (
                   <button
                     key={size}
@@ -201,8 +270,10 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                       padding: "6px 14px",
                       fontSize: "13px",
                       border: "1px solid",
-                      borderColor: selectedSize === size ? "#2c2c2c" : "#d4c9bc",
-                      background: selectedSize === size ? "#2c2c2c" : "transparent",
+                      borderColor:
+                        selectedSize === size ? "#2c2c2c" : "#d4c9bc",
+                      background:
+                        selectedSize === size ? "#2c2c2c" : "transparent",
                       color: selectedSize === size ? "#fff" : "#2c2c2c",
                       cursor: "pointer",
                       borderRadius: "2px",
@@ -238,7 +309,12 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                 }}
               >
                 Size Chart
-                <span style={{ transition: "transform 0.2s", transform: sizeChartOpen ? "rotate(180deg)" : "none" }}>
+                <span
+                  style={{
+                    transition: "transform 0.2s",
+                    transform: sizeChartOpen ? "rotate(180deg)" : "none",
+                  }}
+                >
                   ▾
                 </span>
               </button>
@@ -279,10 +355,15 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                   </thead>
                   <tbody>
                     {product.sizeChart.rows.map((row, i) => (
-                      <tr key={i} style={{ background: i % 2 === 0 ? "transparent" : "#faf8f5" }}>
+                      <tr
+                        key={`row-${i}`}
+                        style={{
+                          background: i % 2 === 0 ? "transparent" : "#faf8f5",
+                        }}
+                      >
                         {row.map((cell, j) => (
                           <td
-                            key={j}
+                            key={`cell-${i}-${j}`}
                             style={{
                               padding: "6px 8px",
                               color: "#2c2c2c",
@@ -322,7 +403,12 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                 }}
               >
                 Care Instructions
-                <span style={{ transition: "transform 0.2s", transform: careOpen ? "rotate(180deg)" : "none" }}>
+                <span
+                  style={{
+                    transition: "transform 0.2s",
+                    transform: careOpen ? "rotate(180deg)" : "none",
+                  }}
+                >
                   ▾
                 </span>
               </button>
@@ -333,10 +419,36 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
                   transition: "max-height 0.3s ease",
                 }}
               >
-                <ul style={{ margin: "12px 0 0 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
+                <ul
+                  style={{
+                    margin: "12px 0 0 0",
+                    padding: 0,
+                    listStyle: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
                   {careSteps.map((step, i) => (
-                    <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13px", color: "#5c5248" }}>
-                      <span style={{ color: "#c8a96e", flexShrink: 0, marginTop: "1px" }}>✦</span>
+                    <li
+                      key={`step-${i}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "8px",
+                        fontSize: "13px",
+                        color: "#5c5248",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#c8a96e",
+                          flexShrink: 0,
+                          marginTop: "1px",
+                        }}
+                      >
+                        ✦
+                      </span>
                       {step}
                     </li>
                   ))}

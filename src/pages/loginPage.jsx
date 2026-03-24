@@ -10,7 +10,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,91 +22,88 @@ export default function LoginPage() {
       dispatch(loginSuccess(data));
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Email hoặc mật khẩu không đúng");
+      setError(err.response?.data?.message || "Email or password is incorrect");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f5f0eb", display: "flex",
-      flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px" }}>
-      <Link to="/" style={{ display: "flex", alignItems: "center", gap: "8px",
-        marginBottom: "36px", textDecoration: "none" }}>
-        <span style={{ width: "20px", height: "20px", borderRadius: "50%",
-          background: "#c8a96e", display: "inline-block" }} />
-        <span className="heading" style={{ fontSize: "22px", color: "#2c2c2c" }}>Maison</span>
+    <div className="auth-page">
+      {/* Logo */}
+      <Link to="/" className="auth-logo-link">
+        <span className="auth-logo-icon" />
+        <span className="auth-logo-text">Maison</span>
       </Link>
 
-      <div style={{ background: "white", borderRadius: "16px", padding: "40px",
-        width: "100%", maxWidth: "420px", boxShadow: "0 4px 24px rgba(44,44,44,0.07)" }}>
-        <p style={{ fontSize: "11px", letterSpacing: "2.5px", textTransform: "uppercase",
-          color: "#c8a96e", marginBottom: "8px" }}>Welcome back</p>
-        <h1 className="heading" style={{ fontSize: "28px", color: "#2c2c2c", marginBottom: "28px" }}>
-          Sign In
-        </h1>
+      {/* Card */}
+      <div className="auth-card animate-slideUp">
+        {/* Header */}
+        <p className="auth-card-label">Welcome back</p>
+        <h1 className="auth-card-title">Sign In</h1>
 
-        {error && (
-          <div style={{ background: "#fff0f0", color: "#c0392b", padding: "10px 14px",
-            borderRadius: "8px", fontSize: "13px", marginBottom: "16px" }}>
-            {error}
-          </div>
-        )}
+        {/* Error Alert */}
+        {error && <div className="auth-error-box">{error}</div>}
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-          <div>
-            <label style={{ display: "block", fontSize: "11px", letterSpacing: "1.5px",
-              textTransform: "uppercase", color: "#9a8c7e", marginBottom: "6px" }}>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com" required
-              style={{ width: "100%", padding: "11px 14px", border: "1px solid #e8e2db",
-                borderRadius: "8px", fontSize: "14px", background: "#faf8f5",
-                outline: "none", boxSizing: "border-box" }} />
+        {/* Form */}
+        <form className="auth-form" onSubmit={handleSubmit}>
+          {/* Email Input */}
+          <div className="auth-form-group">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              required
+              className="form-input-default"
+            />
           </div>
 
-          <div>
-            <label style={{ display: "block", fontSize: "11px", letterSpacing: "1.5px",
-              textTransform: "uppercase", color: "#9a8c7e", marginBottom: "6px" }}>Password</label>
-            <input type={showPassword ? "text" : "password"} value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Your password" required
-              style={{ width: "100%", padding: "11px 14px", border: "1px solid #e8e2db",
-                borderRadius: "8px", fontSize: "14px", background: "#faf8f5",
-                outline: "none", boxSizing: "border-box" }} />
+          {/* Password Input */}
+          <div className="auth-form-group">
+            <label className="form-label">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Your password"
+                required
+                className="form-input-default pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base"
+              >
+                {showPassword ? "🙈" : "👁"}
+              </button>
+            </div>
           </div>
 
-          <button type="submit" disabled={loading}
-            style={{ background: loading ? "#999" : "#2c2c2c", color: "white",
-              border: "none", padding: "13px", borderRadius: "10px",
-              fontSize: "12px", letterSpacing: "2px", textTransform: "uppercase",
-              cursor: loading ? "not-allowed" : "pointer" }}>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={loading ? "btn-primary-disabled" : "btn-primary-enabled"}
+          >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "13px", color: "#999" }}>
+        {/* Footer */}
+        <p className="text-footer">
           Don't have an account?{" "}
-          <Link to="/register" style={{ color: "#2c2c2c", fontWeight: 500 }}>Create one</Link>
+          <Link to="/register" className="btn-link">
+            Sign Up
+          </Link>
         </p>
       </div>
 
-      {/* Back to store */}
-      <Link
-        to="/"
-        style={{
-          marginTop: "24px",
-          fontSize: "11px",
-          letterSpacing: "2px",
-          textTransform: "uppercase",
-          color: "#9a8c7e",
-          textDecoration: "none",
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-        }}
-      >
+      <Link to="/" className="btn-back-link">
         ← Back to store
       </Link>
     </div>
-  );
+  )
 }

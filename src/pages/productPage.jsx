@@ -4,276 +4,201 @@ import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 function Accordion({ title, children }) {
-    usePageTitle(title);
-    const [open, setOpen] = useState(false);
-    return (
-        <div className="border-t border-[#ece7e0]">
-            <button
-                onClick={() => setOpen((v) => !v)}
-                className="w-full flex items-center justify-between py-4 text-sm text-[#2c2c2c] hover:text-[#c8a96e] transition-colors"
-            >
-                <span className="tracking-wide font-medium">{title}</span>
-                <span
-                    className="text-lg leading-none transition-transform duration-300"
-                    style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
-                >
-                    +
-                </span>
-            </button>
-            <div
-                style={{
-                    maxHeight: open ? 400 : 0,
-                    overflow: "hidden",
-                    transition: "max-height 0.35s cubic-bezier(0.22,1,0.36,1)",
-                }}
-            >
-                <div className="pb-4">{children}</div>
-            </div>
-        </div>
-    );
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mb-4 border-b border-[#e5e5e5]">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full p-4 bg-transparent border-none cursor-pointer flex justify-between items-center text-base font-semibold text-[#2c2c2c] transition-all hover:text-[#c8a96e]"
+      >
+        <span>{title}</span>
+        <span
+          className={`inline-block transition-transform duration-300 text-[#c8a96e] text-xl ${
+            open ? "rotate-45" : "rotate-0"
+          }`}
+        >
+          +
+        </span>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${
+          open ? "max-h-[1000px]" : "max-h-0"
+        }`}
+      >
+        <div className="p-4 pt-0 text-[#999]">{children}</div>
+      </div>
+    </div>
+  );
 }
 
 export default function ProductPage() {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { addToCart } = useOutletContext();
-    const { products, loading } = useProducts();
-    const product = products.find((p) => String(p.id) === String(id));
-    const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
-    const [added, setAdded] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useOutletContext();
+  const { products, loading } = useProducts();
+  const product = products.find((p) => String(p.id) === String(id));
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null);
+  const [added, setAdded] = useState(false);
 
-    /* ── Not found ── */
-    if (loading) {
+  usePageTitle(product?.name || "Product");
+
+  if (loading) {
     return (
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 text-[#aaa]">
-            <div className="w-10 h-10 rounded-full border-2 border-[#e8e2db] border-t-[#c8a96e]"
-                style={{ animation: "spin 0.8s linear infinite" }} />
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-            <p className="text-xs tracking-widest uppercase">Loading...</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin" />
+        <p className="text-[#999]">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-8">
+        <h1 className="text-2xl font-bold text-[#2c2c2c]">Product not found</h1>
+        <p className="text-[#999]">
+          The item you're looking for doesn't exist.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="px-6 py-3 bg-[#fafafa] text-[#2c2c2c] border border-[#e5e5e5] rounded-lg cursor-pointer text-sm font-semibold transition-all hover:bg-[#e5e5e5]"
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  }
+
+  const discount = product.originalPrice
+    ? Math.round(
+        ((Number(product.originalPrice) - Number(product.price)) /
+          Number(product.originalPrice)) *
+          100,
+      )
+    : null;
+
+  const handleAddToCart = () => {
+    const colorPart = product.variant?.split(" / ")[0] ?? product.name;
+    const updatedVariant = selectedSize
+      ? `${colorPart} / ${selectedSize}`
+      : product.variant;
+    addToCart({ ...product, variant: updatedVariant, selectedSize });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto">
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-8 p-2 bg-transparent border-none text-[#c8a96e] cursor-pointer text-sm font-semibold transition-all hover:text-[#8b7355]"
+      >
+        ← Back
+      </button>
+
+      <div className="grid grid-cols-2 gap-12 items-start">
+        {/* Image Section */}
+        <div className="flex justify-center items-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full max-w-[500px] h-auto rounded-lg shadow-[0_4px_16px_rgba(200,169,110,0.08)]"
+          />
         </div>
-    );
-    }
 
-    if (!product) {
-        return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-[#888]">
-                <p className="heading text-3xl text-[#2c2c2c]">Product not found</p>
-                <p className="text-sm">The item you're looking for doesn't exist.</p>
-                <button
-                    onClick={() => navigate("/")}
-                    className="mt-2 text-xs tracking-widest uppercase border border-[#2c2c2c] text-[#2c2c2c] px-6 py-2.5 rounded-full hover:bg-[#2c2c2c] hover:text-white transition-all"
-                >
-                    Back to Home
-                </button>
+        {/* Info Section */}
+        <div>
+          <p className="text-xs text-[#c8a96e] tracking-widest uppercase mb-4 font-semibold">
+            {product.category}
+          </p>
+
+          <h1 className="text-4xl font-bold text-[#2c2c2c] mb-4 leading-tight">
+            {product.name}
+          </h1>
+
+          <div className="mb-6 mt-4">
+            {product.originalPrice ? (
+              <div className="flex gap-4 items-center">
+                <span className="text-lg text-[#999] line-through">
+                  ${Number(product.originalPrice).toFixed(2)}
+                </span>
+                <span className="text-2xl font-bold text-[#2c2c2c]">
+                  ${Number(product.price).toFixed(2)}
+                </span>
+                {discount && (
+                  <span className="px-2 py-1 bg-[#c0392b] text-white rounded text-xs font-semibold">
+                    Save {discount}%
+                  </span>
+                )}
+              </div>
+            ) : (
+              <span className="text-2xl font-bold text-[#2c2c2c]">
+                ${Number(product.price).toFixed(2)}
+              </span>
+            )}
+          </div>
+
+          <p className="text-sm text-[#999] leading-relaxed mb-6">
+            {product.description ||
+              "Premium quality product with exceptional craftsmanship."}
+          </p>
+
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mb-6">
+              <p className="text-sm font-semibold text-[#2c2c2c] mb-3">Size</p>
+              <div className="flex gap-2 flex-wrap">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`min-w-[50px] px-3 py-2 rounded text-sm font-semibold transition-all border ${
+                      selectedSize === size
+                        ? "filter-button-active"
+                        : "filter-button-inactive"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
-        );
-    }
+          )}
 
-    const discount = product.originalPrice
-        ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-        : null;
+          <button
+            onClick={handleAddToCart}
+            className="w-full py-3 px-4 bg-[#c8a96e] text-[#f5f0eb] border-none rounded text-base font-bold transition-all hover:bg-[#8b7355] shadow-[0_4px_12px_rgba(200,169,110,0.2)]"
+          >
+            {added ? "✓ Added to Cart" : "Add to Cart"}
+          </button>
 
-    const handleAddToCart = () => {
-        const colorPart = product.variant?.split(" / ")[0] ?? product.name;
-        const updatedVariant = selectedSize ? `${colorPart} / ${selectedSize}` : product.variant;
-        addToCart({ ...product, variant: updatedVariant, selectedSize });
-        setAdded(true);
-        setTimeout(() => setAdded(false), 2000);
-    };
+          {added && (
+            <p className="mt-4 p-3 bg-[#27ae60]/20 text-[#27ae60] rounded text-sm font-semibold">
+              Item added successfully
+            </p>
+          )}
 
-    return (
-        <>
-            <style>{`
-                @keyframes fadeIn { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
-                .fade-in { animation: fadeIn 0.45s ease both; }
-            `}</style>
-
-            <div className="max-w-6xl mx-auto px-6 py-10">
-
-                {/* ── Back button ── */}
-                <button
-                    onClick={() => navigate(-1)}
-                    className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-[#aaa] hover:text-[#2c2c2c] transition-colors mb-8"
-                >
-                    ← Back
-                </button>
-
-                {/* ── Two-column layout ── */}
-                <div className="grid md:grid-cols-[45%_55%] gap-10 items-start">
-
-                    {/* ── LEFT: Image ── */}
-                    <div className="md:sticky md:top-24 fade-in">
-                        <div className="relative rounded-3xl overflow-hidden bg-[#ece7e0] aspect-[4/5]">
-                            <img
-                                src={product.image}
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                            />
-                            {product.badge && (
-                                <div
-                                    className="absolute top-4 left-4 text-white text-[10px] tracking-widest uppercase px-3 py-1 rounded-full"
-                                    style={{ background: product.badge === "Sale" ? "#c0392b" : "#2c2c2c" }}
-                                >
-                                    {product.badge}
-                                </div>
-                            )}
-                            {discount && (
-                                <div className="absolute top-4 right-4 bg-[#c0392b] text-white text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">
-                                    −{discount}%
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* ── RIGHT: Details ── */}
-                    <div className="fade-in" style={{ animationDelay: "0.08s" }}>
-
-                        {/* Category + Name */}
-                        <p className="text-xs tracking-widest uppercase text-[#c8a96e] mb-2">{typeof product.category === "object" ? product.category?.name : product.category}</p>
-                        <h1 className="heading text-4xl text-[#2c2c2c] leading-tight mb-1">{product.name}</h1>
-                        <p className="text-sm text-[#aaa] mb-5">{product.variant}</p>
-
-                        {/* Price */}
-                        <div className="flex items-baseline gap-3 mb-6">
-                            {product.originalPrice && (
-                                <span className="text-lg text-[#bbb] line-through">${product.originalPrice}</span>
-                            )}
-                            <span
-                                className="heading text-3xl"
-                                style={{ color: product.originalPrice ? "#c0392b" : "#2c2c2c" }}
-                            >
-                                ${product.price}
-                            </span>
-                            {discount && (
-                                <span className="text-xs tracking-widest uppercase bg-[#fdecea] text-[#c0392b] px-2.5 py-1 rounded-full">
-                                    Save {discount}%
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-sm text-[#666] leading-relaxed mb-6">{product.description}</p>
-
-                        {/* Material */}
-                        <div className="flex items-start gap-2 text-sm text-[#555] mb-6 p-3 bg-white rounded-2xl border border-[#ece7e0]">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" strokeWidth="1.5" className="mt-0.5 flex-shrink-0">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-[#c8a96e] mb-0.5">Material</p>
-                                <p>{product.material}</p>
-                            </div>
-                        </div>
-
-                        {/* Size selector */}
-                        {product.sizes && product.sizes.length > 0 && (
-                            <div className="mb-6">
-                                <div className="flex items-center justify-between mb-3">
-                                    <p className="text-xs tracking-widest uppercase text-[#888]">Size</p>
-                                    {selectedSize && (
-                                        <p className="text-xs text-[#c8a96e] tracking-wide">
-                                            Selected: {selectedSize}
-                                        </p>
-                                    )}
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {product.sizes.map((size) => (
-                                        <button
-                                            key={size}
-                                            onClick={() => setSelectedSize(size)}
-                                            className="px-4 py-2 rounded-xl text-xs tracking-widest uppercase transition-all border"
-                                            style={{
-                                                background: selectedSize === size ? "#2c2c2c" : "white",
-                                                color: selectedSize === size ? "#f5f0eb" : "#555",
-                                                borderColor: selectedSize === size ? "#2c2c2c" : "#ddd",
-                                            }}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Add to Cart button */}
-                        <button
-                            onClick={handleAddToCart}
-                            className="w-full py-4 rounded-2xl text-sm tracking-widest uppercase font-medium transition-all mb-4"
-                            style={{
-                                background: added ? "#3a7a4a" : "#2c2c2c",
-                                color: "#fff",
-                            }}
-                        >
-                            {added ? "Added to Cart ✓" : "Add to Cart"}
-                        </button>
-
-                        {/* Trust badges */}
-                        <p className="text-center text-xs text-[#bbb] tracking-wide mb-6">
-                            Free returns · Secure checkout · Free shipping over $300
-                        </p>
-
-                        {/* ── Accordions ── */}
-                        <div className="border-b border-[#ece7e0]">
-
-                            {/* Size Chart */}
-                            {product.sizeChart && (
-                                <Accordion title="Size Chart">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-xs text-[#555]">
-                                            <thead>
-                                                <tr className="border-b border-[#ece7e0]">
-                                                    {product.sizeChart.headers.map((h) => (
-                                                        <th
-                                                            key={h}
-                                                            className="text-left py-2 pr-4 text-[10px] tracking-widest uppercase text-[#aaa] font-normal"
-                                                        >
-                                                            {h}
-                                                        </th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {product.sizeChart.rows.map((row, i) => (
-                                                    <tr
-                                                        key={i}
-                                                        className="border-b border-[#f5f0eb]"
-                                                        style={{ background: i % 2 === 0 ? "transparent" : "#faf8f5" }}
-                                                    >
-                                                        {row.map((cell, j) => (
-                                                            <td
-                                                                key={j}
-                                                                className="py-2.5 pr-4"
-                                                                style={{ fontWeight: j === 0 ? 500 : 400 }}
-                                                            >
-                                                                {cell}
-                                                            </td>
-                                                        ))}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </Accordion>
-                            )}
-
-                            {/* Care Instructions */}
-                            {product.care && (
-                                <Accordion title="Care Instructions">
-                                    <ul className="space-y-2">
-                                        {product.care.split(" · ").map((instruction, i) => (
-                                            <li key={i} className="flex items-start gap-2 text-sm text-[#666]">
-                                                <span className="text-[#c8a96e] mt-0.5 flex-shrink-0">·</span>
-                                                {instruction}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </Accordion>
-                            )}
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+          <div className="mt-8 border-t border-[#e5e5e5] pt-8">
+            <Accordion title="Description">
+              <p className="text-sm text-[#999] leading-relaxed">
+                {product.description}
+              </p>
+            </Accordion>
+            <Accordion title="Specifications">
+              <ul className="text-sm text-[#999] leading-relaxed">
+                <li>Material: Premium Quality</li>
+                <li>Care: Machine wash cold</li>
+                <li>Fit: True to size</li>
+              </ul>
+            </Accordion>
+            <Accordion title="Shipping & Returns">
+              <p className="text-sm text-[#999] leading-relaxed">
+                Free shipping on orders over $
+                {import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD || 100}
+                returns accepted.
+              </p>
+            </Accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

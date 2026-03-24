@@ -11,10 +11,15 @@ export const registerApi = (firstName, lastName, email, password) =>
         .post("/auth/register", { firstName, lastName, email, password })
         .then((res) => res.data);
 
+export const getProfileApi = () =>
+  baseUrl
+    .get("/auth/me")
+    .then((res) => res.data);
+
 export const updateProfileApi = ({ firstName, lastName, email }) =>
-    baseUrl
-        .put("/auth/profile", { firstName, lastName, email })
-        .then((res) => res.data);
+  baseUrl
+    .put("/auth/profile", { firstName, lastName, email })
+    .then((res) => res.data);
 
 export const updateProfileApi = ({ firstName, lastName, email }) =>
   baseUrl
@@ -22,6 +27,6 @@ export const updateProfileApi = ({ firstName, lastName, email }) =>
     .then((res) => res.data);
 
 export const changePasswordApi = ({ currentPassword, newPassword }) =>
-    baseUrl
-    .put("/auth/change-password", { currentPassword, newPassword })
+  baseUrl
+    .post("/auth/change-password", { currentPassword, newPassword })
     .then((res) => res.data);

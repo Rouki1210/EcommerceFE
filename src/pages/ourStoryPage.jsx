@@ -49,465 +49,65 @@ const MILESTONES = [
 export default function OurStoryPage() {
   return (
     <>
-      <style>{`
-        @keyframes fadeUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
-        .fu  { animation: fadeUp 0.6s ease both; }
-        .fu1 { animation: fadeUp 0.6s ease 0.1s both; }
-        .fu2 { animation: fadeUp 0.6s ease 0.2s both; }
-        .fu3 { animation: fadeUp 0.6s ease 0.3s both; }
-      `}</style>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-[#2c2c2c] to-[#4a3f35] px-6 py-20 text-center text-white">
+        <h1 className="text-5xl font-bold mb-4 leading-tight">Our Story</h1>
+        <p className="text-base text-[#bbb] max-w-2xl mx-auto">
+          Simple pieces for considered living. We design, craft, and deliver
+          with intention at every step.
+        </p>
+      </div>
 
-      <div style={{ background: "#f9f6f2", minHeight: "100vh" }}>
-        {/* ── Hero ── */}
-        <div
-          style={{
-            position: "relative",
-            height: "520px",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80"
-            alt="Our Story"
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(to bottom, rgba(44,44,44,0.55) 0%, rgba(44,44,44,0.3) 100%)",
-            }}
-          />
-          <div
-            className="fu"
-            style={{
-              position: "relative",
-              textAlign: "center",
-              color: "white",
-              padding: "0 24px",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "11px",
-                letterSpacing: "4px",
-                textTransform: "uppercase",
-                color: "#c8a96e",
-                marginBottom: "12px",
-              }}
-            >
-              Est. 2018 · Paris
-            </p>
-            <h1
-              className="heading"
-              style={{
-                fontSize: "clamp(36px, 6vw, 64px)",
-                marginBottom: "16px",
-                lineHeight: 1.1,
-              }}
-            >
-              Our Story
-            </h1>
-            <p
-              style={{
-                fontSize: "16px",
-                color: "rgba(255,255,255,0.8)",
-                maxWidth: "520px",
-                margin: "0 auto",
-                lineHeight: 1.7,
-              }}
-            >
-              A brand born from the belief that what you wear should feel as
-              good as it looks — and leave the world a little better than you
-              found it.
-            </p>
-          </div>
-        </div>
-
-        {/* ── Opening statement ── */}
-        <div
-          style={{
-            maxWidth: "760px",
-            margin: "0 auto",
-            padding: "80px 24px 60px",
-            textAlign: "center",
-          }}
-        >
-          <p
-            className="fu heading"
-            style={{
-              fontSize: "clamp(22px, 3vw, 32px)",
-              color: "#2c2c2c",
-              lineHeight: 1.5,
-              marginBottom: "20px",
-            }}
-          >
-            "We didn't set out to build a fashion brand. We set out to make the
-            things we couldn't find — beautiful, honest, and built to last."
-          </p>
-          <p
-            className="fu1"
-            style={{
-              fontSize: "13px",
-              color: "#9a8c7e",
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-            }}
-          >
-          </p>
-        </div>
-
-        {/* ── Values ── */}
-        <div style={{ background: "#2c2c2c", padding: "80px 24px" }}>
-          <div style={{ maxWidth: "1040px", margin: "0 auto" }}>
-            <div
-              className="fu"
-              style={{ textAlign: "center", marginBottom: "52px" }}
-            >
-              <p
-                style={{
-                  fontSize: "11px",
-                  letterSpacing: "3px",
-                  textTransform: "uppercase",
-                  color: "#c8a96e",
-                  marginBottom: "8px",
-                }}
-              >
-                What we stand for
+      {/* Values Section */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Our Values</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {VALUES.map((value) => (
+            <div key={value.title} className="text-center">
+              <div className="text-4xl mb-4">{value.icon}</div>
+              <h3 className="text-lg font-semibold text-[#2c2c2c] mb-3">
+                {value.title}
+              </h3>
+              <p className="text-sm text-[#999] leading-relaxed">
+                {value.desc}
               </p>
-              <h2
-                className="heading"
-                style={{ fontSize: "32px", color: "white" }}
-              >
-                Our Values
-              </h2>
             </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "32px",
-              }}
-            >
-              {VALUES.map((v, i) => (
-                <div
-                  key={v.title}
-                  className={`fu${i}`}
-                  style={{ textAlign: "center" }}
-                >
-                  <div
-                    style={{
-                      width: "52px",
-                      height: "52px",
-                      borderRadius: "50%",
-                      border: "1px solid #c8a96e",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 16px",
-                      fontSize: "20px",
-                      color: "#c8a96e",
-                    }}
-                  >
-                    {v.icon}
-                  </div>
-                  <h3
-                    className="heading"
-                    style={{
-                      fontSize: "18px",
-                      color: "white",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {v.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "13px",
-                      color: "rgba(255,255,255,0.55)",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {v.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
+      </section>
 
-        {/* ── Story + image split ── */}
-        <div
-          style={{
-            maxWidth: "1040px",
-            margin: "0 auto",
-            padding: "80px 24px",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "60px",
-            alignItems: "center",
-          }}
-        >
-          <div className="fu">
-            <p
-              style={{
-                fontSize: "11px",
-                letterSpacing: "3px",
-                textTransform: "uppercase",
-                color: "#c8a96e",
-                marginBottom: "8px",
-              }}
-            >
-              How it started
-            </p>
-            <h2
-              className="heading"
-              style={{
-                fontSize: "30px",
-                color: "#2c2c2c",
-                marginBottom: "20px",
-                lineHeight: 1.3,
-              }}
-            >
-              A slow conversation
-              <br />
-              about fast fashion
-            </h2>
-            <p
-              style={{
-                fontSize: "14px",
-                color: "#6b5f5a",
-                lineHeight: 1.8,
-                marginBottom: "16px",
-              }}
-            >
-              Léa and Anh met at a flea market in the 11th arrondissement, both
-              hunting for the same coat. Over coffee they discovered a shared
-              frustration: the clothes they loved were either unaffordable or
-              unethical. Usually both.
-            </p>
-            <p
-              style={{
-                fontSize: "14px",
-                color: "#6b5f5a",
-                lineHeight: 1.8,
-                marginBottom: "16px",
-              }}
-            >
-              So they started small. A shared spreadsheet. A single linen shirt
-              pattern. A seamstress in Lisbon who agreed to make 50 pieces "just
-              to see." They sold out of those 50 in a weekend.
-            </p>
-            <p style={{ fontSize: "14px", color: "#6b5f5a", lineHeight: 1.8 }}>
-              Today Maison has grown — but the original promise hasn't. Every
-              piece we make is still something we'd buy ourselves.
-            </p>
-          </div>
-          <div
-            className="fu1"
-            style={{
-              borderRadius: "20px",
-              overflow: "hidden",
-              aspectRatio: "4/5",
-            }}
-          >
-            <img
-              src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&q=80"
-              alt="Atelier"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-        </div>
-
-        {/* ── Timeline ── */}
-        <div style={{ background: "white", padding: "80px 24px" }}>
-          <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+      {/* Timeline Section */}
+      <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#e5e5e5]">
+        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Timeline</h2>
+        <div>
+          {MILESTONES.map((m) => (
             <div
-              className="fu"
-              style={{ textAlign: "center", marginBottom: "52px" }}
+              key={m.year}
+              className="grid grid-cols-[100px_1fr] gap-8 mb-8 items-start"
             >
-              <p
-                style={{
-                  fontSize: "11px",
-                  letterSpacing: "3px",
-                  textTransform: "uppercase",
-                  color: "#c8a96e",
-                  marginBottom: "8px",
-                }}
-              >
-                The journey
-              </p>
-              <h2
-                className="heading"
-                style={{ fontSize: "32px", color: "#2c2c2c" }}
-              >
-                Milestones
-              </h2>
-            </div>
-            <div style={{ position: "relative", paddingLeft: "40px" }}>
-              {/* Vertical line */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: "9px",
-                  top: "8px",
-                  bottom: "8px",
-                  width: "1px",
-                  background: "#e8e2db",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "36px",
-                }}
-              >
-                {MILESTONES.map((m) => (
-                  <div
-                    key={m.year}
-                    className="fu"
-                    style={{ position: "relative" }}
-                  >
-                    {/* Dot */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        left: "-35px",
-                        top: "4px",
-                        width: "12px",
-                        height: "12px",
-                        borderRadius: "50%",
-                        background: "#c8a96e",
-                        border: "2px solid white",
-                        boxShadow: "0 0 0 2px #c8a96e",
-                      }}
-                    />
-                    <p
-                      style={{
-                        fontSize: "11px",
-                        letterSpacing: "2px",
-                        color: "#c8a96e",
-                        marginBottom: "4px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {m.year}
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        color: "#5a4f4a",
-                        lineHeight: 1.7,
-                      }}
-                    >
-                      {m.text}
-                    </p>
-                  </div>
-                ))}
+              <div className="text-2xl font-semibold text-[#c8a96e]">
+                {m.year}
+              </div>
+              <div className="text-base text-[#2c2c2c] leading-relaxed pt-1">
+                {m.text}
               </div>
             </div>
-          </div>
+          ))}
         </div>
+      </section>
 
-        {/* ── CTA banner ── */}
-        <div
-          style={{
-            background: "#2c2c2c",
-            padding: "80px 24px",
-            textAlign: "center",
-          }}
+      {/* CTA Section */}
+      <section className="max-w-4xl mx-auto px-6 py-20 text-center border-t border-[#e5e5e5]">
+        <p className="text-base text-[#999] mb-6">
+          Ready to experience slow fashion?
+        </p>
+        <Link
+          to="/collection/women"
+          className="inline-block px-8 py-3.5 bg-[#c8a96e] text-[#f5f0eb] rounded font-semibold text-sm transition-all duration-300 hover:bg-[#b8935f] hover:-translate-y-0.5 shadow-md"
         >
-          <p
-            className="fu"
-            style={{
-              fontSize: "11px",
-              letterSpacing: "3px",
-              textTransform: "uppercase",
-              color: "#c8a96e",
-              marginBottom: "12px",
-            }}
-          >
-            Wear the story
-          </p>
-          <h2
-            className="fu1 heading"
-            style={{
-              fontSize: "clamp(28px, 4vw, 44px)",
-              color: "white",
-              marginBottom: "20px",
-            }}
-          >
-            Ready to find your piece?
-          </h2>
-          <p
-            className="fu2"
-            style={{
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.55)",
-              marginBottom: "36px",
-              maxWidth: "440px",
-              margin: "0 auto 36px",
-              lineHeight: 1.7,
-            }}
-          >
-            Every item in our collection is made with the same intention that
-            started all of this.
-          </p>
-          <div
-            className="fu3"
-            style={{
-              display: "flex",
-              gap: "12px",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link
-              to="/"
-              style={{
-                padding: "14px 32px",
-                background: "#c8a96e",
-                color: "white",
-                borderRadius: "10px",
-                fontSize: "11px",
-                letterSpacing: "2.5px",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                fontWeight: 500,
-              }}
-            >
-              Shop New Arrivals
-            </Link>
-            <Link
-              to="/women"
-              style={{
-                padding: "14px 32px",
-                background: "transparent",
-                color: "white",
-                border: "1px solid rgba(255,255,255,0.3)",
-                borderRadius: "10px",
-                fontSize: "11px",
-                letterSpacing: "2.5px",
-                textTransform: "uppercase",
-                textDecoration: "none",
-              }}
-            >
-              Women's Collection
-            </Link>
-          </div>
-        </div>
-      </div>
+          Explore Collection
+        </Link>
+      </section>
     </>
   );
 }
