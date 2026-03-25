@@ -30,6 +30,9 @@ export default function AccountSettingsPage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
+  //Return condition after declaration
+  if (!isAuthenticated) return <Navigate to="/login" />;
+
   const setField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
@@ -42,9 +45,17 @@ export default function AccountSettingsPage() {
 
     try {
       // Always update profile
-      await updateProfileApi(form.firstName + " " + form.lastName);
+      await updateProfileApi({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email
+      });
       dispatch(
-        updateProfile({ firstName: form.firstName, lastName: form.lastName }),
+        updateProfile({ 
+          firstName: form.firstName, 
+          lastName: form.lastName,
+          email: form.email
+        }),
       );
 
       // Update password if provided
@@ -54,7 +65,11 @@ export default function AccountSettingsPage() {
           setLoading(false);
           return;
         }
-        await changePasswordApi(form.currentPassword, form.newPassword);
+        await changePasswordApi({
+          currentPassword: form.currentPassword,
+          newPassword: form.newPassword,
+          confirmPassword: form.newPassword
+        });
         setForm((prev) => ({ ...prev, currentPassword: "", newPassword: "" }));
       }
 

@@ -18,15 +18,10 @@ export const getProfileApi = () =>
 
 export const updateProfileApi = ({ firstName, lastName, email }) =>
   baseUrl
-    .put("/auth/profile", { firstName, lastName, email })
+    .put("/auth/update-profile", { firstName, lastName, email })
     .then((res) => res.data);
 
-export const updateProfileApi = ({ firstName, lastName, email }) =>
+export const changePasswordApi = ({ currentPassword, newPassword, confirmPassword }) =>
   baseUrl
-    .put("/auth/profile", { firstName, lastName, email })
-    .then((res) => res.data);
-
-export const changePasswordApi = ({ currentPassword, newPassword }) =>
-  baseUrl
-    .post("/auth/change-password", { currentPassword, newPassword })
+    .post("/auth/change-password", { currentPassword, newPassword, confirmPassword })
     .then((res) => res.data);

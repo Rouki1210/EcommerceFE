@@ -23,7 +23,7 @@ export default function Layout() {
 
   const goToCartPage = (orderData) => {
     setCartOpen(false);
-    navigate("/shopping-cart", { state: { orderData } });
+    navigate("/shopping-cart", { state: orderData });
   };
 
   const outletContext = {

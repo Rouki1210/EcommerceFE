@@ -1,37 +1,41 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToCart as addToCartRedux,
+  updateQty as updateQtyRedux,
+  removeItem as removeItemRedux,
+  clearToast,
+} from "../features/cart/cartSlice";
+import {
+  selectCartItems,
+  selectCartCount,
+  selectToastMsg,
+} from "../features/cart/cartSlice";
+import { useEffect } from "react";
 
 export function useCart() {
-    const [cart, setCart] = useState([]);
-    const [toastMsg, setToastMsg] = useState(null);
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCartItems);
+  const cartCount = useSelector(selectCartCount);
+  const toastMsg = useSelector(selectToastMsg);
 
-    const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (toastMsg) dispatch(clearToast());
+    }, 2200);
+    return () => clearTimeout(timer);
+  }, [toastMsg, dispatch]);
 
-    const addToCart = (product) => {
-        const cartItemId = `${product.id}__${product.selectedSize ?? ""}`;
-        setCart((prev) => {
-            const existing = prev.find((i) => i.cartItemId === cartItemId);
-            if (existing) {
-                return prev.map((i) =>
-                    i.cartItemId === cartItemId ? { ...i, qty: i.qty + 1 } : i
-                );
-            }
-            return [...prev, { ...product, cartItemId, qty: 1 }];
-        });
-        setToastMsg(`${product.name} added to cart`);
-        setTimeout(() => setToastMsg(null), 2200);
-    };
+  const addToCart = (product) => {
+    dispatch(addToCartRedux(product));
+  };
 
-    const updateQty = (cartItemId, delta) => {
-        setCart((prev) =>
-            prev.map((i) =>
-                i.cartItemId === cartItemId ? { ...i, qty: Math.max(1, i.qty + delta) } : i
-            )
-        );
-    };
+  const updateQty = (cartItemId, delta) => {
+    dispatch(updateQtyRedux({ cartItemId, delta }));
+  };
 
-    const removeItem = (cartItemId) => {
-        setCart((prev) => prev.filter((i) => i.cartItemId !== cartItemId));
-    };
+  const removeItem = (cartItemId) => {
+    dispatch(removeItemRedux(cartItemId));
+  };
 
-    return { cart, setCart, cartCount, addToCart, updateQty, removeItem, toastMsg };
+  return { cart, cartCount, addToCart, updateQty, removeItem, toastMsg };
 }

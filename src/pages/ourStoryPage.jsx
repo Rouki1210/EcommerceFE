@@ -102,7 +102,7 @@ export default function OurStoryPage() {
           Ready to experience slow fashion?
         </p>
         <Link
-          to="/collection/women"
+          to="/women"
           className="inline-block px-8 py-3.5 bg-[#c8a96e] text-[#f5f0eb] rounded font-semibold text-sm transition-all duration-300 hover:bg-[#b8935f] hover:-translate-y-0.5 shadow-md"
         >
           Explore Collection
