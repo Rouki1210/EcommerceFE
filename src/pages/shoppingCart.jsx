@@ -1,48 +1,62 @@
 import { useState } from "react";
-import { useOutletContext, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { SHIPPING_THRESHOLD } from "../data/constants";
-import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
+import {
+  selectCartItems,
+  updateQty,
+  removeItem,
+} from "../features/cart/cartSlice";
 
 export default function ShoppingCart() {
-  const { state } = useLocation();
   const navigate = useNavigate();
-  const {
-    updateCartItem,
-    removeFromCart,
-    addToCart: addToCartGlobal,
-  } = useOutletContext();
-  const { products } = useProducts();
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCartItems);
   usePageTitle("Shopping Cart");
 
-  const cart = state?.cart ?? [];
+  const [promoCode, setPromoCode] = useState(state?.promoCode ?? "");
+  const [promoApplied, setPromoApplied] = useState(
+    state?.promoApplied ?? false,
+  );
+  const [removingId, setRemovingId] = useState(null);
+
   const calculatePricing = () => {
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const subtotal = cart.reduce(
+      (sum, item) => sum + parseFloat(item.price || 0) * item.qty,
+      0,
+    );
     const shippingThreshold = SHIPPING_THRESHOLD || 100;
     const shipping = subtotal >= shippingThreshold ? 0 : 15;
-    const promoApplied = state?.promoApplied ?? false;
     const discount = promoApplied ? subtotal * 0.1 : 0;
     const total = subtotal - discount + shipping;
     return { subtotal, shipping, discount, total, promoApplied };
   };
 
   const pricing = calculatePricing();
-  const [promoCode, setPromoCode] = useState("");
-  const [removingId, setRemovingId] = useState(null);
 
   const handleApplyPromo = () => {
     if (promoCode.toLowerCase() === "save10") {
-      navigate("/shopping-cart", { state: { ...state, promoApplied: true } });
+      setPromoApplied(true);
     }
   };
 
   const handleCheckout = () => {
-    navigate("/checkout", { state: { cart, ...pricing } });
+    navigate("/checkout", { state: { ...pricing, promoCode, cart } });
+  };
+
+  const updateCartItem = (cartItemId, newQty) => {
+    const item = cart.find((i) => i.cartItemId === cartItemId);
+    if (item) {
+      const delta = newQty - item.qty;
+      dispatch(updateQty({ cartItemId, delta }));
+    }
   };
 
   const handleRemove = (id) => {
     setRemovingId(id);
-    setTimeout(() => removeFromCart(id), 350);
+    setTimeout(() => dispatch(removeItem(id)), 350);
   };
 
   return (
@@ -121,11 +135,11 @@ export default function ShoppingCart() {
                     {/* Price */}
                     <div className="text-right">
                       <p className="text-sm text-[#2c2c2c] font-medium">
-                        ${(item.price * item.qty).toFixed(2)}
+                        ${(parseFloat(item.price || 0) * item.qty).toFixed(2)}
                       </p>
                       {item.qty > 1 && (
                         <p className="text-xs text-[#999]">
-                          ${item.price.toFixed(2)} each
+                          ${parseFloat(item.price || 0).toFixed(2)} each
                         </p>
                       )}
                     </div>
