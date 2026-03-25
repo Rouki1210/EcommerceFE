@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useNotification } from "../../context/NotificationContext";
@@ -57,7 +58,7 @@ export default function NotificationBell() {
                         {/* Header */}
                         <div className="px-[18px] pt-4 pb-3 border-b border-black/[0.06] flex justify-between items-center">
                             <div>
-                                <div className="text-slate-900 text-sm font-extrabold">Notifications</div>
+<div className="text-slate-900 text-sm font-extrabold">Notifications</div>
                                 <div className="text-slate-400 text-[11px] mt-0.5">{unreadCount > 0 ? `${unreadCount} unread` : "All caught up!"}</div>
                             </div>
                             {unreadCount > 0 && (
@@ -96,7 +97,7 @@ export default function NotificationBell() {
                                                 <div className="text-slate-500 text-[11px] leading-relaxed truncate">{notif.message}</div>
                                                 <div className="text-slate-300 text-[10px] mt-1">{notif.time}</div>
                                             </div>
-                                            {!notif.read && (
+{!notif.read && (
                                                 <motion.div
                                                     animate={{ scale: [1, 1.3, 1] }}
                                                     transition={{ duration: 2, repeat: Infinity }}

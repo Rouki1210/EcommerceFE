@@ -1,4 +1,4 @@
-
+import { motion } from "framer-motion";
 import NotificationBell from "./NotificationBell";
 
 export default function Header({ title, subtitle }) {
@@ -38,5 +38,5 @@ export default function Header({ title, subtitle }) {
                 <NotificationBell />
             </motion.div>
         </div>
-  );
+    );
 }

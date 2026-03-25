@@ -20,9 +20,9 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       const res = await loginAdmin(form.email, form.password);
-      if (res?.token) {
-        localStorage.setItem("adminAuth", "true");
-        localStorage.setItem("adminToken", res.token);
+      if (res?.accessToken) {
+        localStorage.setItem("role", "ADMIN");
+        localStorage.setItem("adminToken", res.accessToken);
         navigate("/admin/dashboard");
       } else {
         setError(res?.message || "Invalid credentials.");
