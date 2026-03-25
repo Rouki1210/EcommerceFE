@@ -10,6 +10,8 @@ export default function AccountSettingsPage() {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
+  if (!isAuthenticated) return <Navigate to="/login" />;
+
   const initialForm = useMemo(
     () => ({
       firstName: user?.firstName ?? "",

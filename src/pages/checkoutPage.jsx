@@ -122,7 +122,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="page-container min-h-screen">
+    <div className="page-container bg-white min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <button
