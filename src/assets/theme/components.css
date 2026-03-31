@@ -1,3 +1,71 @@
+/* ─────────────────────────────────────────────────────────
+   GLOBAL BANNER, SECTION, EMPTY STATE, TYPOGRAPHY, BADGE
+   ───────────────────────────────────────────────────────── */
+
+.banner {
+  @apply w-full py-16 px-6 text-center bg-gradient-to-br from-[#c8a96e] to-[#8b7355] text-white flex flex-col items-center justify-center;
+}
+
+.section {
+  @apply max-w-6xl mx-auto px-6 py-12;
+}
+
+.empty-state {
+  @apply flex flex-col items-center justify-center min-h-[300px] text-[#999] text-center;
+}
+
+.heading-lg {
+  @apply font-serif text-4xl text-[#2c2c2c] font-bold mb-3;
+}
+.heading-md {
+  @apply font-serif text-2xl text-[#2c2c2c] font-semibold mb-2;
+}
+.heading-sm {
+  @apply font-serif text-lg text-[#2c2c2c] font-medium mb-1;
+}
+.subtitle {
+  @apply text-base text-[#666] opacity-90 mb-2;
+}
+.caption {
+  @apply text-xs text-[#aaa] uppercase tracking-wider;
+}
+.label {
+  @apply block text-[10px] tracking-widest uppercase text-[#666] mb-1.5 font-medium;
+}
+
+.badge {
+  @apply inline-block px-3 py-1.5 text-xs font-bold tracking-wider uppercase rounded-full transition-all;
+}
+.badge-success {
+  @apply bg-[#27ae60] text-white;
+}
+.badge-error {
+  @apply bg-[#c0392b] text-white;
+}
+.badge-neutral {
+  @apply bg-[#ece7e0] text-[#2c2c2c];
+}
+
+.grid-cards {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.card {
+  @apply bg-white rounded-lg overflow-hidden shadow-[0_8px_24px_rgba(200,169,110,0.12)];
+}
+.card-dark {
+  @apply bg-[#2c2c2c] text-white rounded-lg overflow-hidden shadow-lg;
+}
+.card-padded {
+  @apply p-6;
+}
+
+.btn-ghost {
+  @apply bg-transparent border border-[#e5e5e5] text-[#2c2c2c] hover:border-[#c8a96e] hover:text-[#c8a96e] rounded-lg px-6 py-3 font-medium text-sm transition-all;
+}
+.btn-secondary {
+  @apply bg-white border border-[#e5e5e5] text-[#2c2c2c] hover:border-[#c8a96e] hover:text-[#c8a96e] rounded-lg px-6 py-3 font-medium text-sm transition-all;
+}
 /* ═══════════════════════════════════════════════════════════
    MAISON - TAILWIND COMPONENT LIBRARY
    Reusable component classes using @apply directive

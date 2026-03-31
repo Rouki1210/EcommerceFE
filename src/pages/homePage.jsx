@@ -1,8 +1,8 @@
 import { useOutletContext } from "react-router-dom";
-import Hero from "../components/Hero";
-import MarqueeStrip from "../components/MarqueeStrip";
-import ProductGrid from "../components/Productgrid";
-import EditorialBanner from "../components/Editorialbanner";
+import Hero from "../components/feature/Hero";
+import MarqueeStrip from "../components/feature/MarqueeStrip";
+import ProductGrid from "../components/feature/Productgrid";
+import EditorialBanner from "../components/feature/Editorialbanner";
 import { useCategories } from "../data/useCategories";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { colors, shadows, keyframes } from "../assets/theme/theme";

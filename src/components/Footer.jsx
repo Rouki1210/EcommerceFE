@@ -1,3 +1,4 @@
+// This file has been removed as part of the update.
 import { Link } from "react-router-dom";
 
 const FOOTER_LINKS = {

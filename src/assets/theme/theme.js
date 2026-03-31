@@ -1,216 +1,123 @@
+// Base UI Components mở rộng (Banner, Section, EmptyState, Badge, Grid, TypographyBase, FilterBar)
+import Banner from "../../components/base/Banner";
+import Section from "../../components/base/Section";
+import EmptyState from "../../components/base/EmptyState";
+import Badge from "../../components/base/Badge";
+import Grid from "../../components/base/Grid";
+import TypographyBase from "../../components/base/TypographyBase";
+import FilterBar from "../../components/base/FilterBar";
 /* ═══════════════════════════════════════════════════════════
-   ECOMMERCE DESIGN TOKENS
-   Import: import { colors, gradients, shadows, keyframes, tw } from "@/assets/theme/theme"
-═══════════════════════════════════════════════════════════ */
+  ECOMMERCE DESIGN TOKENS & MUI THEME
+  Import: import { theme, colors, gradients, shadows, ... } from "@/assets/theme/theme"
+════════════════════════════════════════════════════════════ */
 
-/* ── Color Tokens ── */
+// ---- TOKENS & PRESETS ----
+// (Đặt tất cả token lên đầu file)
+
 export const colors = {
-  // Backgrounds
-  bg: "#0d0800", // primary background
-  bgCard: "#f5f0eb", // card/panel background (light)
-  bgInput: "#fafafa", // input background
-  bgHover: "#ece7e0", // hovered element background
-  bgDark: "#2c2c2c", // dark section background
-  bgDeep: "#1a1a1a", // very dark background
-
-  // Brands & Accents
-  gold: "#c8a96e", // primary accent (warm gold)
-  goldLight: "#e5d4b0", // light gold
-  goldDark: "#8b7355", // dark gold
-  orange: "#ff6b00", // secondary accent (warm)
-  red: "#ff0040", // danger/alert color
-
-  // Text Colors
+  // ...existing code...
+  bg: "#0d0800",
+  bgCard: "#f5f0eb",
+  bgInput: "#fafafa",
+  bgHover: "#ece7e0",
+  bgDark: "#2c2c2c",
+  bgDeep: "#1a1a1a",
+  gold: "#c8a96e",
+  goldLight: "#e5d4b0",
+  goldDark: "#8b7355",
+  orange: "#ff6b00",
+  red: "#ff0040",
   white: "#fff",
-  text: "#2c2c2c", // primary text (dark)
-  textMuted: "#999", // secondary text
-  textDim: "#666", // tertiary text
-  textLight: "#bbb", // footnotes, disabled
-  textFaint: "#aaa", // very faint
-  textSub: "#9a8c7e", // subtle brown
-
-  // Borders
-  border: "#e5e5e5", // default border
-  borderSub: "#ece7e0", // subtle border
-  borderDark: "#2a1500", // dark border (admin)
-
-  // Status Colors
-  success: "#27ae60", // success/positive
-  error: "#c0392b", // error/negative
-  warning: "#f39c12", // warning
-
-  // Overlays
+  text: "#2c2c2c",
+  textMuted: "#999",
+  textDim: "#666",
+  textLight: "#bbb",
+  textFaint: "#aaa",
+  textSub: "#9a8c7e",
+  border: "#e5e5e5",
+  borderSub: "#ece7e0",
+  borderDark: "#2a1500",
+  success: "#27ae60",
+  error: "#c0392b",
+  warning: "#f39c12",
   overlay: "rgba(0, 0, 0, 0.5)",
   overlayDark: "rgba(0, 0, 0, 0.8)",
-  overlayLight: "rgba(0, 0, 0, 0.3)",
 };
 
-/* ── Gradient Tokens ── */
+// Base UI Components (MUI + Tailwind wrappers)
+import Button from "../../components/base/Button.jsx";
+import Card, { CardContent } from "../../components/base/Card.jsx";
+import Input from "../../components/base/Input.jsx";
+import Typography from "../../components/base/Typography.jsx";
+import Modal, {
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "../../components/base/Modal.jsx";
+import Divider from "../../components/base/Divider.jsx";
+import Box from "../../components/base/Box.jsx";
+
+export {
+  Button,
+  Card,
+  CardContent,
+  Input,
+  Typography,
+  Modal,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+  Box,
+  Banner,
+  Section,
+  EmptyState,
+  Badge,
+  Grid,
+  TypographyBase,
+  FilterBar,
+};
+
+/* ── Gradients ── */
 export const gradients = {
-  // Brand gradients
-  brandWarm: "linear-gradient(135deg, #c8a96e, #8b7355)",
-  brandHorizontal: "linear-gradient(90deg, #c8a96e, #8b7355)",
-  brandVertical: "linear-gradient(180deg, #c8a96e, #8b7355)",
-
-  // Hero gradients
-  heroDark: "linear-gradient(135deg, #2c2c2c 0%, #4a3f35 100%)",
-  heroWarm: "linear-gradient(135deg, #3d2817 0%, #5a4a3a 100%)",
-
-  // Special gradients
-  cardHover:
-    "linear-gradient(135deg, rgba(200, 169, 110, 0.1), rgba(139, 115, 85, 0.05))",
-
-  // Text gradients (for background-clip: text effect)
-  textGold: {
-    background: "linear-gradient(90deg, #c8a96e, #8b7355)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  },
-  textWarm: {
-    background: "linear-gradient(90deg, #d4a574, #a0805f)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  },
+  gold: "linear-gradient(90deg, #c8a96e 0%, #e5d4b0 100%)",
+  orange: "linear-gradient(90deg, #ff6b00 0%, #ffb347 100%)",
+  dark: "linear-gradient(90deg, #2c2c2c 0%, #1a1a1a 100%)",
+  white: "linear-gradient(90deg, #fff 0%, #fafafa 100%)",
 };
 
-/* ── Shadow Tokens ── */
+/* ── Shadows ── */
 export const shadows = {
-  // Subtle
-  sm: "0 2px 8px rgba(0, 0, 0, 0.1)",
-  base: "0 4px 12px rgba(0, 0, 0, 0.15)",
-  md: "0 8px 20px rgba(0, 0, 0, 0.12)",
-
-  // Cards & Panels
-  card: "0 4px 16px rgba(200, 169, 110, 0.08)",
-  cardHover: "0 8px 24px rgba(200, 169, 110, 0.12)",
-  cardElevated: "0 12px 32px rgba(0, 0, 0, 0.15)",
-
-  // Interactive
-  button: "0 4px 12px rgba(200, 169, 110, 0.2)",
-  buttonHover: "0 8px 20px rgba(200, 169, 110, 0.3)",
-
-  // Modal & Overlays
-  modal: "0 20px 60px rgba(0, 0, 0, 0.3), 0 0 1px rgba(200, 169, 110, 0.1)",
-  modalDark: "0 40px 100px rgba(0, 0, 0, 0.9)",
-
-  // Admin
-  adminPanel: "-8px 0 40px rgba(0, 0, 0, 0.3)",
-
-  // Input focus
-  inputFocus: "0 0 0 3px rgba(200, 169, 110, 0.1)",
-
-  // Badge
-  badge: "0 4px 12px rgba(200, 169, 110, 0.15)",
-
-  // Navigation
-  navbarGlow: "0 4px 16px rgba(200, 169, 110, 0.06)",
+  xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
+  sm: "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)",
+  md: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)",
+  lg: "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)",
+  xl: "0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)",
+  "2xl": "0 25px 50px -12px rgba(0,0,0,0.25)",
+  inner: "inset 0 2px 4px 0 rgba(0,0,0,0.06)",
+  outline: "0 0 0 3px rgba(200,169,110,0.5)",
+  none: "none",
 };
 
-/* ── Keyframes Animation Strings ── */
-export const keyframes = `
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes modalIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95) translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  
-  @keyframes toastIn {
-    0% {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    15% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    80% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-  }
-  
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  
-  @keyframes glow {
-    0%, 100% { box-shadow: 0 0 8px rgba(200, 169, 110, 0.3); }
-    50% { box-shadow: 0 0 16px rgba(200, 169, 110, 0.5); }
-  }
-`;
+/* ── Keyframes (for animation) ── */
+export const keyframes = {
+  fadeIn: {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
+  fadeOut: {
+    from: { opacity: 1 },
+    to: { opacity: 0 },
+  },
+  slideUp: {
+    from: { transform: "translateY(20px)", opacity: 0 },
+    to: { transform: "translateY(0)", opacity: 1 },
+  },
+  slideDown: {
+    from: { transform: "translateY(-20px)", opacity: 0 },
+    to: { transform: "translateY(0)", opacity: 1 },
+  },
+};
 
 /* ── Animation Duration & Timing ── */
 export const animations = {
@@ -288,80 +195,28 @@ export const breakpoints = {
   "2xl": "1536px",
 };
 
-/* ── Tailwind Utility Shorthands ── */
+/* ── Tailwind Utility Shorthands (đồng bộ với components.css) ── */
 export const tw = {
-  // ── Containers
-  card: "bg-[#f5f0eb] border border-[#ece7e0] rounded-lg",
-  cardPadded: "bg-[#f5f0eb] border border-[#ece7e0] rounded-lg p-6",
-  cardDark: "bg-[#2c2c2c] border border-[#3a3a3a] rounded-lg",
-  cardDarkPadded: "bg-[#2c2c2c] border border-[#3a3a3a] rounded-lg p-6",
-
-  // ── Form Elements
-  input:
-    "w-full px-4 py-3 bg-[#fafafa] border border-[#e5e5e5] rounded-lg text-sm text-[#2c2c2c] outline-none transition-all focus:border-[#c8a96e] focus:ring-2 focus:ring-[#c8a96e]/10 placeholder-[#bbb]",
-  inputDark:
-    "w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-sm text-[#fff] outline-none transition-all focus:border-[#c8a96e] focus:ring-2 focus:ring-[#c8a96e]/10 placeholder-[#666]",
-  label: "block text-xs font-medium text-[#666] uppercase tracking-wider mb-2",
-  labelDark:
-    "block text-xs font-medium text-[#aaa] uppercase tracking-wider mb-2",
-
-  // ── Buttons
-  btnPrimary:
-    "px-6 py-3 bg-[#2c2c2c] text-white rounded-lg font-medium text-sm transition-all hover:bg-[#1a1a1a] active:scale-95 cursor-pointer border-none shadow-md",
-  btnPrimaryGold:
-    "px-6 py-3 bg-[#c8a96e] text-white rounded-lg font-medium text-sm transition-all hover:bg-[#8b7355] active:scale-95 cursor-pointer border-none shadow-md",
-  btnSecondary:
-    "px-6 py-3 bg-white border border-[#e5e5e5] text-[#2c2c2c] rounded-lg font-medium text-sm transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-  btnGhost:
-    "px-6 py-3 bg-transparent border border-[#e5e5e5] text-[#2c2c2c] rounded-lg font-medium text-sm transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-  btnSmall:
-    "px-4 py-2 rounded-md text-xs font-medium transition-all cursor-pointer",
-  btnIcon:
-    "w-10 h-10 flex items-center justify-center rounded-lg border border-[#e5e5e5] text-[#666] transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-
-  // ── Links
-  link: "text-[#c8a96e] hover:text-[#8b7355] transition-colors cursor-pointer no-underline",
-  linkHover: "hover:underline hover:text-[#8b7355] transition-colors",
-
-  // ── Typography
-  heading: "font-serif font-bold text-[#2c2c2c]",
-  headingLarge: "font-serif font-bold text-4xl text-[#2c2c2c]",
-  headingMedium: "font-serif font-semibold text-2xl text-[#2c2c2c]",
-  body: "text-base text-[#666] leading-relaxed",
-  caption: "text-sm text-[#999] leading-relaxed",
-  muted: "text-xs text-[#aaa] uppercase tracking-wider",
-
-  // ── Dividers
-  divider: "border-t border-[#ece7e0]",
-  dividerDark: "border-t border-[#3a3a3a]",
-
-  // ── Badges
-  badge:
-    "inline-block px-3 py-1.5 text-xs font-bold tracking-wider uppercase rounded-full transition-all",
-  badgeAccent: "bg-[#c8a96e] text-white",
-  badgeSuccess: "bg-[#27ae60] text-white",
-  badgeError: "bg-[#c0392b] text-white",
-  badgeNeutral: "bg-[#ece7e0] text-[#2c2c2c]",
-
-  // ── Layout Helpers
-  container: "max-w-6xl mx-auto px-6",
-  pageWrapper: "max-w-6xl mx-auto px-6 py-12 sm:px-4",
-  section: "py-12 sm:py-8",
-  sectionPadded: "max-w-6xl mx-auto px-6 py-12",
-
-  // ── Grid & Flex
-  gridCards: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-  gridProducts: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
-  flexCenter: "flex items-center justify-center",
-  flexBetween: "flex items-center justify-between",
-
-  // ── Overlays
-  overlay: "fixed inset-0 bg-black/50 backdrop-blur-sm z-40",
-  overlayDark: "fixed inset-0 bg-black/80 z-50",
-
-  // ── Focus States
-  focusRing:
-    "focus:outline-none focus:ring-2 focus:ring-[#c8a96e] focus:ring-offset-2",
+  banner: "banner",
+  section: "section",
+  emptyState: "empty-state",
+  headingLg: "heading-lg",
+  headingMd: "heading-md",
+  headingSm: "heading-sm",
+  subtitle: "subtitle",
+  caption: "caption",
+  label: "label",
+  badge: "badge",
+  badgeSuccess: "badge-success",
+  badgeError: "badge-error",
+  badgeNeutral: "badge-neutral",
+  gridCards: "grid-cards",
+  card: "card",
+  cardDark: "card-dark",
+  cardPadded: "card-padded",
+  btnGhost: "btn-ghost",
+  btnSecondary: "btn-secondary",
+  // ... giữ lại các preset cũ nếu cần
 };
 
 /* ── Composite Component Styles ── */
@@ -407,7 +262,7 @@ export const components = {
   },
 };
 
-export default {
+export const theme = {
   colors,
   gradients,
   shadows,
@@ -420,3 +275,5 @@ export default {
   tw,
   components,
 };
+
+export default theme;

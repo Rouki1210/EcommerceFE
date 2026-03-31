@@ -33,7 +33,7 @@ const FormInput = ({
 
   return (
     <div>
-      <label className="form-label">{label}</label>
+      <label className="label">{label}</label>
       <input
         id={id}
         type={type}
@@ -43,11 +43,9 @@ const FormInput = ({
         onBlur={onBlur}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className={`${isError ? "form-input-error" : "form-input-default"} ${
-          isFocused ? "border-[#c8a96e]" : ""
-        }`}
+        className={`input${isError ? " input-error" : ""}${isFocused ? " border-[#c8a96e]" : ""}`}
       />
-      {error && <p className="form-error-text">{error}</p>}
+      {error && <p className="text-error text-xs mt-1">{error}</p>}
     </div>
   );
 };
@@ -122,7 +120,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="page-container bg-white min-h-screen">
+    <div className="section bg-white min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <button
@@ -138,20 +136,16 @@ export default function CheckoutPage() {
               },
             })
           }
-          className="btn-back-link mb-3"
+          className="btn btn-link mb-3"
         >
           ← Back to Cart
         </button>
-        <p className="text-xs tracking-widest uppercase text-[#c8a96e] mb-1 font-semibold">
-          Step 2 of 3
-        </p>
-        <h1 className="text-4xl text-[#2c2c2c] mt-3 font-bold">
-          Delivery Information
-        </h1>
+        <p className="muted mb-1">Step 2 of 3</p>
+        <h1 className="heading heading-lg mt-3">Delivery Information</h1>
       </div>
 
       {/* Progress Bar */}
-      <div className="flex gap-2 items-center mb-8">
+      <div className="flex-center gap-2 mb-8">
         {[
           { num: 1, label: "Cart", done: true },
           { num: 2, label: "Delivery", active: true },
@@ -159,19 +153,19 @@ export default function CheckoutPage() {
         ].map((step, i) => (
           <div key={step.num} className="flex items-center gap-2">
             <div
-              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
+              className={`w-7 h-7 rounded-full flex-center text-xs font-semibold transition-colors ${
                 step.done
                   ? "bg-[#2c2c2c] text-white"
                   : step.active
                     ? "bg-[#c8a96e] text-white"
-                    : "bg-transparent border border-[#e5e5e5] text-[#999]"
+                    : "bg-transparent border border-sub text-muted"
               }`}
             >
               {step.done ? "✓" : step.num}
             </div>
             <span
               className={`text-xs ${
-                step.active ? "font-semibold text-[#2c2c2c]" : "text-[#999]"
+                step.active ? "font-semibold text-main" : "text-muted"
               }`}
             >
               {step.label}
@@ -194,11 +188,9 @@ export default function CheckoutPage() {
       >
         <div className="lg:col-span-3 flex flex-col gap-6">
           {/* Contact Card */}
-          <div className="bg-[#f5f0eb] rounded-xl p-8 shadow-lg">
-            <h2 className="text-lg text-[#2c2c2c] mb-6 font-semibold">
-              Contact Information
-            </h2>
-            <div className="space-y-4">
+          <div className="card">
+            <h2 className="heading-md mb-6">Contact Information</h2>
+            <div className="flex flex-col gap-4">
               <FormInput
                 id="fullName"
                 label="Full Name *"
@@ -242,11 +234,9 @@ export default function CheckoutPage() {
           </div>
 
           {/* Address Card */}
-          <div className="bg-[#f5f0eb] rounded-xl p-8 shadow-lg">
-            <h2 className="text-lg text-[#2c2c2c] mb-6 font-semibold">
-              Shipping Address
-            </h2>
-            <div className="space-y-4">
+          <div className="card">
+            <h2 className="heading-md mb-6">Shipping Address</h2>
+            <div className="flex flex-col gap-4">
               <FormInput
                 id="address"
                 label="Street Address *"
@@ -273,12 +263,12 @@ export default function CheckoutPage() {
                   autoComplete="address-level2"
                 />
                 <div>
-                  <label className="form-label">Country *</label>
+                  <label className="label">Country *</label>
                   <select
                     id="country"
                     value={form.country}
                     onChange={(e) => set("country", e.target.value)}
-                    className="form-input-default w-full"
+                    className="input w-full"
                   >
                     {COUNTRIES.map((c) => (
                       <option key={c} value={c}>
@@ -292,8 +282,8 @@ export default function CheckoutPage() {
           </div>
 
           {/* Notes Card */}
-          <div className="bg-[#f5f0eb] rounded-xl p-8 shadow-lg">
-            <label className="form-label">Order Notes (Optional)</label>
+          <div className="card">
+            <label className="label">Order Notes (Optional)</label>
             <textarea
               id="notes"
               value={form.notes}
@@ -302,44 +292,42 @@ export default function CheckoutPage() {
               onBlur={() => setFocusedField(null)}
               placeholder="Add any special instructions..."
               rows="4"
-              className="form-input-default w-full resize-none font-inherit"
+              className="input w-full resize-none font-inherit"
             />
           </div>
         </div>
 
         {/* Summary Sidebar */}
-        <div className="bg-[#f5f0eb] rounded-xl p-6 h-fit sticky top-5 shadow-lg">
-          <h3 className="text-base text-[#2c2c2c] mb-4 font-semibold">
-            Order Summary
-          </h3>
+        <div className="card p-6 h-fit sticky top-5">
+          <h3 className="heading mb-4">Order Summary</h3>
 
-          <div className="flex justify-between text-xs text-[#999] py-2 border-b border-[#e5e5e5]">
+          <div className="flex-between text-xs text-muted py-2 border-b border-sub">
             <span>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
 
           {discount > 0 && (
-            <div className="flex justify-between text-xs text-[#27ae60] py-2 border-b border-[#e5e5e5]">
+            <div className="flex-between text-xs text-success py-2 border-b border-sub">
               <span>Discount</span>
               <span>-${discount.toFixed(2)}</span>
             </div>
           )}
 
-          <div className="flex justify-between text-xs text-[#999] py-2 border-b border-[#e5e5e5]">
+          <div className="flex-between text-xs text-muted py-2 border-b border-sub">
             <span>Shipping</span>
             <span>${shipping.toFixed(2)}</span>
           </div>
 
-          <div className="flex justify-between text-lg font-semibold py-4 text-[#2c2c2c]">
+          <div className="flex-between text-lg font-semibold py-4 text-main">
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
 
-          <button type="submit" className="btn-primary-enabled w-full">
+          <button type="submit" className="btn btn-primary w-full">
             Place Order
           </button>
 
-          <p className="text-center text-xs text-[#999] mt-3">
+          <p className="text-center text-xs text-muted mt-3">
             Free shipping on orders over ${SHIPPING_THRESHOLD}
           </p>
         </div>

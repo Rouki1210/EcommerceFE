@@ -1,0 +1,247 @@
+/* ===============================
+   THEME BASE (Design Tokens + Component Classes)
+   Gộp cả biến theme và class tái sử dụng UI
+   Import vào App.jsx hoặc index.css
+=============================== */
+:root {
+  /* Màu sắc chủ đạo */
+  --color-bg: #f5f0eb;
+  --color-bg-dark: #2c2c2c;
+  --color-bg-card: #fff;
+  --color-bg-input: #fafafa;
+  --color-bg-hover: #ece7e0;
+  --color-gold: #c8a96e;
+  --color-gold-light: #e5d4b0;
+  --color-gold-dark: #8b7355;
+  --color-orange: #ff6b00;
+  --color-red: #ff0040;
+  --color-success: #27ae60;
+  --color-error: #c0392b;
+  --color-warning: #f39c12;
+  --color-border: #e5e5e5;
+  --color-border-sub: #ece7e0;
+  --color-border-dark: #2a1500;
+  --color-text: #2c2c2c;
+  --color-text-muted: #999;
+  --color-text-dim: #666;
+  --color-text-light: #bbb;
+  --color-text-faint: #aaa;
+  --color-text-sub: #9a8c7e;
+  --color-white: #fff;
+
+  /* Font */
+  --font-main: "Inter", sans-serif;
+  --font-serif: "Playfair Display", serif;
+
+  /* Shadow */
+  --shadow-card: 0 8px 24px rgba(200, 169, 110, 0.12);
+  --shadow-hover: 0 8px 24px rgba(200, 169, 110, 0.18);
+
+  /* Radius */
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+}
+
+/* BUTTONS */
+.btn {
+  @apply px-4 py-2 rounded-xl font-semibold transition-colors cursor-pointer;
+}
+.btn-primary {
+  background: var(--color-bg-dark);
+  color: var(--color-white);
+}
+.btn-primary:hover {
+  background: #1a1a1a;
+}
+.btn-secondary {
+  background: var(--color-gold);
+  color: var(--color-white);
+}
+.btn-secondary:hover {
+  background: var(--color-gold-dark);
+}
+.btn-disabled {
+  background: var(--color-text-muted);
+  color: var(--color-white);
+  cursor: not-allowed;
+}
+.btn-link {
+  @apply text-[var(--color-bg-dark)] font-medium no-underline hover:underline;
+}
+
+/* CARD */
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-lg);
+}
+.card-hover:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* INPUT */
+.input {
+  @apply border rounded-lg px-3 py-2 outline-none transition-colors w-full;
+  background: var(--color-bg-input);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.input:focus {
+  border-color: var(--color-gold);
+}
+.input-error {
+  border-color: var(--color-error);
+}
+
+/* LABEL */
+.label {
+  @apply block text-xs tracking-widest uppercase font-medium mb-1.5;
+  color: var(--color-text-dim);
+}
+
+/* TYPOGRAPHY */
+.heading {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--color-text);
+  font-weight: bold;
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-error {
+  color: var(--color-error);
+}
+
+/* CONTAINER */
+.container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+}
+
+/* GRID */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* UTILS */
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+/* USER PAGE CUSTOM CLASSES */
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2c2c2c 0%, #4a3f35 100%);
+  min-height: 260px;
+}
+.hero-banner-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+.text-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 0.75rem;
+}
+.text-heading {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  color: var(--color-white);
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+.text-subtitle {
+  color: var(--color-text-light);
+  font-size: 1rem;
+  max-width: 28rem;
+}
+.hero-circle {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.1;
+  background: var(--color-gold);
+}
+.hero-circle-lg {
+  right: 4rem;
+  top: 4rem;
+  width: 16rem;
+  height: 16rem;
+}
+.hero-circle-sm {
+  right: 2rem;
+  bottom: 5rem;
+  width: 12rem;
+  height: 12rem;
+}
+
+/* Section */
+.section {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+.section-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.section-flex-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+/* Filter Button */
+.filter-btn {
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: #888;
+}
+.filter-btn-active {
+  background: var(--color-bg-dark);
+  color: var(--color-bg);
+  border-color: var(--color-bg-dark);
+}
+
+/* Grid */
+.grid-products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+@media (min-width: 768px) {
+  .grid-products {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

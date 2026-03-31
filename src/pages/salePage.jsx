@@ -1,7 +1,15 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/feature/ProductCard";
 import { useProducts } from "../hooks/useProducts";
+import {
+  Button,
+  Typography,
+  Box,
+  tw,
+  colors,
+  gradients,
+} from "../assets/theme";
 
 const DISCOUNT_TIERS = [80, 90, 100];
 
@@ -25,46 +33,52 @@ export default function SalePage() {
   return (
     <>
       {/* Banner */}
-      <div className="bg-gradient-to-br from-[#c8a96e] to-[#8b7355] py-16 px-6 text-center text-white">
-        <h1 className="text-5xl font-bold mb-3 leading-tight">
+      <Box
+        className="py-16 px-6 text-center"
+        style={{
+          background: gradients.gold,
+          color: colors.white,
+        }}
+      >
+        <Typography
+          variant="h2"
+          className="font-bold mb-3 leading-tight"
+          style={{ fontSize: "2.8rem" }}
+        >
           End of Season Sale
-        </h1>
-        <p className="text-base opacity-90">
+        </Typography>
+        <Typography variant="body1" className="opacity-90">
           Up to 70% off our favourite pieces. Limited time only.
-        </p>
-      </div>
+        </Typography>
+      </Box>
 
       {/* Discount Filters */}
-      <div className="max-w-5xl mx-auto py-10 px-6 flex gap-3 justify-center flex-wrap">
-        <button
+      <Box className="max-w-5xl mx-auto py-10 px-6 flex gap-3 justify-center flex-wrap">
+        <Button
           onClick={() => setSelectedDiscount(null)}
-          className={`px-5 py-2 border-2 rounded text-sm font-medium transition-all ${
-            selectedDiscount === null
-              ? "filter-button-active"
-              : "filter-button-inactive"
-          }`}
+          variant={selectedDiscount === null ? "contained" : "outlined"}
+          color={selectedDiscount === null ? "primary" : "inherit"}
+          className={`min-w-[120px] ${selectedDiscount === null ? tw["btn-primary-gold"] : tw["btn-secondary"]}`}
         >
           All Discounts
-        </button>
+        </Button>
         {DISCOUNT_TIERS.map((d) => (
-          <button
+          <Button
             key={d}
             onClick={() => setSelectedDiscount(d)}
-            className={`px-5 py-2 border-2 rounded text-sm font-medium transition-all ${
-              selectedDiscount === d
-                ? "filter-button-active"
-                : "filter-button-inactive"
-            }`}
+            variant={selectedDiscount === d ? "contained" : "outlined"}
+            color={selectedDiscount === d ? "primary" : "inherit"}
+            className={`min-w-[120px] ${selectedDiscount === d ? tw["btn-primary-gold"] : tw["btn-secondary"]}`}
           >
             {d}% and up
-          </button>
+          </Button>
         ))}
-      </div>
+      </Box>
 
       {/* Products Section */}
-      <section className="max-w-5xl mx-auto px-6 pb-16">
+      <Box className="max-w-5xl mx-auto px-6 pb-16">
         {saleProducts.length > 0 ? (
-          <div className="product-grid">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {saleProducts.map((product) => (
               <div
                 key={product.id}
@@ -76,11 +90,13 @@ export default function SalePage() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center min-h-[300px] text-[#999]">
-            <p>No products found for the selected discount.</p>
-          </div>
+          <Box className="flex flex-col items-center justify-center min-h-[300px]">
+            <Typography variant="body2" className="text-muted">
+              No products found for the selected discount.
+            </Typography>
+          </Box>
         )}
-      </section>
+      </Box>
     </>
   );
 }

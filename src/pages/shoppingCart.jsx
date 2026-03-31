@@ -60,39 +60,29 @@ export default function ShoppingCart() {
   };
 
   return (
-    <div className="page-container">
+    <div className="container cart-root">
       <div className="mb-8">
-        <h1 className="text-4xl text-[#2c2c2c] mb-2 font-bold">
-          Shopping Cart
-        </h1>
-        <p className="text-sm text-[#999]">
+        <h1 className="heading mb-2">Shopping Cart</h1>
+        <p className="text-muted">
           {cart.length} item{cart.length !== 1 ? "s" : ""} in your bag
         </p>
       </div>
 
       {cart.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-lg text-[#2c2c2c] mb-4">Your cart is empty</p>
-          <button onClick={() => navigate("/")} className="btn-primary-enabled">
+          <p className="text-lg text-main mb-4">Your cart is empty</p>
+          <button onClick={() => navigate("/")} className="btn btn-primary">
             Continue Shopping
           </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-3 bg-[#f5f0eb] rounded-lg shadow-lg overflow-hidden">
+          <div className="lg:col-span-3 card overflow-hidden">
             {cart.map((item) => (
               <div
                 key={item.cartItemId}
-                className="cart-item"
-                style={{
-                  opacity: removingId === item.cartItemId ? 0 : 1,
-                  transform:
-                    removingId === item.cartItemId
-                      ? "translateX(28px)"
-                      : "translateX(0)",
-                  transition: "opacity 0.35s ease, transform 0.35s ease",
-                }}
+                className={`item-row cart-item${removingId === item.cartItemId ? " removing" : ""}`}
               >
                 <img
                   src={item.image}
@@ -101,14 +91,12 @@ export default function ShoppingCart() {
                 />
                 <div className="cart-item-details">
                   <div>
-                    <p className="text-sm text-[#2c2c2c] mb-1 font-medium">
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-[#999]">{item.variant}</p>
+                    <p className="font-medium text-main mb-1">{item.name}</p>
+                    <p className="text-xs text-muted">{item.variant}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     {/* Quantity Selector */}
-                    <div className="flex items-center gap-2 border border-[#e5e5e5] rounded-full p-1">
+                    <div className="flex items-center gap-2 border border-sub rounded-full p-1">
                       <button
                         onClick={() =>
                           updateCartItem(
@@ -116,7 +104,7 @@ export default function ShoppingCart() {
                             Math.max(1, item.qty - 1),
                           )
                         }
-                        className="w-6 h-6 flex items-center justify-center text-[#2c2c2c] hover:bg-[#2c2c2c] hover:text-[#f5f0eb] rounded-full transition-all"
+                        className="qty-btn w-6 h-6 flex items-center justify-center text-main rounded-full"
                       >
                         −
                       </button>
@@ -127,18 +115,18 @@ export default function ShoppingCart() {
                         onClick={() =>
                           updateCartItem(item.cartItemId, item.qty + 1)
                         }
-                        className="w-6 h-6 flex items-center justify-center text-[#2c2c2c] hover:bg-[#2c2c2c] hover:text-[#f5f0eb] rounded-full transition-all"
+                        className="qty-btn w-6 h-6 flex items-center justify-center text-main rounded-full"
                       >
                         +
                       </button>
                     </div>
                     {/* Price */}
                     <div className="text-right">
-                      <p className="text-sm text-[#2c2c2c] font-medium">
+                      <p className="font-medium text-main">
                         ${(parseFloat(item.price || 0) * item.qty).toFixed(2)}
                       </p>
                       {item.qty > 1 && (
-                        <p className="text-xs text-[#999]">
+                        <p className="text-xs text-muted">
                           ${parseFloat(item.price || 0).toFixed(2)} each
                         </p>
                       )}
@@ -146,7 +134,7 @@ export default function ShoppingCart() {
                     {/* Remove Button */}
                     <button
                       onClick={() => handleRemove(item.cartItemId)}
-                      className="text-[#999] text-2xl hover:text-[#c0392b] transition-colors"
+                      className="remove-btn text-2xl"
                     >
                       ×
                     </button>
@@ -157,10 +145,8 @@ export default function ShoppingCart() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-[#f5f0eb] rounded-lg p-6 h-fit sticky top-5 shadow-lg">
-            <h3 className="text-base text-[#2c2c2c] mb-4 font-semibold">
-              Order Summary
-            </h3>
+          <div className="card bg-main/5 p-6 h-fit sticky top-5">
+            <h3 className="font-semibold mb-4 text-main">Order Summary</h3>
 
             {/* Promo Code */}
             <div className="mb-4">
@@ -169,15 +155,15 @@ export default function ShoppingCart() {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 placeholder="Promo code"
-                className="form-input-default w-full mb-2"
+                className="input promo-input mb-2"
               />
               <button
                 onClick={handleApplyPromo}
                 disabled={pricing.promoApplied}
-                className={`w-full py-2.5 px-4 border rounded-lg font-medium transition-all mb-4 ${
+                className={`btn w-full mb-4 ${
                   pricing.promoApplied
-                    ? "bg-[#27ae60]/20 text-[#27ae60] border-[#e5e5e5] cursor-default"
-                    : "bg-[#f5f0eb] text-[#2c2c2c] border-[#e5e5e5] hover:bg-[#2c2c2c] hover:text-white"
+                    ? "btn-disabled text-success border-sub cursor-default"
+                    : "btn-primary border-sub hover:bg-main hover:text-white"
                 }`}
               >
                 {pricing.promoApplied ? "Applied ✓" : "Apply"}
@@ -185,19 +171,19 @@ export default function ShoppingCart() {
             </div>
 
             {/* Pricing Rows */}
-            <div className="flex justify-between text-xs text-[#999] py-2 border-b border-[#e5e5e5]">
+            <div className="flex justify-between text-xs text-muted py-2 border-b border-sub">
               <span>Subtotal</span>
               <span>${pricing.subtotal.toFixed(2)}</span>
             </div>
 
             {pricing.discount > 0 && (
-              <div className="flex justify-between text-xs text-[#27ae60] py-2 border-b border-[#e5e5e5]">
+              <div className="flex justify-between text-xs text-success py-2 border-b border-sub">
                 <span>Discount</span>
                 <span>-${pricing.discount.toFixed(2)}</span>
               </div>
             )}
 
-            <div className="flex justify-between text-xs text-[#999] py-2 border-b border-[#e5e5e5]">
+            <div className="flex justify-between text-xs text-muted py-2 border-b border-sub">
               <span>Shipping</span>
               <span>
                 {pricing.shipping === 0
@@ -206,19 +192,19 @@ export default function ShoppingCart() {
               </span>
             </div>
 
-            <div className="flex justify-between text-lg font-semibold py-4 text-[#2c2c2c]">
+            <div className="flex justify-between text-lg font-semibold py-4 text-main">
               <span>Total</span>
               <span>${pricing.total.toFixed(2)}</span>
             </div>
 
             <button
               onClick={handleCheckout}
-              className="btn-primary-enabled w-full"
+              className="btn btn-primary w-full checkout-btn"
             >
               Proceed to Checkout
             </button>
 
-            <p className="text-center text-xs text-[#999] mt-3">
+            <p className="text-center text-xs text-muted mt-3">
               Free shipping on orders over ${SHIPPING_THRESHOLD}
             </p>
           </div>

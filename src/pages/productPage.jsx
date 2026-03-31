@@ -46,7 +46,7 @@ export default function ProductPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
         <div className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin" />
-        <p className="text-[#999]">Loading...</p>
+        <p className="text-muted">Loading...</p>
       </div>
     );
   }
@@ -54,14 +54,9 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-8">
-        <h1 className="text-2xl font-bold text-[#2c2c2c]">Product not found</h1>
-        <p className="text-[#999]">
-          The item you're looking for doesn't exist.
-        </p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-6 py-3 bg-[#fafafa] text-[#2c2c2c] border border-[#e5e5e5] rounded-lg cursor-pointer text-sm font-semibold transition-all hover:bg-[#e5e5e5]"
-        >
+        <h1 className="heading text-2xl">Product not found</h1>
+        <p className="text-muted">The item you're looking for doesn't exist.</p>
+        <button onClick={() => navigate("/")} className="btn btn-secondary">
           Back to Home
         </button>
       </div>
@@ -87,11 +82,8 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-8 p-2 bg-transparent border-none text-[#c8a96e] cursor-pointer text-sm font-semibold transition-all hover:text-[#8b7355]"
-      >
+    <div className="section">
+      <button onClick={() => navigate(-1)} className="btn btn-link mb-8">
         ← Back
       </button>
 
@@ -101,24 +93,22 @@ export default function ProductPage() {
           <img
             src={product.image}
             alt={product.name}
-            className="w-full max-w-[500px] h-auto rounded-lg shadow-[0_4px_16px_rgba(200,169,110,0.08)]"
+            className="w-full max-w-[500px] h-auto rounded-xl shadow-card"
           />
         </div>
 
         {/* Info Section */}
         <div>
-          <p className="text-xs text-[#c8a96e] tracking-widest uppercase mb-4 font-semibold">
-            {product.category}
-          </p>
+          <p className="text-label mb-4">{product.category}</p>
 
-          <h1 className="text-4xl font-bold text-[#2c2c2c] mb-4 leading-tight">
+          <h1 className="text-heading text-4xl mb-4 leading-tight">
             {product.name}
           </h1>
 
           <div className="mb-6 mt-4">
             {product.originalPrice ? (
               <div className="flex gap-4 items-center">
-                <span className="text-lg text-[#999] line-through">
+                <span className="text-lg text-muted line-through">
                   ${Number(product.originalPrice).toFixed(2)}
                 </span>
                 <span className="text-2xl font-bold text-[#2c2c2c]">
@@ -137,7 +127,7 @@ export default function ProductPage() {
             )}
           </div>
 
-          <p className="text-sm text-[#999] leading-relaxed mb-6">
+          <p className="text-sm text-muted leading-relaxed mb-6">
             {product.description ||
               "Premium quality product with exceptional craftsmanship."}
           </p>
@@ -151,9 +141,7 @@ export default function ProductPage() {
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`min-w-[50px] px-3 py-2 rounded text-sm font-semibold transition-all border ${
-                      selectedSize === size
-                        ? "filter-button-active"
-                        : "filter-button-inactive"
+                      selectedSize === size ? "filter-btn-active" : "filter-btn"
                     }`}
                   >
                     {size}
@@ -165,7 +153,7 @@ export default function ProductPage() {
 
           <button
             onClick={handleAddToCart}
-            className="w-full py-3 px-4 bg-[#c8a96e] text-[#f5f0eb] border-none rounded text-base font-bold transition-all hover:bg-[#8b7355] shadow-[0_4px_12px_rgba(200,169,110,0.2)]"
+            className="btn btn-secondary w-full text-base font-bold"
           >
             {added ? "✓ Added to Cart" : "Add to Cart"}
           </button>
@@ -178,19 +166,19 @@ export default function ProductPage() {
 
           <div className="mt-8 border-t border-[#e5e5e5] pt-8">
             <Accordion title="Description">
-              <p className="text-sm text-[#999] leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 {product.description}
               </p>
             </Accordion>
             <Accordion title="Specifications">
-              <ul className="text-sm text-[#999] leading-relaxed">
+              <ul className="text-sm text-muted leading-relaxed">
                 <li>Material: Premium Quality</li>
                 <li>Care: Machine wash cold</li>
                 <li>Fit: True to size</li>
               </ul>
             </Accordion>
             <Accordion title="Shipping & Returns">
-              <p className="text-sm text-[#999] leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 Free shipping on orders over $
                 {import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD || 100}
                 returns accepted.

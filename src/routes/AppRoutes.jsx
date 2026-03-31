@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import Layout from "../components/Layout";
+import Layout from "../components/feature/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
 import CollectionPage from "../pages/collectionPage";
@@ -18,8 +18,8 @@ import AccountSettingsPage from "../pages/accountSettingsPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
-import AdminLayout from "../components/admin/AdminLayout";
-import ProtectedRoute from "../components/admin/ProtectedRoute";
+import AdminLayout from "../components/feature/admin/AdminLayout";
+import ProtectedRoute from "../components/feature/admin/ProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
 import Admindashboard from "../pages/admin/Admindashboard";
 import Adminproducts from "../pages/admin/Adminproducts";
