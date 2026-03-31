@@ -50,7 +50,7 @@ export default function RegisterPage() {
     setApiError("");
     try {
       const data = await registerApi(
-        form.firstName + " " + form.lastName,
+        form.firstName,form.lastName,
         form.email,
         form.password,
       );
