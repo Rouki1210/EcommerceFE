@@ -8,12 +8,16 @@ import {
   updateQty,
   removeItem,
 } from "../features/cart/cartSlice";
+import { tw } from "../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ShoppingCart() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useDispatch();
   const cart = useSelector(selectCartItems);
+
   usePageTitle("Shopping Cart");
 
   const [promoCode, setPromoCode] = useState(state?.promoCode ?? "");
@@ -59,131 +63,134 @@ export default function ShoppingCart() {
     setTimeout(() => dispatch(removeItem(id)), 350);
   };
 
+  const promoBtnClassName = cx(
+    tw.cartPagePromoBtn,
+    pricing.promoApplied && tw.cartPagePromoApplied,
+  );
+
   return (
-    <div className="container cart-root">
-      <div className="mb-8">
-        <h1 className="heading mb-2">Shopping Cart</h1>
-        <p className="text-muted">
+    <div className={tw.cartPage}>
+      <div className={tw.cartPageHeader}>
+        <h1 className={cx("heading", tw.cartPageTitle)}>Shopping Cart</h1>
+        <p className={tw.cartPageSubtitle}>
           {cart.length} item{cart.length !== 1 ? "s" : ""} in your bag
         </p>
       </div>
 
       {cart.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-lg text-main mb-4">Your cart is empty</p>
-          <button onClick={() => navigate("/")} className="btn btn-primary">
+        <div className={tw.cartPageEmpty}>
+          <p className={tw.collectionEmptyTitle}>Your cart is empty</p>
+          <button onClick={() => navigate("/")} className={tw.cartPageEmptyBtn}>
             Continue Shopping
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Cart Items */}
-          <div className="lg:col-span-3 card overflow-hidden">
-            {cart.map((item) => (
-              <div
-                key={item.cartItemId}
-                className={`item-row cart-item${removingId === item.cartItemId ? " removing" : ""}`}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="cart-item-image"
-                />
-                <div className="cart-item-details">
-                  <div>
-                    <p className="font-medium text-main mb-1">{item.name}</p>
-                    <p className="text-xs text-muted">{item.variant}</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    {/* Quantity Selector */}
-                    <div className="flex items-center gap-2 border border-sub rounded-full p-1">
-                      <button
-                        onClick={() =>
-                          updateCartItem(
-                            item.cartItemId,
-                            Math.max(1, item.qty - 1),
-                          )
-                        }
-                        className="qty-btn w-6 h-6 flex items-center justify-center text-main rounded-full"
-                      >
-                        −
-                      </button>
-                      <span className="text-xs text-center w-5">
-                        {item.qty}
-                      </span>
-                      <button
-                        onClick={() =>
-                          updateCartItem(item.cartItemId, item.qty + 1)
-                        }
-                        className="qty-btn w-6 h-6 flex items-center justify-center text-main rounded-full"
-                      >
-                        +
-                      </button>
+        <div className={tw.cartPageLayout}>
+          <div className={tw.cartPageItems}>
+            {cart.map((item) => {
+              const rowClassName = cx(
+                tw.cartPageItem,
+                removingId === item.cartItemId && tw.cartPageItemRemoving,
+              );
+
+              return (
+                <div key={item.cartItemId} className={rowClassName}>
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className={tw.cartPageItemImage}
+                  />
+
+                  <div className={tw.cartPageItemDetails}>
+                    <div>
+                      <p className={tw.cartPageItemName}>{item.name}</p>
+                      <p className={tw.cartPageItemVariant}>{item.variant}</p>
                     </div>
-                    {/* Price */}
-                    <div className="text-right">
-                      <p className="font-medium text-main">
-                        ${(parseFloat(item.price || 0) * item.qty).toFixed(2)}
-                      </p>
-                      {item.qty > 1 && (
-                        <p className="text-xs text-muted">
-                          ${parseFloat(item.price || 0).toFixed(2)} each
+
+                    <div className="flex items-center justify-between gap-3">
+                      <div className={tw.cartPageQty}>
+                        <button
+                          onClick={() =>
+                            updateCartItem(
+                              item.cartItemId,
+                              Math.max(1, item.qty - 1),
+                            )
+                          }
+                          className={tw.cartPageQtyBtn}
+                        >
+                          −
+                        </button>
+                        <span className="text-xs w-5 text-center">
+                          {item.qty}
+                        </span>
+                        <button
+                          onClick={() =>
+                            updateCartItem(item.cartItemId, item.qty + 1)
+                          }
+                          className={tw.cartPageQtyBtn}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className={tw.cartPagePriceBox}>
+                        <p className={tw.cartPagePrice}>
+                          ${(parseFloat(item.price || 0) * item.qty).toFixed(2)}
                         </p>
-                      )}
+                        {item.qty > 1 && (
+                          <p className={tw.cartPageEach}>
+                            ${parseFloat(item.price || 0).toFixed(2)} each
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => handleRemove(item.cartItemId)}
+                        className={tw.cartPageRemove}
+                        aria-label="Remove item"
+                      >
+                        ×
+                      </button>
                     </div>
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => handleRemove(item.cartItemId)}
-                      className="remove-btn text-2xl"
-                    >
-                      ×
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Order Summary */}
-          <div className="card bg-main/5 p-6 h-fit sticky top-5">
-            <h3 className="font-semibold mb-4 text-main">Order Summary</h3>
+          <div className={tw.cartPageSummary}>
+            <h3 className={tw.cartPageSummaryTitle}>Order Summary</h3>
 
-            {/* Promo Code */}
             <div className="mb-4">
               <input
                 type="text"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 placeholder="Promo code"
-                className="input promo-input mb-2"
+                className={tw.cartPagePromoInput}
               />
               <button
                 onClick={handleApplyPromo}
                 disabled={pricing.promoApplied}
-                className={`btn w-full mb-4 ${
-                  pricing.promoApplied
-                    ? "btn-disabled text-success border-sub cursor-default"
-                    : "btn-primary border-sub hover:bg-main hover:text-white"
-                }`}
+                className={promoBtnClassName}
               >
                 {pricing.promoApplied ? "Applied ✓" : "Apply"}
               </button>
             </div>
 
-            {/* Pricing Rows */}
-            <div className="flex justify-between text-xs text-muted py-2 border-b border-sub">
+            <div className={tw.cartPageRow}>
               <span>Subtotal</span>
               <span>${pricing.subtotal.toFixed(2)}</span>
             </div>
 
             {pricing.discount > 0 && (
-              <div className="flex justify-between text-xs text-success py-2 border-b border-sub">
+              <div className={cx(tw.cartPageRow, tw.cartPageRowDiscount)}>
                 <span>Discount</span>
                 <span>-${pricing.discount.toFixed(2)}</span>
               </div>
             )}
 
-            <div className="flex justify-between text-xs text-muted py-2 border-b border-sub">
+            <div className={tw.cartPageRow}>
               <span>Shipping</span>
               <span>
                 {pricing.shipping === 0
@@ -192,19 +199,16 @@ export default function ShoppingCart() {
               </span>
             </div>
 
-            <div className="flex justify-between text-lg font-semibold py-4 text-main">
+            <div className={tw.cartPageTotal}>
               <span>Total</span>
               <span>${pricing.total.toFixed(2)}</span>
             </div>
 
-            <button
-              onClick={handleCheckout}
-              className="btn btn-primary w-full checkout-btn"
-            >
+            <button onClick={handleCheckout} className={tw.cartPageCheckout}>
               Proceed to Checkout
             </button>
 
-            <p className="text-center text-xs text-muted mt-3">
+            <p className={tw.cartPageHint}>
               Free shipping on orders over ${SHIPPING_THRESHOLD}
             </p>
           </div>

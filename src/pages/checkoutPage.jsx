@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SHIPPING_THRESHOLD } from "../data/constants";
+import { usePageTitle } from "../hooks/usePageTitle";
+import { tw } from "../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const COUNTRIES = [
   "Vietnam",
@@ -20,37 +24,36 @@ const FormInput = ({
   label,
   value,
   onChange,
-  onFocus,
-  onBlur,
   error,
-  focusedField,
   type = "text",
   placeholder,
   autoComplete,
 }) => {
-  const isError = !!error;
-  const isFocused = focusedField === id;
-
   return (
     <div>
-      <label className="label">{label}</label>
+      <label htmlFor={id} className="form-label">
+        {label}
+      </label>
       <input
         id={id}
         type={type}
         value={value}
         onChange={onChange}
-        onFocus={onFocus}
-        onBlur={onBlur}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className={`input${isError ? " input-error" : ""}${isFocused ? " border-[#c8a96e]" : ""}`}
+        className={cx(
+          error ? "form-input-error" : "form-input-default",
+          "focus:border-[#c8a96e]",
+        )}
       />
-      {error && <p className="text-error text-xs mt-1">{error}</p>}
+      {error && <p className="form-error-text">{error}</p>}
     </div>
   );
 };
 
 export default function CheckoutPage() {
+  usePageTitle("Checkout");
+
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -72,7 +75,6 @@ export default function CheckoutPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [focusedField, setFocusedField] = useState(null);
 
   const set = (key, val) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -120,9 +122,8 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="section bg-white min-h-screen">
-      {/* Header */}
-      <div className="mb-8">
+    <div className={tw.checkoutPage}>
+      <div>
         <button
           onClick={() =>
             navigate("/shopping-cart", {
@@ -136,83 +137,82 @@ export default function CheckoutPage() {
               },
             })
           }
-          className="btn btn-link mb-3"
+          className={cx("btn-link", tw.checkoutBack)}
         >
-          ← Back to Cart
+          Back to cart
         </button>
-        <p className="muted mb-1">Step 2 of 3</p>
-        <h1 className="heading heading-lg mt-3">Delivery Information</h1>
+        <p className={tw.checkoutStep}>Step 2 of 3</p>
+        <h1 className={cx("heading", tw.checkoutTitle)}>
+          Delivery Information
+        </h1>
       </div>
 
-      {/* Progress Bar */}
-      <div className="flex-center gap-2 mb-8">
+      <div className={tw.checkoutProgress}>
         {[
           { num: 1, label: "Cart", done: true },
           { num: 2, label: "Delivery", active: true },
           { num: 3, label: "Confirmation", done: false },
         ].map((step, i) => (
-          <div key={step.num} className="flex items-center gap-2">
+          <div key={step.num} className={tw.checkoutProgressItem}>
             <div
-              className={`w-7 h-7 rounded-full flex-center text-xs font-semibold transition-colors ${
+              className={cx(
+                tw.checkoutProgressDot,
                 step.done
-                  ? "bg-[#2c2c2c] text-white"
+                  ? tw.checkoutProgressDotDone
                   : step.active
-                    ? "bg-[#c8a96e] text-white"
-                    : "bg-transparent border border-sub text-muted"
-              }`}
+                    ? tw.checkoutProgressDotActive
+                    : tw.checkoutProgressDotIdle,
+              )}
             >
               {step.done ? "✓" : step.num}
             </div>
             <span
-              className={`text-xs ${
-                step.active ? "font-semibold text-main" : "text-muted"
-              }`}
+              className={cx(
+                tw.checkoutProgressLabel,
+                step.active
+                  ? tw.checkoutProgressLabelActive
+                  : tw.checkoutProgressLabelIdle,
+              )}
             >
               {step.label}
             </span>
             {i < 2 && (
               <div
-                className={`flex-1 h-px w-10 mx-1 ${
-                  step.done ? "bg-[#2c2c2c]" : "bg-[#e5e5e5]"
-                }`}
+                className={cx(
+                  tw.checkoutProgressLine,
+                  step.done
+                    ? tw.checkoutProgressLineDone
+                    : tw.checkoutProgressLineIdle,
+                )}
               />
             )}
           </div>
         ))}
       </div>
 
-      {/* Form Layout */}
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 lg:grid-cols-4 gap-6"
-      >
-        <div className="lg:col-span-3 flex flex-col gap-6">
-          {/* Contact Card */}
-          <div className="card">
-            <h2 className="heading-md mb-6">Contact Information</h2>
+      <form onSubmit={handleSubmit} className={tw.checkoutLayout}>
+        <div className={tw.checkoutMain}>
+          <div className={tw.checkoutCard}>
+            <h2 className={cx("heading", tw.checkoutCardTitle)}>
+              Contact Information
+            </h2>
             <div className="flex flex-col gap-4">
               <FormInput
                 id="fullName"
                 label="Full Name *"
                 value={form.fullName}
                 onChange={(e) => set("fullName", e.target.value)}
-                onFocus={() => setFocusedField("fullName")}
-                onBlur={() => setFocusedField(null)}
                 error={errors.fullName}
-                focusedField={focusedField}
                 placeholder="e.g. Nguyen Van A"
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className={tw.checkoutFormGrid2}>
                 <FormInput
                   id="email"
                   label="Email Address *"
                   type="email"
                   value={form.email}
                   onChange={(e) => set("email", e.target.value)}
-                  onFocus={() => setFocusedField("email")}
-                  onBlur={() => setFocusedField(null)}
                   error={errors.email}
-                  focusedField={focusedField}
                   placeholder="your@email.com"
                   autoComplete="email"
                 />
@@ -222,10 +222,7 @@ export default function CheckoutPage() {
                   type="tel"
                   value={form.phone}
                   onChange={(e) => set("phone", e.target.value)}
-                  onFocus={() => setFocusedField("phone")}
-                  onBlur={() => setFocusedField(null)}
                   error={errors.phone}
-                  focusedField={focusedField}
                   placeholder="+84 xxx xxx xxx"
                   autoComplete="tel"
                 />
@@ -233,42 +230,39 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Address Card */}
-          <div className="card">
-            <h2 className="heading-md mb-6">Shipping Address</h2>
+          <div className={tw.checkoutCard}>
+            <h2 className={cx("heading", tw.checkoutCardTitle)}>
+              Shipping Address
+            </h2>
             <div className="flex flex-col gap-4">
               <FormInput
                 id="address"
                 label="Street Address *"
                 value={form.address}
                 onChange={(e) => set("address", e.target.value)}
-                onFocus={() => setFocusedField("address")}
-                onBlur={() => setFocusedField(null)}
                 error={errors.address}
-                focusedField={focusedField}
                 placeholder="123 Main Street"
                 autoComplete="street-address"
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className={tw.checkoutFormGrid2}>
                 <FormInput
                   id="city"
                   label="City/Area *"
                   value={form.city}
                   onChange={(e) => set("city", e.target.value)}
-                  onFocus={() => setFocusedField("city")}
-                  onBlur={() => setFocusedField(null)}
                   error={errors.city}
-                  focusedField={focusedField}
                   placeholder="Ho Chi Minh City"
                   autoComplete="address-level2"
                 />
                 <div>
-                  <label className="label">Country *</label>
+                  <label htmlFor="country" className="form-label">
+                    Country *
+                  </label>
                   <select
                     id="country"
                     value={form.country}
                     onChange={(e) => set("country", e.target.value)}
-                    className="input w-full"
+                    className="form-input-default focus:border-[#c8a96e]"
                   >
                     {COUNTRIES.map((c) => (
                       <option key={c} value={c}>
@@ -281,53 +275,57 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Notes Card */}
-          <div className="card">
-            <label className="label">Order Notes (Optional)</label>
+          <div className={tw.checkoutCard}>
+            <label htmlFor="notes" className="form-label">
+              Order Notes (Optional)
+            </label>
             <textarea
               id="notes"
               value={form.notes}
               onChange={(e) => set("notes", e.target.value)}
-              onFocus={() => setFocusedField("notes")}
-              onBlur={() => setFocusedField(null)}
               placeholder="Add any special instructions..."
-              rows="4"
-              className="input w-full resize-none font-inherit"
+              rows={4}
+              className={cx(
+                "form-input-default",
+                tw.checkoutTextarea,
+                "focus:border-[#c8a96e]",
+              )}
             />
           </div>
         </div>
 
-        {/* Summary Sidebar */}
-        <div className="card p-6 h-fit sticky top-5">
-          <h3 className="heading mb-4">Order Summary</h3>
+        <div className={tw.checkoutSummary}>
+          <h3 className={tw.checkoutSummaryTitle}>Order Summary</h3>
 
-          <div className="flex-between text-xs text-muted py-2 border-b border-sub">
+          <div className={tw.checkoutSummaryRow}>
             <span>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
 
           {discount > 0 && (
-            <div className="flex-between text-xs text-success py-2 border-b border-sub">
+            <div
+              className={cx(tw.checkoutSummaryRow, tw.checkoutSummaryDiscount)}
+            >
               <span>Discount</span>
               <span>-${discount.toFixed(2)}</span>
             </div>
           )}
 
-          <div className="flex-between text-xs text-muted py-2 border-b border-sub">
+          <div className={tw.checkoutSummaryRow}>
             <span>Shipping</span>
-            <span>${shipping.toFixed(2)}</span>
+            <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
           </div>
 
-          <div className="flex-between text-lg font-semibold py-4 text-main">
+          <div className={tw.checkoutSummaryTotal}>
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
 
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className={tw.checkoutSubmit}>
             Place Order
           </button>
 
-          <p className="text-center text-xs text-muted mt-3">
+          <p className={tw.checkoutHint}>
             Free shipping on orders over ${SHIPPING_THRESHOLD}
           </p>
         </div>

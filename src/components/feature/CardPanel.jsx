@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { SHIPPING_THRESHOLD } from "../../data/constants";
 import CardItem from "./CardItem";
+import { tw } from "../../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
   const [promoCode, setPromoCode] = useState("");
@@ -28,6 +31,7 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
   const total = subtotal - discount + shipping;
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const progressPct = Math.min((subtotal / SHIPPING_THRESHOLD) * 100, 100);
+  const remainingForFreeShipping = Math.max(SHIPPING_THRESHOLD - subtotal, 0);
 
   const handleCheckout = () => {
     onCheckout({
@@ -41,26 +45,117 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
     });
   };
 
+  const promoBtnClassName = cx(
+    tw.cartPanelPromoBtn,
+    promoApplied && tw.cartPanelPromoBtnApplied,
+  );
+
   return (
     <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
-        onClick={onClose}
-        style={{ animation: "fadeIn 0.25s ease" }}
-      />
+      <div className={tw.cartPanelBackdrop} onClick={onClose} />
 
-      <style>{`
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                @keyframes slideIn {
-                    from { transform: translateX(100%); }
-                    to { transform: translateX(0); }
-                }
-            `}</style>
-      {/* ...existing code... */}
+      <aside className={tw.cartPanelDrawer}>
+        <header className={tw.cartPanelHeader}>
+          <h3 className={cx("heading", tw.cartPanelTitle)}>
+            Cart ({cartCount})
+          </h3>
+          <button
+            className={tw.cartPanelClose}
+            onClick={onClose}
+            aria-label="Close cart"
+          >
+            ×
+          </button>
+        </header>
+
+        <div className={tw.cartPanelBody}>
+          {cart.length === 0 ? (
+            <div className={tw.cartPanelEmpty}>
+              <p>Your cart is empty.</p>
+              <button className={tw.cartPanelEmptyBtn} onClick={onClose}>
+                Continue Shopping
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className={tw.cartPanelItems}>
+                {cart.map((item) => (
+                  <CardItem
+                    key={item.cartItemId}
+                    item={item}
+                    onUpdateQty={onUpdateQty}
+                    onRemove={handleRemove}
+                    isRemoving={removingId === item.cartItemId}
+                  />
+                ))}
+              </div>
+
+              <div className={tw.cartPanelProgressBox}>
+                <p className={tw.cartPanelProgressText}>
+                  {remainingForFreeShipping > 0
+                    ? `Add $${remainingForFreeShipping.toFixed(2)} for free shipping`
+                    : "You unlocked free shipping"}
+                </p>
+                <div className={tw.cartPanelProgressTrack}>
+                  <div
+                    className={tw.cartPanelProgressFill}
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className={tw.cartPanelPromoRow}>
+                <input
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  placeholder="Promo code"
+                  className={tw.cartPanelPromoInput}
+                />
+                <button
+                  className={promoBtnClassName}
+                  onClick={applyPromo}
+                  disabled={promoApplied}
+                >
+                  {promoApplied ? "Applied" : "Apply"}
+                </button>
+              </div>
+
+              <div className={tw.cartPanelSummary}>
+                <div className={tw.cartPanelRow}>
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                {discount > 0 && (
+                  <div className={tw.cartPanelRow}>
+                    <span>Discount</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className={tw.cartPanelRow}>
+                  <span>Shipping</span>
+                  <span>
+                    {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                  </span>
+                </div>
+                <div className={tw.cartPanelTotalRow}>
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <button
+                className={tw.cartPanelCheckoutBtn}
+                onClick={handleCheckout}
+              >
+                Proceed to Checkout
+              </button>
+              <p className={tw.cartPanelHint}>
+                Free shipping on orders over ${SHIPPING_THRESHOLD}
+              </p>
+            </>
+          )}
+        </div>
+      </aside>
     </>
   );
 }

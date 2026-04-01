@@ -6,19 +6,13 @@ import CartPanel from "./CardPanel";
 import Toast from "./Toast";
 import Footer from "./Footer";
 import ProductModal from "./ProductModal";
+import { tw } from "../../assets/theme/theme";
 
 export default function Layout() {
   const [cartOpen, setCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const {
-    cart,
-    setCart,
-    cartCount,
-    addToCart,
-    updateQty,
-    removeItem,
-    toastMsg,
-  } = useCart();
+  const { cart, cartCount, addToCart, updateQty, removeItem, toastMsg } =
+    useCart();
   const navigate = useNavigate();
 
   const goToCartPage = (orderData) => {
@@ -28,7 +22,6 @@ export default function Layout() {
 
   const outletContext = {
     cart,
-    setCart,
     cartCount,
     addToCart,
     updateQty,
@@ -38,15 +31,7 @@ export default function Layout() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-[#f5f0eb]"
-      style={{ fontFamily: "'DM Sans', sans-serif" }}
-    >
-      <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
-                .heading { font-family: 'Playfair Display', serif; }
-            `}</style>
-
+    <div className={tw.appShell}>
       <Navbar
         cartCount={cartCount}
         onCartOpen={() => setCartOpen(true)}

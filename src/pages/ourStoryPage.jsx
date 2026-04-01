@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import { usePageTitle } from "../hooks/usePageTitle";
+import { tw } from "../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const VALUES = [
   {
@@ -47,64 +51,46 @@ const MILESTONES = [
 ];
 
 export default function OurStoryPage() {
+  usePageTitle("Our Story");
+
   return (
     <>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#2c2c2c] to-[#4a3f35] px-6 py-20 text-center text-white">
-        <h1 className="text-5xl font-bold mb-4 leading-tight">Our Story</h1>
-        <p className="text-base text-[#bbb] max-w-2xl mx-auto">
+      <div className={tw.storyHero}>
+        <h1 className={cx("heading", tw.storyHeroTitle)}>Our Story</h1>
+        <p className={tw.storyHeroSubtitle}>
           Simple pieces for considered living. We design, craft, and deliver
           with intention at every step.
         </p>
       </div>
 
-      {/* Values Section */}
-      <section className="max-w-4xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Our Values</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <section className={tw.storySection}>
+        <h2 className={cx("heading", tw.storySectionTitle)}>Our Values</h2>
+        <div className={tw.storyValuesGrid}>
           {VALUES.map((value) => (
-            <div key={value.title} className="text-center">
-              <div className="text-4xl mb-4">{value.icon}</div>
-              <h3 className="text-lg font-semibold text-[#2c2c2c] mb-3">
-                {value.title}
-              </h3>
-              <p className="text-sm text-[#999] leading-relaxed">
-                {value.desc}
-              </p>
+            <div key={value.title} className={tw.storyValueItem}>
+              <div className={tw.storyValueIcon}>{value.icon}</div>
+              <h3 className={tw.storyValueTitle}>{value.title}</h3>
+              <p className={tw.storyValueDesc}>{value.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#e5e5e5]">
-        <h2 className="text-3xl font-bold mb-10 text-[#2c2c2c]">Timeline</h2>
+      <section className={tw.storyTimelineSection}>
+        <h2 className={cx("heading", tw.storySectionTitle)}>Timeline</h2>
         <div>
           {MILESTONES.map((m) => (
-            <div
-              key={m.year}
-              className="grid grid-cols-[100px_1fr] gap-8 mb-8 items-start"
-            >
-              <div className="text-2xl font-semibold text-[#c8a96e]">
-                {m.year}
-              </div>
-              <div className="text-base text-[#2c2c2c] leading-relaxed pt-1">
-                {m.text}
-              </div>
+            <div key={m.year} className={tw.storyTimelineItem}>
+              <div className={tw.storyTimelineYear}>{m.year}</div>
+              <div className={tw.storyTimelineText}>{m.text}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="max-w-4xl mx-auto px-6 py-20 text-center border-t border-[#e5e5e5]">
-        <p className="text-base text-[#999] mb-6">
-          Ready to experience slow fashion?
-        </p>
-        <Link
-          to="/women"
-          className="inline-block px-8 py-3.5 bg-[#c8a96e] text-[#f5f0eb] rounded font-semibold text-sm transition-all duration-300 hover:bg-[#b8935f] hover:-translate-y-0.5 shadow-md"
-        >
+      <section className={tw.storyCtaSection}>
+        <p className={tw.storyCtaText}>Ready to experience slow fashion?</p>
+        <Link to="/women" className={tw.storyCtaBtn}>
           Explore Collection
         </Link>
       </section>

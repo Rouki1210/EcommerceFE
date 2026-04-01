@@ -1,4 +1,4 @@
-import Header from "../../components/admin/Header";
+import Header from "../../components/feature/admin/Header";
 import {
   ResponsiveContainer,
   AreaChart,

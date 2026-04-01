@@ -2,30 +2,27 @@ import { useState } from "react";
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { tw } from "../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function Accordion({ title, children }) {
   const [open, setOpen] = useState(false);
+  const bodyStyle = { maxHeight: open ? "1000px" : "0" };
+
   return (
-    <div className="mb-4 border-b border-[#e5e5e5]">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full p-4 bg-transparent border-none cursor-pointer flex justify-between items-center text-base font-semibold text-[#2c2c2c] transition-all hover:text-[#c8a96e]"
-      >
+    <div className={tw.productPageAcc}>
+      <button onClick={() => setOpen(!open)} className={tw.productPageAccBtn}>
         <span>{title}</span>
         <span
-          className={`inline-block transition-transform duration-300 text-[#c8a96e] text-xl ${
-            open ? "rotate-45" : "rotate-0"
-          }`}
+          className={tw.productPageAccIcon}
+          style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
         >
           +
         </span>
       </button>
-      <div
-        className={`overflow-hidden transition-all duration-300 ${
-          open ? "max-h-[1000px]" : "max-h-0"
-        }`}
-      >
-        <div className="p-4 pt-0 text-[#999]">{children}</div>
+      <div className={tw.productPageAccBody} style={bodyStyle}>
+        <div>{children}</div>
       </div>
     </div>
   );
@@ -44,19 +41,22 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <div className="w-10 h-10 border-4 border-[#e5e5e5] border-t-[#c8a96e] rounded-full animate-spin" />
-        <p className="text-muted">Loading...</p>
+      <div className={tw.saleEmpty}>
+        <p>Loading...</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-8">
-        <h1 className="heading text-2xl">Product not found</h1>
-        <p className="text-muted">The item you're looking for doesn't exist.</p>
-        <button onClick={() => navigate("/")} className="btn btn-secondary">
+      <div className={tw.saleEmpty}>
+        <h1 className={cx("heading", tw.collectionEmptyTitle)}>
+          Product not found
+        </h1>
+        <p className={tw.collectionEmptyText}>
+          The item you're looking for doesn't exist.
+        </p>
+        <button onClick={() => navigate("/")} className={tw.productGridMoreBtn}>
           Back to Home
         </button>
       </div>
@@ -82,67 +82,67 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="section">
-      <button onClick={() => navigate(-1)} className="btn btn-link mb-8">
+    <div className={tw.pageSection}>
+      <button
+        onClick={() => navigate(-1)}
+        className={cx("btn btn-link", tw.productPageBack)}
+      >
         ← Back
       </button>
 
-      <div className="grid grid-cols-2 gap-12 items-start">
-        {/* Image Section */}
-        <div className="flex justify-center items-center">
+      <div className={tw.productPageLayout}>
+        <div className={tw.productPageImageWrap}>
           <img
             src={product.image}
             alt={product.name}
-            className="w-full max-w-[500px] h-auto rounded-xl shadow-card"
+            className={tw.productPageImage}
           />
         </div>
 
-        {/* Info Section */}
-        <div>
-          <p className="text-label mb-4">{product.category}</p>
+        <div className={tw.productPageInfo}>
+          <p className={tw.productPageCategory}>{product.category}</p>
 
-          <h1 className="text-heading text-4xl mb-4 leading-tight">
-            {product.name}
-          </h1>
+          <h1 className={cx("heading", tw.productPageTitle)}>{product.name}</h1>
 
-          <div className="mb-6 mt-4">
+          <div className={tw.productPagePriceRow}>
             {product.originalPrice ? (
-              <div className="flex gap-4 items-center">
-                <span className="text-lg text-muted line-through">
+              <>
+                <span className={tw.productPageOldPrice}>
                   ${Number(product.originalPrice).toFixed(2)}
                 </span>
-                <span className="text-2xl font-bold text-[#2c2c2c]">
+                <span className={tw.productPagePrice}>
                   ${Number(product.price).toFixed(2)}
                 </span>
                 {discount && (
-                  <span className="px-2 py-1 bg-[#c0392b] text-white rounded text-xs font-semibold">
+                  <span className={tw.productPageDiscount}>
                     Save {discount}%
                   </span>
                 )}
-              </div>
+              </>
             ) : (
-              <span className="text-2xl font-bold text-[#2c2c2c]">
+              <span className={tw.productPagePrice}>
                 ${Number(product.price).toFixed(2)}
               </span>
             )}
           </div>
 
-          <p className="text-sm text-muted leading-relaxed mb-6">
+          <p className={tw.productPageDesc}>
             {product.description ||
               "Premium quality product with exceptional craftsmanship."}
           </p>
 
           {product.sizes && product.sizes.length > 0 && (
-            <div className="mb-6">
-              <p className="text-sm font-semibold text-[#2c2c2c] mb-3">Size</p>
-              <div className="flex gap-2 flex-wrap">
+            <div className={tw.productPageSizeBlock}>
+              <p className={tw.productPageSizeLabel}>Size</p>
+              <div className={tw.productPageSizeList}>
                 {product.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`min-w-[50px] px-3 py-2 rounded text-sm font-semibold transition-all border ${
-                      selectedSize === size ? "filter-btn-active" : "filter-btn"
-                    }`}
+                    className={cx(
+                      tw.productPageSizeBtn,
+                      selectedSize === size && tw.productPageSizeBtnActive,
+                    )}
                   >
                     {size}
                   </button>
@@ -151,34 +151,27 @@ export default function ProductPage() {
             </div>
           )}
 
-          <button
-            onClick={handleAddToCart}
-            className="btn btn-secondary w-full text-base font-bold"
-          >
+          <button onClick={handleAddToCart} className={tw.productPageAddBtn}>
             {added ? "✓ Added to Cart" : "Add to Cart"}
           </button>
 
           {added && (
-            <p className="mt-4 p-3 bg-[#27ae60]/20 text-[#27ae60] rounded text-sm font-semibold">
-              Item added successfully
-            </p>
+            <p className={tw.productPageAdded}>Item added successfully</p>
           )}
 
-          <div className="mt-8 border-t border-[#e5e5e5] pt-8">
+          <div className={tw.productPageDetails}>
             <Accordion title="Description">
-              <p className="text-sm text-muted leading-relaxed">
-                {product.description}
-              </p>
+              <p>{product.description}</p>
             </Accordion>
             <Accordion title="Specifications">
-              <ul className="text-sm text-muted leading-relaxed">
+              <ul>
                 <li>Material: Premium Quality</li>
                 <li>Care: Machine wash cold</li>
                 <li>Fit: True to size</li>
               </ul>
             </Accordion>
             <Accordion title="Shipping & Returns">
-              <p className="text-sm text-muted leading-relaxed">
+              <p>
                 Free shipping on orders over $
                 {import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD || 100}
                 returns accepted.

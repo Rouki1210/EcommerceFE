@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../features/auth/authSlice";
 import { loginApi } from "../api/authApi";
+import { tw } from "../assets/theme/theme";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -29,25 +30,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-page">
-      {/* Logo */}
+    <div className={tw.authPage}>
       <Link to="/" className="auth-logo-link">
         <span className="auth-logo-icon" />
         <span className="auth-logo-text">Maison</span>
       </Link>
 
-      {/* Card */}
       <div className="auth-card animate-slideUp">
-        {/* Header */}
         <p className="auth-card-label">Welcome back</p>
         <h1 className="auth-card-title">Sign In</h1>
 
-        {/* Error Alert */}
         {error && <div className="auth-error-box">{error}</div>}
 
-        {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
-          {/* Email Input */}
           <div className="auth-form-group">
             <label className="form-label">Email</label>
             <input
@@ -60,10 +55,9 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password Input */}
           <div className="auth-form-group">
             <label className="form-label">Password</label>
-            <div className="relative">
+            <div className={tw.authPasswordWrap}>
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -75,14 +69,13 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base"
+                className={tw.authPasswordToggle}
               >
                 {showPassword ? "🙈" : "👁"}
               </button>
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -92,7 +85,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Footer */}
         <p className="text-footer">
           Don't have an account?{" "}
           <Link to="/register" className="btn-link">
@@ -105,5 +97,5 @@ export default function LoginPage() {
         ← Back to store
       </Link>
     </div>
-  )
+  );
 }

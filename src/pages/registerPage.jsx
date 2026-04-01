@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../features/auth/authSlice";
 import { registerApi } from "../api/authApi";
-import { keyframes } from "../assets/theme/theme";
+import { tw } from "../assets/theme/theme";
 
 export default function RegisterPage() {
   const dispatch = useDispatch();
@@ -50,7 +50,8 @@ export default function RegisterPage() {
     setApiError("");
     try {
       const data = await registerApi(
-        form.firstName,form.lastName,
+        form.firstName,
+        form.lastName,
         form.email,
         form.password,
       );
@@ -64,153 +65,164 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: keyframes,
-        }}
-      />
-      <div className="auth-page">
-        <Link to="/" className="auth-logo-link">
-          <span className="auth-logo-icon" />
-          <span className="auth-logo-text">Maison</span>
-        </Link>
+    <div className={tw.authPage}>
+      <Link to="/" className="auth-logo-link">
+        <span className="auth-logo-icon" />
+        <span className="auth-logo-text">Maison</span>
+      </Link>
 
-        <div className="auth-card animate-slideUp">
-          <p className="auth-card-label">Join our community</p>
-          <h1 className="auth-card-title">Create Account</h1>
+      <div className="auth-card animate-slideUp">
+        <p className="auth-card-label">Join our community</p>
+        <h1 className="auth-card-title">Create Account</h1>
 
-          {apiError && <div className="auth-error-box">{apiError}</div>}
+        {apiError && <div className="auth-error-box">{apiError}</div>}
 
-          <form className="auth-form" onSubmit={handleSubmit}>
-            {/* First Name */}
-            <div className="auth-form-group">
-              <label className="form-label">First Name *</label>
-              <input
-                type="text"
-                value={form.firstName}
-                onChange={(e) => setField("firstName", e.target.value)}
-                placeholder="First name"
-                className={
-                  errors.firstName ? "form-input-error" : "form-input-default"
-                }
-              />
-              {errors.firstName && (
-                <p className="form-error-text">{errors.firstName}</p>
-              )}
-            </div>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          {/* First Name */}
+          <div className="auth-form-group">
+            <label className="form-label">First Name *</label>
+            <input
+              type="text"
+              value={form.firstName}
+              onChange={(e) => setField("firstName", e.target.value)}
+              placeholder="First name"
+              className={
+                errors.firstName ? "form-input-error" : "form-input-default"
+              }
+            />
+            {errors.firstName && (
+              <p className="form-error-text">{errors.firstName}</p>
+            )}
+          </div>
 
-            {/* Last Name */}
-            <div className="auth-form-group">
-              <label className="form-label">Last Name *</label>
-              <input
-                type="text"
-                value={form.lastName}
-                onChange={(e) => setField("lastName", e.target.value)}
-                placeholder="Last name"
-                className={
-                  errors.lastName ? "form-input-error" : "form-input-default"
-                }
-              />
-              {errors.lastName && (
-                <p className="form-error-text">{errors.lastName}</p>
-              )}
-            </div>
+          {/* Last Name */}
+          <div className="auth-form-group">
+            <label className="form-label">Last Name *</label>
+            <input
+              type="text"
+              value={form.lastName}
+              onChange={(e) => setField("lastName", e.target.value)}
+              placeholder="Last name"
+              className={
+                errors.lastName ? "form-input-error" : "form-input-default"
+              }
+            />
+            {errors.lastName && (
+              <p className="form-error-text">{errors.lastName}</p>
+            )}
+          </div>
 
-            {/* Email */}
-            <div className="auth-form-group">
-              <label className="form-label">Email *</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setField("email", e.target.value)}
-                placeholder="your@email.com"
-                className={
-                  errors.email ? "form-input-error" : "form-input-default"
-                }
-              />
-              {errors.email && (
-                <p className="form-error-text">{errors.email}</p>
-              )}
-            </div>
+          {/* Email */}
+          <div className="auth-form-group">
+            <label className="form-label">Email *</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setField("email", e.target.value)}
+              placeholder="your@email.com"
+              className={
+                errors.email ? "form-input-error" : "form-input-default"
+              }
+            />
+            {errors.email && <p className="form-error-text">{errors.email}</p>}
+          </div>
 
-            {/* Password */}
-            <div className="auth-form-group">
-              <label className="form-label">Password *</label>
+          {/* Password */}
+          <div className="auth-form-group">
+            <label className="form-label">Password *</label>
+            <div className={tw.authPasswordWrap}>
               <input
                 type={showPassword ? "text" : "password"}
                 value={form.password}
                 onChange={(e) => setField("password", e.target.value)}
                 placeholder="At least 8 characters"
                 className={
-                  errors.password ? "form-input-error" : "form-input-default"
+                  errors.password
+                    ? "form-input-error pr-10"
+                    : "form-input-default pr-10"
                 }
               />
-              {errors.password && (
-                <p className="form-error-text">{errors.password}</p>
-              )}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={tw.authPasswordToggle}
+              >
+                {showPassword ? "🙈" : "👁"}
+              </button>
             </div>
+            {errors.password && (
+              <p className="form-error-text">{errors.password}</p>
+            )}
+          </div>
 
-            {/* Confirm Password */}
-            <div className="auth-form-group">
-              <label className="form-label">Confirm Password *</label>
+          {/* Confirm Password */}
+          <div className="auth-form-group">
+            <label className="form-label">Confirm Password *</label>
+            <div className={tw.authPasswordWrap}>
               <input
                 type={showPassword ? "text" : "password"}
                 value={form.confirm}
                 onChange={(e) => setField("confirm", e.target.value)}
                 placeholder="Re-enter password"
                 className={
-                  errors.confirm ? "form-input-error" : "form-input-default"
+                  errors.confirm
+                    ? "form-input-error pr-10"
+                    : "form-input-default pr-10"
                 }
               />
-              {errors.confirm && (
-                <p className="form-error-text">{errors.confirm}</p>
-              )}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={tw.authPasswordToggle}
+              >
+                {showPassword ? "🙈" : "👁"}
+              </button>
             </div>
+            {errors.confirm && (
+              <p className="form-error-text">{errors.confirm}</p>
+            )}
+          </div>
 
-            {/* Terms Checkbox */}
-            <div className="form-checkbox-group">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={form.terms}
-                onChange={(e) => setField("terms", e.target.checked)}
-                className="form-checkbox"
-              />
-              <label htmlFor="terms" className="form-checkbox-label">
-                I agree to the{" "}
-                <a href="#terms" className="btn-link">
-                  Terms & Conditions
-                </a>
-              </label>
-            </div>
-            {errors.terms && <p className="form-error-text">{errors.terms}</p>}
+          {/* Terms Checkbox */}
+          <div className="form-checkbox-group">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={form.terms}
+              onChange={(e) => setField("terms", e.target.checked)}
+              className="form-checkbox"
+            />
+            <label htmlFor="terms" className="form-checkbox-label">
+              I agree to the{" "}
+              <a href="#terms" className="btn-link">
+                Terms & Conditions
+              </a>
+            </label>
+          </div>
+          {errors.terms && <p className="form-error-text">{errors.terms}</p>}
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={
-                loading ? "btn-primary-disabled" : "btn-primary-enabled"
-              }
-            >
-              {loading ? "Creating account..." : "Create Account"}
-            </button>
-          </form>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={loading ? "btn-primary-disabled" : "btn-primary-enabled"}
+          >
+            {loading ? "Creating account..." : "Create Account"}
+          </button>
+        </form>
 
-          {/* Footer Link */}
-          <p className="text-footer">
-            Already have an account?{" "}
-            <Link to="/login" className="btn-link">
-              Sign in
-            </Link>
-          </p>
-        </div>
-
-        <Link to="/" className="text-back-link">
-          ← Back to store
-        </Link>
+        {/* Footer Link */}
+        <p className="text-footer">
+          Already have an account?{" "}
+          <Link to="/login" className="btn-link">
+            Sign in
+          </Link>
+        </p>
       </div>
-    </>
+
+      <Link to="/" className="text-back-link">
+        ← Back to store
+      </Link>
+    </div>
   );
 }

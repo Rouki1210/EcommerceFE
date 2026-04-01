@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { tw } from "../../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function ProductCard({ product, onAddToCart }) {
   const [added, setAdded] = useState(false);
@@ -35,16 +38,23 @@ function ProductCard({ product, onAddToCart }) {
 
   const goToDetail = () => navigate(`/product/${product.id}`);
 
+  const cardClassName = cx(tw.productCardRoot, hovered && tw.productCardRaised);
+  const badgeClassName = cx(
+    tw.productCardBadge,
+    product.badge === "Sale" && tw.productCardBadgeSale,
+  );
+  const imageClassName = cx(
+    tw.productCardImage,
+    hovered && tw.productCardImageZoom,
+  );
+  const overlayClassName = cx(
+    tw.productCardOverlay,
+    hovered && tw.productCardOverlayVisible,
+  );
+
   return (
     <div
-      className="group relative bg-white rounded-3xl overflow-hidden cursor-pointer"
-      style={{
-        boxShadow: hovered
-          ? "0 12px 40px rgba(44,44,44,0.1)"
-          : "0 2px 12px rgba(44,44,44,0.05)",
-        transition: "box-shadow 0.3s ease, transform 0.3s ease",
-        transform: hovered ? "translateY(-4px)" : "none",
-      }}
+      className={cardClassName}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
@@ -52,37 +62,17 @@ function ProductCard({ product, onAddToCart }) {
       }}
       onClick={goToDetail}
     >
-      {/* Badge */}
-      {product.badge && (
-        <div
-          className="absolute top-3 left-3 z-10 text-white text-[10px] tracking-widest uppercase px-2.5 py-1 rounded-full"
-          style={{
-            background: product.badge === "Sale" ? "#c0392b" : "#2c2c2c",
-          }}
-        >
-          {product.badge}
-        </div>
-      )}
+      {product.badge && <div className={badgeClassName}>{product.badge}</div>}
 
-      {/* Image */}
-      <div className="relative overflow-hidden bg-[#f5f0eb] aspect-[5/6]">
+      <div className={tw.productCardMedia}>
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover"
-          style={{
-            transform: hovered ? "scale(1.06)" : "scale(1)",
-            transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
-          }}
+          className={imageClassName}
         />
 
-        {/* Hover overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity">
-          {/* Quick add button */}
-          <button
-            onClick={handleQuickAdd}
-            className="bg-[#2c2c2c] text-white px-5 py-2 rounded-full text-xs tracking-widest uppercase hover:bg-[#c8a96e] transition-all mb-2"
-          >
+        <div className={overlayClassName}>
+          <button onClick={handleQuickAdd} className={tw.productCardQuickAdd}>
             {needsSizeSelection
               ? "Select Size"
               : added
@@ -90,14 +80,13 @@ function ProductCard({ product, onAddToCart }) {
                 : "Quick Add"}
           </button>
 
-          {/* Size selection */}
           {showSizes && product.sizes && (
-            <div className="flex gap-2 mt-2">
+            <div className={tw.productCardSizeRow}>
               {product.sizes.map((size) => (
                 <button
                   key={size}
                   onClick={(e) => handleSelectSize(e, size)}
-                  className="bg-white text-[#2c2c2c] px-3 py-1 rounded-full text-xs border border-[#2c2c2c] hover:bg-[#c8a96e] hover:text-white transition-all"
+                  className={tw.productCardSizeBtn}
                 >
                   {size}
                 </button>
@@ -107,18 +96,15 @@ function ProductCard({ product, onAddToCart }) {
         </div>
       </div>
 
-      {/* Info */}
-      <div className="p-4">
-        <p className="heading text-[15px] text-[#2c2c2c] mb-1 truncate">
-          {product.name}
-        </p>
-        <p className="text-xs text-[#aaa] mb-2 truncate">{product.variant}</p>
-        <div className="flex items-center gap-2">
-          <span className="text-[15px] text-[#2c2c2c] font-medium">
+      <div className={tw.productCardBody}>
+        <p className={cx("heading", tw.productCardName)}>{product.name}</p>
+        <p className={tw.productCardVariant}>{product.variant}</p>
+        <div className={tw.productCardPriceRow}>
+          <span className={tw.productCardPrice}>
             ${product.price.toLocaleString()}
           </span>
           {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-xs text-[#c0392b] line-through">
+            <span className={tw.productCardOldPrice}>
               ${product.originalPrice.toLocaleString()}
             </span>
           )}
