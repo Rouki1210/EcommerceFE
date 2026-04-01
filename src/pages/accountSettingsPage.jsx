@@ -14,8 +14,6 @@ export default function AccountSettingsPage() {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) return <Navigate to="/login" />;
-
   const initialForm = useMemo(
     () => ({
       firstName: user?.firstName ?? "",
@@ -33,6 +31,8 @@ export default function AccountSettingsPage() {
   const [loading, setLoading] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
 
   const setField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
