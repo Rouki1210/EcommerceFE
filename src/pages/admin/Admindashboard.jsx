@@ -37,7 +37,7 @@ const stats = [
   },
 ];
 
-export default function Admindashboard() {
+export default function AdminDashboard() {
   return (
     <div className="flex flex-col gap-7">
       <Header title="Admin Dashboard" subtitle="Overview" />

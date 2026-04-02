@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import ProductTable from "../../components/feature/admin/Producttable";
+import ProductTable from "../../components/feature/admin/ProductTable";
 import ProductModal from "../../components/feature/admin/ProductModal";
 import NotificationBell from "../../components/feature/admin/NotificationBell";
 import { useNotification } from "../../context/NotificationContext";
@@ -11,7 +11,7 @@ import {
   uploadProductImage,
 } from "../../api/productApi";
 
-export default function Adminproducts() {
+export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [editing, setEditing] = useState(null);
   const [search, setSearch] = useState("");
