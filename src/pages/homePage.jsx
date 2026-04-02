@@ -6,7 +6,7 @@ import EditorialBanner from "../components/feature/Editorialbanner";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function HomePage() {
-  const { addToCart, openCart, openProductModal } = useOutletContext();
+  const { addToCart, openCart } = useOutletContext();
 
   usePageTitle("Home");
 
@@ -17,7 +17,7 @@ export default function HomePage() {
     <>
       <Hero onShopNow={scrollToProducts} />
       <MarqueeStrip />
-      <ProductGrid onAddToCart={addToCart} onViewDetail={openProductModal} />
+      <ProductGrid onAddToCart={addToCart} />
       <EditorialBanner onCtaClick={openCart} />
     </>
   );

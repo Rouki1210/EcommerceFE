@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../features/auth/authSlice";
-import { tw } from "../../assets/theme/theme";
+import { logout } from "../../../features/auth/authSlice";
+import { tw } from "../../../assets/theme/theme";
 
 export default function UserDropdown() {
   const dispatch = useDispatch();
@@ -78,10 +78,10 @@ export default function UserDropdown() {
               </button>
               <button
                 type="button"
-                onClick={() => goTo("/order-tracking")}
+                onClick={() => goTo("/orders")}
                 className={tw.userMenuItem}
               >
-                My order
+                My orders
               </button>
             </div>
 

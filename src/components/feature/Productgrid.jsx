@@ -6,7 +6,7 @@ import { tw } from "../../assets/theme/theme";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
-function ProductGrid({ onAddToCart, onViewDetail }) {
+function ProductGrid({ onAddToCart }) {
   const { products } = useProducts();
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -54,7 +54,6 @@ function ProductGrid({ onAddToCart, onViewDetail }) {
             key={product.id}
             product={product}
             onAddToCart={onAddToCart}
-            onViewDetail={onViewDetail}
           />
         ))}
       </div>

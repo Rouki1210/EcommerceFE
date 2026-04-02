@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { tw } from "../../assets/theme/theme";
+import ProductPriceRow from "../base/ProductPriceRow";
+import ProductSizeSelector from "../base/ProductSizeSelector";
+import {
+  PRODUCT_UI_COPY,
+  buildVariantWithSize,
+  getCategoryLabel,
+} from "../base/productUiConfig";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -24,30 +31,16 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
   if (!product) return null;
 
-  const discount =
-    product.originalPrice && product.originalPrice > product.price
-      ? Math.round(
-          ((product.originalPrice - product.price) / product.originalPrice) *
-            100,
-        )
-      : null;
-
   const careSteps = product.care ? product.care.split(" · ") : [];
 
   const handleAddToCart = () => {
-    const colorPart = product.variant?.split(" / ")[0] ?? product.name;
-    const updatedVariant = selectedSize
-      ? `${colorPart} / ${selectedSize}`
-      : product.variant;
+    const updatedVariant = buildVariantWithSize(product, selectedSize);
     onAddToCart({ ...product, variant: updatedVariant, selectedSize });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const categoryLabel =
-    typeof product.category === "object"
-      ? product.category?.name
-      : product.category;
+  const categoryLabel = getCategoryLabel(product.category);
 
   const sizeChart = product.sizeChart;
 
@@ -79,49 +72,28 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
             {product.name}
           </h2>
 
-          <div className={tw.productModalPriceRow}>
-            <span className={tw.productModalPrice}>
-              ${Number(product.price).toFixed(2)}
-            </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <>
-                <span className={tw.productModalPriceOld}>
-                  ${Number(product.originalPrice).toFixed(2)}
-                </span>
-                {discount && (
-                  <span className={tw.productModalDiscount}>
-                    Save {discount}%
-                  </span>
-                )}
-              </>
-            )}
-          </div>
+          <ProductPriceRow
+            price={product.price}
+            originalPrice={product.originalPrice}
+            rowClassName={tw.productModalPriceRow}
+            priceClassName={tw.productModalPrice}
+            oldPriceClassName={tw.productModalPriceOld}
+            discountClassName={tw.productModalDiscount}
+            currentFirst
+          />
 
           <p className={tw.productModalDesc}>{product.description}</p>
 
-          {product.sizes?.length > 0 && (
-            <>
-              <p className={tw.productModalSizeLabel}>Select size</p>
-              <div className={tw.productModalSizeList}>
-                {product.sizes.map((size) => {
-                  const sizeBtnClassName = cx(
-                    tw.productModalSizeBtn,
-                    selectedSize === size && tw.productModalSizeBtnActive,
-                  );
-
-                  return (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={sizeBtnClassName}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
+          <ProductSizeSelector
+            label={PRODUCT_UI_COPY.selectSizeLabel}
+            sizes={product.sizes}
+            selectedSize={selectedSize}
+            onSelect={setSelectedSize}
+            labelClassName={tw.productModalSizeLabel}
+            listClassName={tw.productModalSizeList}
+            buttonClassName={tw.productModalSizeBtn}
+            activeButtonClassName={tw.productModalSizeBtnActive}
+          />
 
           <div className={tw.productModalActions}>
             <button
@@ -134,7 +106,9 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
               className={tw.productModalActionPrimary}
               onClick={handleAddToCart}
             >
-              {added ? "Added ✓" : "Add to cart"}
+              {added
+                ? PRODUCT_UI_COPY.addedToCartModal
+                : PRODUCT_UI_COPY.addToCartModal}
             </button>
           </div>
 

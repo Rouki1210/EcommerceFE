@@ -5,6 +5,19 @@ import { loginSuccess } from "../features/auth/authSlice";
 import { registerApi } from "../api/authApi";
 import { tw } from "../assets/theme/theme";
 
+const COMMON_PROVIDER_CO_TYPO_REGEX = /@(gmail|yahoo|outlook|hotmail)\.co$/i;
+
+const isValidEmailByInputType = (email) => {
+  if (typeof document === "undefined") {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  const input = document.createElement("input");
+  input.type = "email";
+  input.value = email;
+  return input.validity.valid;
+};
+
 export default function RegisterPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,9 +41,14 @@ export default function RegisterPage() {
 
   const validate = () => {
     const e = {};
+    const email = form.email.trim();
+
     if (!form.firstName.trim()) e.firstName = "First name is required";
     if (!form.lastName.trim()) e.lastName = "Last name is required";
-    if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+    if (
+      !isValidEmailByInputType(email) ||
+      COMMON_PROVIDER_CO_TYPO_REGEX.test(email)
+    )
       e.email = "Invalid email address";
     if (form.password.length < 8)
       e.password = "Password must be at least 8 characters";
@@ -120,6 +138,7 @@ export default function RegisterPage() {
               value={form.email}
               onChange={(e) => setField("email", e.target.value)}
               placeholder="your@email.com"
+              required
               className={
                 errors.email ? "form-input-error" : "form-input-default"
               }

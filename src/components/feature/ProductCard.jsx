@@ -14,6 +14,11 @@ function ProductCard({ product, onAddToCart }) {
 
   const handleQuickAdd = (e) => {
     e.stopPropagation();
+    if (typeof onAddToCart !== "function") {
+      goToDetail();
+      return;
+    }
+
     if (needsSizeSelection) {
       setShowSizes(true);
     } else {
@@ -37,6 +42,11 @@ function ProductCard({ product, onAddToCart }) {
   };
 
   const goToDetail = () => navigate(`/product/${product.id}`);
+
+  const handleDetail = (e) => {
+    e.stopPropagation();
+    goToDetail();
+  };
 
   const cardClassName = cx(tw.productCardRoot, hovered && tw.productCardRaised);
   const badgeClassName = cx(
@@ -78,6 +88,9 @@ function ProductCard({ product, onAddToCart }) {
               : added
                 ? "Added!"
                 : "Quick Add"}
+          </button>
+          <button onClick={handleDetail} className={tw.productCardDetailBtn}>
+            Detail
           </button>
 
           {showSizes && product.sizes && (

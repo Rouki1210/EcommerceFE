@@ -1,12 +1,57 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../features/auth/authSlice";
 import { changePasswordApi, updateProfileApi } from "../api/authApi";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { tw } from "../assets/theme/theme";
+import { Box, Button, Card, Divider, Input, tw } from "../assets/theme/theme";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
+const PROFILE_KEYS = ["firstName", "lastName"];
+const PROFILE_ROWS = [
+  [
+    { key: "firstName", label: "First Name", type: "text" },
+    { key: "lastName", label: "Last Name", type: "text" },
+  ],
+];
+
+const buildProfilePayload = (form) => ({
+  firstName: form.firstName.trim(),
+  lastName: form.lastName.trim(),
+});
+
+function PasswordField({
+  label,
+  value,
+  onChange,
+  error,
+  placeholder,
+  isVisible,
+  onToggle,
+}) {
+  return (
+    <Input
+      label={label}
+      type={isVisible ? "text" : "password"}
+      value={value}
+      onChange={onChange}
+      error={error}
+      placeholder={placeholder}
+      className={cx("pr-16", tw.accountInputField)}
+      inputWrapperClassName={tw.accountPasswordWrap}
+      endAdornment={
+        <button
+          type="button"
+          onClick={onToggle}
+          className={tw.accountPasswordToggle}
+          aria-label={isVisible ? "Hide password" : "Show password"}
+        >
+          {isVisible ? "Hide" : "Show"}
+        </button>
+      }
+    />
+  );
+}
 
 export default function AccountSettingsPage() {
   usePageTitle("Account Settings");
@@ -21,6 +66,7 @@ export default function AccountSettingsPage() {
       email: user?.email ?? "",
       currentPassword: "",
       newPassword: "",
+      confirmPassword: "",
     }),
     [user],
   );
@@ -31,6 +77,17 @@ export default function AccountSettingsPage() {
   const [loading, setLoading] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const initialProfile = useMemo(
+    () => buildProfilePayload(initialForm),
+    [initialForm],
+  );
+  const currentProfile = useMemo(() => buildProfilePayload(form), [form]);
+
+  useEffect(() => {
+    setForm(initialForm);
+  }, [initialForm]);
 
   if (!isAuthenticated) return <Navigate to="/login" />;
 
@@ -42,39 +99,74 @@ export default function AccountSettingsPage() {
   const handleSaveChanges = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    const hasProfileChanges = PROFILE_KEYS.some(
+      (key) => currentProfile[key] !== initialProfile[key],
+    );
+    const wantsPasswordChange = Boolean(
+      form.currentPassword || form.newPassword || form.confirmPassword,
+    );
+
+    if (!hasProfileChanges && !wantsPasswordChange) {
+      setSuccessMessage("No changes to save");
+      return;
+    }
+
+    if (wantsPasswordChange) {
+      if (!form.currentPassword) {
+        setErrors({ currentPassword: "Current password is required" });
+        return;
+      }
+      if (!form.newPassword) {
+        setErrors({ newPassword: "New password is required" });
+        return;
+      }
+      if (form.newPassword.length < 8) {
+        setErrors({ newPassword: "Password must be at least 8 characters" });
+        return;
+      }
+      if (!form.confirmPassword) {
+        setErrors({ confirmPassword: "Confirm password is required" });
+        return;
+      }
+      if (form.newPassword !== form.confirmPassword) {
+        setErrors({ confirmPassword: "Passwords do not match" });
+        return;
+      }
+    }
+
+    if (hasProfileChanges) {
+      if (!currentProfile.firstName) {
+        setErrors({ firstName: "First name is required" });
+        return;
+      }
+      if (!currentProfile.lastName) {
+        setErrors({ lastName: "Last name is required" });
+        return;
+      }
+    }
+
+    setSuccessMessage("");
     setLoading(true);
 
     try {
-      await updateProfileApi({
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-      });
-      dispatch(
-        updateProfile({
-          firstName: form.firstName,
-          lastName: form.lastName,
-          email: form.email,
-        }),
-      );
+      if (hasProfileChanges) {
+        await updateProfileApi(currentProfile);
+        dispatch(updateProfile(currentProfile));
+      }
 
-      if (form.newPassword) {
-        if (!form.currentPassword) {
-          setErrors({ currentPassword: "Current password is required" });
-          setLoading(false);
-          return;
-        }
-        if (form.newPassword.length < 8) {
-          setErrors({ newPassword: "Password must be at least 8 characters" });
-          setLoading(false);
-          return;
-        }
+      if (wantsPasswordChange) {
         await changePasswordApi({
           currentPassword: form.currentPassword,
           newPassword: form.newPassword,
-          confirmPassword: form.newPassword,
+          confirmPassword: form.confirmPassword,
         });
-        setForm((prev) => ({ ...prev, currentPassword: "", newPassword: "" }));
+        setForm((prev) => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
       }
 
       setSuccessMessage("Changes saved successfully!");
@@ -89,7 +181,7 @@ export default function AccountSettingsPage() {
   };
 
   return (
-    <div className={tw.accountPage}>
+    <Box className={tw.accountPage}>
       <h1 className={cx("heading", tw.accountTitle)}>Account Settings</h1>
 
       {successMessage && (
@@ -98,107 +190,79 @@ export default function AccountSettingsPage() {
 
       {errors.api && <div className={tw.accountError}>{errors.api}</div>}
 
-      <div className={tw.accountCard}>
-        <form onSubmit={handleSaveChanges} className="flex flex-col gap-6">
-          <div>
+      <Card className={tw.accountCard}>
+        <form onSubmit={handleSaveChanges} className={tw.accountFormContent}>
+          <Box>
             <h2 className={tw.accountSectionTitle}>Profile Information</h2>
-            <div className={cx(tw.accountGrid2, "mb-4")}>
-              <div>
-                <label className="form-label">First Name</label>
-                <input
-                  type="text"
-                  value={form.firstName}
-                  onChange={(e) => setField("firstName", e.target.value)}
-                  className="form-input-default focus:border-[#c8a96e]"
-                />
-              </div>
-              <div>
-                <label className="form-label">Last Name</label>
-                <input
-                  type="text"
-                  value={form.lastName}
-                  onChange={(e) => setField("lastName", e.target.value)}
-                  className="form-input-default focus:border-[#c8a96e]"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="form-label">Email Address</label>
-              <input
-                type="email"
-                value={form.email}
-                disabled
-                className="form-input-default cursor-not-allowed opacity-60"
-              />
-            </div>
-          </div>
+            {PROFILE_ROWS.map((row, index) => (
+              <Box
+                key={`profile-row-${index}`}
+                className={cx(tw.accountGrid2, tw.accountFormRow)}
+              >
+                {row.map((field) => (
+                  <Input
+                    key={field.key}
+                    label={field.label}
+                    type={field.type}
+                    value={form[field.key]}
+                    onChange={(e) => setField(field.key, e.target.value)}
+                    placeholder={field.placeholder}
+                    className={tw.accountInputField}
+                    error={errors[field.key]}
+                  />
+                ))}
+              </Box>
+            ))}
 
-          <div className={tw.accountDivider} />
+            <Input
+              label="Email Address"
+              type="email"
+              value={form.email}
+              placeholder="your@email.com"
+              className={tw.accountInputField}
+              error={errors.email}
+              disabled
+            />
+          </Box>
 
-          <div>
+          <Divider className={tw.accountDivider} />
+
+          <Box>
             <h2 className={tw.accountSectionTitle}>Change Password</h2>
-            <div className="flex flex-col gap-4">
-              <div>
-                <label className="form-label">Current Password</label>
-                <div className={tw.accountPasswordWrap}>
-                  <input
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={form.currentPassword}
-                    onChange={(e) =>
-                      setField("currentPassword", e.target.value)
-                    }
-                    className={cx(
-                      errors.currentPassword
-                        ? "form-input-error"
-                        : "form-input-default",
-                      "pr-10 focus:border-[#c8a96e]",
-                    )}
-                    placeholder="Required if changing password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className={tw.accountPasswordToggle}
-                  >
-                    {showCurrentPassword ? "🙈" : "👁"}
-                  </button>
-                </div>
-                {errors.currentPassword && (
-                  <p className="form-error-text">{errors.currentPassword}</p>
-                )}
-              </div>
+            <Box className={tw.accountPasswordFields}>
+              <PasswordField
+                label="Current Password"
+                value={form.currentPassword}
+                onChange={(e) => setField("currentPassword", e.target.value)}
+                error={errors.currentPassword}
+                placeholder="Required if changing password"
+                isVisible={showCurrentPassword}
+                onToggle={() => setShowCurrentPassword((prev) => !prev)}
+              />
 
-              <div>
-                <label className="form-label">New Password</label>
-                <div className={tw.accountPasswordWrap}>
-                  <input
-                    type={showNewPassword ? "text" : "password"}
-                    value={form.newPassword}
-                    onChange={(e) => setField("newPassword", e.target.value)}
-                    className={cx(
-                      errors.newPassword
-                        ? "form-input-error"
-                        : "form-input-default",
-                      "pr-10 focus:border-[#c8a96e]",
-                    )}
-                    placeholder="Leave blank to keep current password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className={tw.accountPasswordToggle}
-                  >
-                    {showNewPassword ? "🙈" : "👁"}
-                  </button>
-                </div>
-                {errors.newPassword && (
-                  <p className="form-error-text">{errors.newPassword}</p>
-                )}
-              </div>
-            </div>
-          </div>
+              <PasswordField
+                label="New Password"
+                value={form.newPassword}
+                onChange={(e) => setField("newPassword", e.target.value)}
+                error={errors.newPassword}
+                placeholder="Leave blank to keep current password"
+                isVisible={showNewPassword}
+                onToggle={() => setShowNewPassword((prev) => !prev)}
+              />
 
-          <button
+              <PasswordField
+                label="Confirm Password"
+                value={form.confirmPassword}
+                onChange={(e) => setField("confirmPassword", e.target.value)}
+                error={errors.confirmPassword}
+                placeholder="Re-enter new password"
+                isVisible={showConfirmPassword}
+                onToggle={() => setShowConfirmPassword((prev) => !prev)}
+              />
+            </Box>
+          </Box>
+
+          <Button
             type="submit"
             disabled={loading}
             className={cx(
@@ -207,9 +271,9 @@ export default function AccountSettingsPage() {
             )}
           >
             {loading ? "Saving..." : "Save Changes"}
-          </button>
+          </Button>
         </form>
-      </div>
-    </div>
+      </Card>
+    </Box>
   );
 }

@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { tw } from "../../assets/theme/theme";
+import HeroModelCard from "../base/HeroModelCard";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
+
+const HERO_MODEL_IMAGES = {
+  primary:
+    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop",
+  secondary:
+    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=480&fit=crop",
+};
 
 function Hero({ onShopNow }) {
   return (
@@ -30,13 +38,15 @@ function Hero({ onShopNow }) {
       </div>
 
       <div className={tw.heroMedia}>
-        <div className={tw.heroImageCard}>
-          <img
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"
-            alt="model"
-            className={tw.heroImage}
-          />
-        </div>
+        <HeroModelCard
+          src={HERO_MODEL_IMAGES.primary}
+          alt="model in yellow outfit"
+        />
+        <HeroModelCard
+          src={HERO_MODEL_IMAGES.secondary}
+          alt="model in teal outfit"
+          variant="secondary"
+        />
       </div>
     </section>
   );

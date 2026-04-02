@@ -9,7 +9,7 @@ const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function CollectionPage({ gender, title, subtitle }) {
   usePageTitle(title);
-  const { addToCart, openProductModal } = useOutletContext();
+  const { addToCart } = useOutletContext();
   const { products } = useProducts();
 
   const baseProducts = products.filter(
@@ -87,7 +87,6 @@ export default function CollectionPage({ gender, title, subtitle }) {
                 key={product.id}
                 product={product}
                 onAddToCart={addToCart}
-                onViewDetail={openProductModal}
               />
             ))}
           </div>

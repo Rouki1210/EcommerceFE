@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import UserDropdown from "./userDropdown";
+import { UserDropdown } from "./user";
 import { useProducts } from "../../hooks/useProducts";
 import { tw } from "../../assets/theme/theme";
 

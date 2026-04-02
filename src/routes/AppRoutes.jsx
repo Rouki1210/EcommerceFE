@@ -15,6 +15,7 @@ import ProductPage from "../pages/productPage";
 import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
 import AccountSettingsPage from "../pages/accountSettingsPage";
+import MyOrdersPage from "../pages/myOrdersPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
@@ -70,6 +71,7 @@ function AppRoutes() {
           <Route path="/sale" element={<SalePage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders" element={<MyOrdersPage />} />
           <Route path="/order-tracking" element={<OrderTracking />} />
           <Route path="/our-story" element={<OurStoryPage />} />
           <Route path="/profile" element={<AccountSettingsPage />} />

@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const isValidJwt = (token) =>
+  typeof token === "string" && token.split(".").length === 3;
+
 const baseUrl = axios.create({
   baseURL: "http://localhost:8080",
   headers: {
@@ -19,8 +22,10 @@ const baseUrl = axios.create({
 baseUrl.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("auth_token");
-    if (token) {
+    if (isValidJwt(token)) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (token) {
+      localStorage.removeItem("auth_token");
     }
     return config;
   },
@@ -38,6 +43,8 @@ baseUrl.interceptors.response.use(
       document.cookie = "token=; max-age=0; path=/;";
       localStorage.removeItem("user_type");
       localStorage.removeItem("user_name");
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("auth_user");
 
       if (!window.location.pathname.includes("/login")) {
         alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
