@@ -14,10 +14,15 @@ const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ShoppingCart() {
   const navigate = useNavigate();
+  const navigate = useNavigate();
   const { state } = useLocation();
-  const dispatch = useDispatch();
-  const cart = useSelector(selectCartItems);
-
+  const navigate = useNavigate();
+  const {
+    updateCartItem,
+    removeFromCart,
+    addToCart: addToCartGlobal,
+  } = useOutletContext();
+  const { products } = useProducts();
   usePageTitle("Shopping Cart");
 
   const [promoCode, setPromoCode] = useState(state?.promoCode ?? "");
@@ -26,7 +31,17 @@ export default function ShoppingCart() {
   );
   const [removingId, setRemovingId] = useState(null);
 
+  const [promoCode, setPromoCode] = useState(state?.promoCode ?? "");
+  const [promoApplied, setPromoApplied] = useState(
+    state?.promoApplied ?? false,
+  );
+  const [removingId, setRemovingId] = useState(null);
+
   const calculatePricing = () => {
+    const subtotal = cart.reduce(
+      (sum, item) => sum + parseFloat(item.price || 0) * item.qty,
+      0,
+    );
     const subtotal = cart.reduce(
       (sum, item) => sum + parseFloat(item.price || 0) * item.qty,
       0,
@@ -47,6 +62,15 @@ export default function ShoppingCart() {
   };
 
   const handleCheckout = () => {
+    navigate("/checkout", { state: { ...pricing, promoCode, cart } });
+  };
+
+  const updateCartItem = (cartItemId, newQty) => {
+    const item = cart.find((i) => i.cartItemId === cartItemId);
+    if (item) {
+      const delta = newQty - item.qty;
+      dispatch(updateQty({ cartItemId, delta }));
+    }
     navigate("/checkout", { state: { ...pricing, promoCode, cart } });
   };
 
