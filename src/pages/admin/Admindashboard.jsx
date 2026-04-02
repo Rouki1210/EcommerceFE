@@ -11,23 +11,23 @@ const stats = [
 ];
 
 export default function Admindashboard() {
-  return (
-    <div className="flex flex-col gap-7">
-      <Header title="Admin Dashboard" subtitle="Overview" />
+    return (
+        <div className="flex flex-col gap-7">
+            <Header title="Admin Dashboard" subtitle="Overview" />
 
-      <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-3 gap-5">
                 {stats.map((s, i) => <StatsCard key={i} {...s} />)}
-      </div>
+            </div>
 
-      <div className="grid gap-5" style={{ gridTemplateColumns: "1.6fr 1fr" }}>
-        <AreaSalesChart />
-        <BarOrdersChart />
-      </div>
+            <div className="grid gap-5" style={{ gridTemplateColumns: "1.6fr 1fr" }}>
+                <AreaSalesChart />
+                <BarOrdersChart />
+            </div>
 
-      <div className="grid gap-5" style={{ gridTemplateColumns: "1.4fr 1fr" }}>
-        <Recentorders />
-        <Topproducts />
-      </div>
-    </div>
-  );
+            <div className="grid gap-5" style={{ gridTemplateColumns: "1.4fr 1fr" }}>
+                <Recentorders />
+                <Topproducts />
+            </div>
+        </div>
+    );
 }
