@@ -1,11 +1,9 @@
 import { useOutletContext } from "react-router-dom";
-import Hero from "../components/Hero";
-import MarqueeStrip from "../components/MarqueeStrip";
-import ProductGrid from "../components/Productgrid";
-import EditorialBanner from "../components/Editorialbanner";
-import { useCategories } from "../data/useCategories";
+import Hero from "../components/feature/Hero";
+import MarqueeStrip from "../components/feature/MarqueeStrip";
+import ProductGrid from "../components/feature/Productgrid";
+import EditorialBanner from "../components/feature/Editorialbanner";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { colors, shadows, keyframes } from "../assets/theme/theme";
 
 export default function HomePage() {
   const { addToCart, openCart, openProductModal } = useOutletContext();
@@ -14,9 +12,6 @@ export default function HomePage() {
 
   const scrollToProducts = () =>
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-
-  const categories = useCategories();
-  console.log("Fetched categories:", categories);
 
   return (
     <>

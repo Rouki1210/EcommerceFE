@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import Layout from "../components/Layout";
+import Layout from "../components/feature/Layout";
 import Home from "../pages/homePage";
 import ShoppingCart from "../pages/shoppingCart";
 import CollectionPage from "../pages/collectionPage";
@@ -18,8 +18,9 @@ import AccountSettingsPage from "../pages/accountSettingsPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
-import AdminLayout from "../components/admin/AdminLayout";
-import ProtectedRoute from "../components/admin/ProtectedRoute";
+/* ========== ADMIN COMPONENTS - COMMENTED OUT TEMPORARILY ==========
+import AdminLayout from "../components/feature/admin/AdminLayout";
+import ProtectedRoute from "../components/feature/admin/ProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
 import Admindashboard from "../pages/admin/Admindashboard";
 import Adminproducts from "../pages/admin/Adminproducts";
@@ -27,6 +28,7 @@ import Adminorders from "../pages/admin/Adminorders";
 import Adminusers from "../pages/admin/Adminusers";
 import Adminanalytics from "../pages/admin/Adminanalytics";
 import Adminsettings from "../pages/admin/Adminsettings";
+========== END ADMIN COMPONENTS ========== */
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -77,11 +79,9 @@ function AppRoutes() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Admin login — public */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-
-        {/* Admin routes — protected */}
-        <Route
+        {/* ========== ADMIN ROUTES - COMMENTED OUT TEMPORARILY ========== */}
+        {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
+        {/* <Route
           path="/admin"
           element={
             <ProtectedRoute>
@@ -96,7 +96,7 @@ function AppRoutes() {
           <Route path="users" element={<Adminusers />} />
           <Route path="analytics" element={<Adminanalytics />} />
           <Route path="settings" element={<Adminsettings />} />
-        </Route>
+        </Route> */}
       </Routes>
     </BrowserRouter>
   );

@@ -1,12 +1,16 @@
 import { useMemo, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../features/auth/authSlice";
 import { changePasswordApi, updateProfileApi } from "../api/authApi";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { tw } from "../assets/theme/theme";
+
+const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function AccountSettingsPage() {
   usePageTitle("Account Settings");
+
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
@@ -44,22 +48,25 @@ export default function AccountSettingsPage() {
     setLoading(true);
 
     try {
-      // Always update profile
       await updateProfileApi({
         firstName: form.firstName,
         lastName: form.lastName,
-        email: form.email
+        email: form.email,
       });
       dispatch(
-        updateProfile({ 
-          firstName: form.firstName, 
+        updateProfile({
+          firstName: form.firstName,
           lastName: form.lastName,
-          email: form.email
+          email: form.email,
         }),
       );
 
-      // Update password if provided
       if (form.newPassword) {
+        if (!form.currentPassword) {
+          setErrors({ currentPassword: "Current password is required" });
+          setLoading(false);
+          return;
+        }
         if (form.newPassword.length < 8) {
           setErrors({ newPassword: "Password must be at least 8 characters" });
           setLoading(false);
@@ -68,7 +75,7 @@ export default function AccountSettingsPage() {
         await changePasswordApi({
           currentPassword: form.currentPassword,
           newPassword: form.newPassword,
-          confirmPassword: form.newPassword
+          confirmPassword: form.newPassword,
         });
         setForm((prev) => ({ ...prev, currentPassword: "", newPassword: "" }));
       }
@@ -85,139 +92,127 @@ export default function AccountSettingsPage() {
   };
 
   return (
-    <>
-      <div className="max-w-2xl mx-auto p-8">
-        <h1 className="text-4xl text-[#2c2c2c] mb-8 font-bold text-center">
-          Account Settings
-        </h1>
+    <div className={tw.accountPage}>
+      <h1 className={cx("heading", tw.accountTitle)}>Account Settings</h1>
 
-        {successMessage && (
-          <div className="bg-[#27ae60]/20 text-[#27ae60] px-4 py-3 rounded-lg mb-6 text-sm">
-            {successMessage}
-          </div>
-        )}
+      {successMessage && (
+        <div className={tw.accountSuccess}>{successMessage}</div>
+      )}
 
-        {errors.api && (
-          <div className="bg-red-50/80 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
-            {errors.api}
-          </div>
-        )}
+      {errors.api && <div className={tw.accountError}>{errors.api}</div>}
 
-        {/* Unified Settings Form */}
-        <div className="bg-[#f5f0eb] rounded-xl p-8 shadow-[0_4px_16px_rgba(200,169,110,0.08)]">
-          <form onSubmit={handleSaveChanges} className="flex flex-col gap-6">
-            {/* Profile Information Section */}
-            <div>
-              <h2 className="text-lg text-[#2c2c2c] mb-6 font-semibold">
-                Profile Information
-              </h2>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="form-label">First Name</label>
-                  <input
-                    type="text"
-                    value={form.firstName}
-                    onChange={(e) => setField("firstName", e.target.value)}
-                    className="form-input-default"
-                  />
-                </div>
-                <div>
-                  <label className="form-label">Last Name</label>
-                  <input
-                    type="text"
-                    value={form.lastName}
-                    onChange={(e) => setField("lastName", e.target.value)}
-                    className="form-input-default"
-                  />
-                </div>
+      <div className={tw.accountCard}>
+        <form onSubmit={handleSaveChanges} className="flex flex-col gap-6">
+          <div>
+            <h2 className={tw.accountSectionTitle}>Profile Information</h2>
+            <div className={cx(tw.accountGrid2, "mb-4")}>
+              <div>
+                <label className="form-label">First Name</label>
+                <input
+                  type="text"
+                  value={form.firstName}
+                  onChange={(e) => setField("firstName", e.target.value)}
+                  className="form-input-default focus:border-[#c8a96e]"
+                />
               </div>
               <div>
-                <label className="form-label">Email Address</label>
+                <label className="form-label">Last Name</label>
                 <input
-                  type="email"
-                  value={form.email}
-                  disabled
-                  className="form-input-default opacity-60 cursor-not-allowed"
+                  type="text"
+                  value={form.lastName}
+                  onChange={(e) => setField("lastName", e.target.value)}
+                  className="form-input-default focus:border-[#c8a96e]"
                 />
               </div>
             </div>
-
-            {/* Divider */}
-            <div className="border-t border-[#e5e5e5]"></div>
-
-            {/* Change Password Section */}
             <div>
-              <h2 className="text-lg text-[#2c2c2c] mb-6 font-semibold">
-                Change Password
-              </h2>
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="form-label">Current Password</label>
-                  <div className="relative">
-                    <input
-                      type={showCurrentPassword ? "text" : "password"}
-                      value={form.currentPassword}
-                      onChange={(e) =>
-                        setField("currentPassword", e.target.value)
-                      }
-                      className="form-input-default pr-10"
-                      placeholder="Required if changing password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowCurrentPassword(!showCurrentPassword)
-                      }
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base"
-                    >
-                      {showCurrentPassword ? "🙈" : "👁"}
-                    </button>
-                  </div>
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                value={form.email}
+                disabled
+                className="form-input-default cursor-not-allowed opacity-60"
+              />
+            </div>
+          </div>
+
+          <div className={tw.accountDivider} />
+
+          <div>
+            <h2 className={tw.accountSectionTitle}>Change Password</h2>
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="form-label">Current Password</label>
+                <div className={tw.accountPasswordWrap}>
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    value={form.currentPassword}
+                    onChange={(e) =>
+                      setField("currentPassword", e.target.value)
+                    }
+                    className={cx(
+                      errors.currentPassword
+                        ? "form-input-error"
+                        : "form-input-default",
+                      "pr-10 focus:border-[#c8a96e]",
+                    )}
+                    placeholder="Required if changing password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    className={tw.accountPasswordToggle}
+                  >
+                    {showCurrentPassword ? "🙈" : "👁"}
+                  </button>
                 </div>
-                <div>
-                  <label className="form-label">New Password</label>
-                  <div className="relative">
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      value={form.newPassword}
-                      onChange={(e) => setField("newPassword", e.target.value)}
-                      className={
-                        errors.newPassword
-                          ? "form-input-error pr-10"
-                          : "form-input-default pr-10"
-                      }
-                      placeholder="Leave blank to keep current password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base"
-                    >
-                      {showNewPassword ? "🙈" : "👁"}
-                    </button>
-                  </div>
-                  {errors.newPassword && (
-                    <p className="form-error-text">{errors.newPassword}</p>
-                  )}
+                {errors.currentPassword && (
+                  <p className="form-error-text">{errors.currentPassword}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="form-label">New Password</label>
+                <div className={tw.accountPasswordWrap}>
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    value={form.newPassword}
+                    onChange={(e) => setField("newPassword", e.target.value)}
+                    className={cx(
+                      errors.newPassword
+                        ? "form-input-error"
+                        : "form-input-default",
+                      "pr-10 focus:border-[#c8a96e]",
+                    )}
+                    placeholder="Leave blank to keep current password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className={tw.accountPasswordToggle}
+                  >
+                    {showNewPassword ? "🙈" : "👁"}
+                  </button>
                 </div>
+                {errors.newPassword && (
+                  <p className="form-error-text">{errors.newPassword}</p>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Save Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={`px-6 py-3 rounded-lg font-semibold text-sm mt-4 transition-all ${
-                loading
-                  ? "btn-primary-disabled"
-                  : "bg-[#c8a96e] text-[#f5f0eb] hover:bg-[#8b7355] shadow-[0_4px_12px_rgba(200,169,110,0.2)]"
-              }`}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={cx(
+              tw.accountSaveBtn,
+              loading ? tw.accountSaveBtnLoading : tw.accountSaveBtnReady,
+            )}
+          >
+            {loading ? "Saving..." : "Save Changes"}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }

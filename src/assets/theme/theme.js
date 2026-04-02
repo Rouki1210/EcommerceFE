@@ -1,216 +1,122 @@
+// Base UI Components mở rộng (Banner, Section, EmptyState, Badge, Grid, TypographyBase, FilterBar)
+import Banner from "../../components/base/Banner";
+import Section from "../../components/base/Section";
+import EmptyState from "../../components/base/EmptyState";
+import Badge from "../../components/base/Badge";
+import Grid from "../../components/base/Grid";
+import TypographyBase from "../../components/base/TypographyBase";
+import FilterBar from "../../components/base/FilterBar";
 /* ═══════════════════════════════════════════════════════════
-   ECOMMERCE DESIGN TOKENS
-   Import: import { colors, gradients, shadows, keyframes, tw } from "@/assets/theme/theme"
-═══════════════════════════════════════════════════════════ */
+  ECOMMERCE DESIGN TOKENS & MUI THEME
+  Import: import { theme, colors, gradients, shadows, ... } from "@/assets/theme/theme"
+════════════════════════════════════════════════════════════ */
 
-/* ── Color Tokens ── */
+// ---- TOKENS & PRESETS ----
+// (Đặt tất cả token lên đầu file)
+
 export const colors = {
-  // Backgrounds
-  bg: "#0d0800", // primary background
-  bgCard: "#f5f0eb", // card/panel background (light)
-  bgInput: "#fafafa", // input background
-  bgHover: "#ece7e0", // hovered element background
-  bgDark: "#2c2c2c", // dark section background
-  bgDeep: "#1a1a1a", // very dark background
-
-  // Brands & Accents
-  gold: "#c8a96e", // primary accent (warm gold)
-  goldLight: "#e5d4b0", // light gold
-  goldDark: "#8b7355", // dark gold
-  orange: "#ff6b00", // secondary accent (warm)
-  red: "#ff0040", // danger/alert color
-
-  // Text Colors
+  bg: "#0d0800",
+  bgCard: "#f5f0eb",
+  bgInput: "#fafafa",
+  bgHover: "#ece7e0",
+  bgDark: "#2c2c2c",
+  bgDeep: "#1a1a1a",
+  gold: "#c8a96e",
+  goldLight: "#e5d4b0",
+  goldDark: "#8b7355",
+  orange: "#ff6b00",
+  red: "#ff0040",
   white: "#fff",
-  text: "#2c2c2c", // primary text (dark)
-  textMuted: "#999", // secondary text
-  textDim: "#666", // tertiary text
-  textLight: "#bbb", // footnotes, disabled
-  textFaint: "#aaa", // very faint
-  textSub: "#9a8c7e", // subtle brown
-
-  // Borders
-  border: "#e5e5e5", // default border
-  borderSub: "#ece7e0", // subtle border
-  borderDark: "#2a1500", // dark border (admin)
-
-  // Status Colors
-  success: "#27ae60", // success/positive
-  error: "#c0392b", // error/negative
-  warning: "#f39c12", // warning
-
-  // Overlays
+  text: "#2c2c2c",
+  textMuted: "#999",
+  textDim: "#666",
+  textLight: "#bbb",
+  textFaint: "#aaa",
+  textSub: "#9a8c7e",
+  border: "#e5e5e5",
+  borderSub: "#ece7e0",
+  borderDark: "#2a1500",
+  success: "#27ae60",
+  error: "#c0392b",
+  warning: "#f39c12",
   overlay: "rgba(0, 0, 0, 0.5)",
   overlayDark: "rgba(0, 0, 0, 0.8)",
-  overlayLight: "rgba(0, 0, 0, 0.3)",
 };
 
-/* ── Gradient Tokens ── */
+// Base UI Components (MUI + Tailwind wrappers)
+import Button from "../../components/base/Button.jsx";
+import Card, { CardContent } from "../../components/base/Card.jsx";
+import Input from "../../components/base/Input.jsx";
+import Typography from "../../components/base/Typography.jsx";
+import Modal, {
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "../../components/base/Modal.jsx";
+import Divider from "../../components/base/Divider.jsx";
+import Box from "../../components/base/Box.jsx";
+
+export {
+  Button,
+  Card,
+  CardContent,
+  Input,
+  Typography,
+  Modal,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+  Box,
+  Banner,
+  Section,
+  EmptyState,
+  Badge,
+  Grid,
+  TypographyBase,
+  FilterBar,
+};
+
+/* ── Gradients ── */
 export const gradients = {
-  // Brand gradients
-  brandWarm: "linear-gradient(135deg, #c8a96e, #8b7355)",
-  brandHorizontal: "linear-gradient(90deg, #c8a96e, #8b7355)",
-  brandVertical: "linear-gradient(180deg, #c8a96e, #8b7355)",
-
-  // Hero gradients
-  heroDark: "linear-gradient(135deg, #2c2c2c 0%, #4a3f35 100%)",
-  heroWarm: "linear-gradient(135deg, #3d2817 0%, #5a4a3a 100%)",
-
-  // Special gradients
-  cardHover:
-    "linear-gradient(135deg, rgba(200, 169, 110, 0.1), rgba(139, 115, 85, 0.05))",
-
-  // Text gradients (for background-clip: text effect)
-  textGold: {
-    background: "linear-gradient(90deg, #c8a96e, #8b7355)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  },
-  textWarm: {
-    background: "linear-gradient(90deg, #d4a574, #a0805f)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  },
+  gold: "linear-gradient(90deg, #c8a96e 0%, #e5d4b0 100%)",
+  orange: "linear-gradient(90deg, #ff6b00 0%, #ffb347 100%)",
+  dark: "linear-gradient(90deg, #2c2c2c 0%, #1a1a1a 100%)",
+  white: "linear-gradient(90deg, #fff 0%, #fafafa 100%)",
 };
 
-/* ── Shadow Tokens ── */
+/* ── Shadows ── */
 export const shadows = {
-  // Subtle
-  sm: "0 2px 8px rgba(0, 0, 0, 0.1)",
-  base: "0 4px 12px rgba(0, 0, 0, 0.15)",
-  md: "0 8px 20px rgba(0, 0, 0, 0.12)",
-
-  // Cards & Panels
-  card: "0 4px 16px rgba(200, 169, 110, 0.08)",
-  cardHover: "0 8px 24px rgba(200, 169, 110, 0.12)",
-  cardElevated: "0 12px 32px rgba(0, 0, 0, 0.15)",
-
-  // Interactive
-  button: "0 4px 12px rgba(200, 169, 110, 0.2)",
-  buttonHover: "0 8px 20px rgba(200, 169, 110, 0.3)",
-
-  // Modal & Overlays
-  modal: "0 20px 60px rgba(0, 0, 0, 0.3), 0 0 1px rgba(200, 169, 110, 0.1)",
-  modalDark: "0 40px 100px rgba(0, 0, 0, 0.9)",
-
-  // Admin
-  adminPanel: "-8px 0 40px rgba(0, 0, 0, 0.3)",
-
-  // Input focus
-  inputFocus: "0 0 0 3px rgba(200, 169, 110, 0.1)",
-
-  // Badge
-  badge: "0 4px 12px rgba(200, 169, 110, 0.15)",
-
-  // Navigation
-  navbarGlow: "0 4px 16px rgba(200, 169, 110, 0.06)",
+  xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
+  sm: "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)",
+  md: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)",
+  lg: "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)",
+  xl: "0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)",
+  "2xl": "0 25px 50px -12px rgba(0,0,0,0.25)",
+  inner: "inset 0 2px 4px 0 rgba(0,0,0,0.06)",
+  outline: "0 0 0 3px rgba(200,169,110,0.5)",
+  none: "none",
 };
 
-/* ── Keyframes Animation Strings ── */
-export const keyframes = `
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes modalIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95) translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  
-  @keyframes toastIn {
-    0% {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    15% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    80% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-  }
-  
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  
-  @keyframes glow {
-    0%, 100% { box-shadow: 0 0 8px rgba(200, 169, 110, 0.3); }
-    50% { box-shadow: 0 0 16px rgba(200, 169, 110, 0.5); }
-  }
-`;
+/* ── Keyframes (for animation) ── */
+export const keyframes = {
+  fadeIn: {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
+  fadeOut: {
+    from: { opacity: 1 },
+    to: { opacity: 0 },
+  },
+  slideUp: {
+    from: { transform: "translateY(20px)", opacity: 0 },
+    to: { transform: "translateY(0)", opacity: 1 },
+  },
+  slideDown: {
+    from: { transform: "translateY(-20px)", opacity: 0 },
+    to: { transform: "translateY(0)", opacity: 1 },
+  },
+};
 
 /* ── Animation Duration & Timing ── */
 export const animations = {
@@ -288,80 +194,377 @@ export const breakpoints = {
   "2xl": "1536px",
 };
 
-/* ── Tailwind Utility Shorthands ── */
+/* ── Tailwind Utility Shorthands (đồng bộ với components.css) ── */
 export const tw = {
-  // ── Containers
-  card: "bg-[#f5f0eb] border border-[#ece7e0] rounded-lg",
-  cardPadded: "bg-[#f5f0eb] border border-[#ece7e0] rounded-lg p-6",
-  cardDark: "bg-[#2c2c2c] border border-[#3a3a3a] rounded-lg",
-  cardDarkPadded: "bg-[#2c2c2c] border border-[#3a3a3a] rounded-lg p-6",
-
-  // ── Form Elements
-  input:
-    "w-full px-4 py-3 bg-[#fafafa] border border-[#e5e5e5] rounded-lg text-sm text-[#2c2c2c] outline-none transition-all focus:border-[#c8a96e] focus:ring-2 focus:ring-[#c8a96e]/10 placeholder-[#bbb]",
-  inputDark:
-    "w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg text-sm text-[#fff] outline-none transition-all focus:border-[#c8a96e] focus:ring-2 focus:ring-[#c8a96e]/10 placeholder-[#666]",
-  label: "block text-xs font-medium text-[#666] uppercase tracking-wider mb-2",
-  labelDark:
-    "block text-xs font-medium text-[#aaa] uppercase tracking-wider mb-2",
-
-  // ── Buttons
-  btnPrimary:
-    "px-6 py-3 bg-[#2c2c2c] text-white rounded-lg font-medium text-sm transition-all hover:bg-[#1a1a1a] active:scale-95 cursor-pointer border-none shadow-md",
-  btnPrimaryGold:
-    "px-6 py-3 bg-[#c8a96e] text-white rounded-lg font-medium text-sm transition-all hover:bg-[#8b7355] active:scale-95 cursor-pointer border-none shadow-md",
-  btnSecondary:
-    "px-6 py-3 bg-white border border-[#e5e5e5] text-[#2c2c2c] rounded-lg font-medium text-sm transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-  btnGhost:
-    "px-6 py-3 bg-transparent border border-[#e5e5e5] text-[#2c2c2c] rounded-lg font-medium text-sm transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-  btnSmall:
-    "px-4 py-2 rounded-md text-xs font-medium transition-all cursor-pointer",
-  btnIcon:
-    "w-10 h-10 flex items-center justify-center rounded-lg border border-[#e5e5e5] text-[#666] transition-all hover:border-[#c8a96e] hover:text-[#c8a96e] cursor-pointer",
-
-  // ── Links
-  link: "text-[#c8a96e] hover:text-[#8b7355] transition-colors cursor-pointer no-underline",
-  linkHover: "hover:underline hover:text-[#8b7355] transition-colors",
-
-  // ── Typography
-  heading: "font-serif font-bold text-[#2c2c2c]",
-  headingLarge: "font-serif font-bold text-4xl text-[#2c2c2c]",
-  headingMedium: "font-serif font-semibold text-2xl text-[#2c2c2c]",
-  body: "text-base text-[#666] leading-relaxed",
-  caption: "text-sm text-[#999] leading-relaxed",
-  muted: "text-xs text-[#aaa] uppercase tracking-wider",
-
-  // ── Dividers
-  divider: "border-t border-[#ece7e0]",
-  dividerDark: "border-t border-[#3a3a3a]",
-
-  // ── Badges
-  badge:
-    "inline-block px-3 py-1.5 text-xs font-bold tracking-wider uppercase rounded-full transition-all",
-  badgeAccent: "bg-[#c8a96e] text-white",
-  badgeSuccess: "bg-[#27ae60] text-white",
-  badgeError: "bg-[#c0392b] text-white",
-  badgeNeutral: "bg-[#ece7e0] text-[#2c2c2c]",
-
-  // ── Layout Helpers
-  container: "max-w-6xl mx-auto px-6",
-  pageWrapper: "max-w-6xl mx-auto px-6 py-12 sm:px-4",
-  section: "py-12 sm:py-8",
-  sectionPadded: "max-w-6xl mx-auto px-6 py-12",
-
-  // ── Grid & Flex
-  gridCards: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-  gridProducts: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
-  flexCenter: "flex items-center justify-center",
-  flexBetween: "flex items-center justify-between",
-
-  // ── Overlays
-  overlay: "fixed inset-0 bg-black/50 backdrop-blur-sm z-40",
-  overlayDark: "fixed inset-0 bg-black/80 z-50",
-
-  // ── Focus States
-  focusRing:
-    "focus:outline-none focus:ring-2 focus:ring-[#c8a96e] focus:ring-offset-2",
+  appShell: "app-shell",
+  banner: "banner",
+  section: "section",
+  emptyState: "empty-state",
+  headingLg: "heading-lg",
+  headingMd: "heading-md",
+  headingSm: "heading-sm",
+  subtitle: "subtitle",
+  caption: "caption",
+  label: "label",
+  badge: "badge",
+  badgeSuccess: "badge-success",
+  badgeError: "badge-error",
+  badgeNeutral: "badge-neutral",
+  gridCards: "grid-cards",
+  card: "card",
+  cardDark: "card-dark",
+  cardPadded: "card-padded",
+  btnGhost: "btn-ghost",
+  btnSecondary: "btn-secondary",
+  navbar: "navbar",
+  navbarContainer: "navbar-container",
+  navbarLogoLink: "navbar-logo-link",
+  navbarLogoDot: "navbar-logo-dot",
+  navbarLogoText: "navbar-logo-text",
+  navbarNav: "navbar-nav",
+  navbarNavDimmed: "navbar-nav-dimmed",
+  navbarNavLink: "navbar-nav-link",
+  navbarNavLinkActive: "navbar-nav-link-active",
+  navbarNavLinkSale: "navbar-nav-link-sale",
+  navbarNavLinkSaleActive: "navbar-nav-link-sale-active",
+  navbarActions: "navbar-actions",
+  navbarIconBtn: "navbar-icon-btn",
+  navbarSearchWrap: "navbar-search-wrap",
+  navbarSearchShell: "navbar-search-shell",
+  navbarSearchShellOpen: "navbar-search-shell-open",
+  navbarSearchInput: "navbar-search-input",
+  navbarSearchInputOpen: "navbar-search-input-open",
+  navbarDropdown: "navbar-dropdown",
+  navbarDropdownHeader: "navbar-dropdown-header",
+  navbarDropdownMeta: "navbar-dropdown-meta",
+  navbarSuggestionItem: "navbar-suggestion-item",
+  navbarSuggestionItemActive: "navbar-suggestion-item-active",
+  navbarSuggestionImage: "navbar-suggestion-image",
+  navbarSuggestionInfo: "navbar-suggestion-info",
+  navbarSuggestionName: "navbar-suggestion-name",
+  navbarSuggestionMeta: "navbar-suggestion-meta",
+  navbarSuggestionPrice: "navbar-suggestion-price",
+  navbarSuggestionDivider: "navbar-suggestion-divider",
+  navbarDropdownFooter: "navbar-dropdown-footer",
+  navbarNoResults: "navbar-no-results",
+  navbarNoResultsTitle: "navbar-no-results-title",
+  navbarNoResultsText: "navbar-no-results-text",
+  navbarNoResultsQuery: "navbar-no-results-query",
+  navbarNoResultsHint: "navbar-no-results-hint",
+  navbarHighlight: "navbar-highlight",
+  navbarAccountBtn: "navbar-account-btn",
+  navbarCartBtn: "navbar-cart-btn",
+  navbarCartBadge: "navbar-cart-badge",
+  heroSection: "hero-section",
+  heroText: "hero-text",
+  heroEyebrow: "hero-eyebrow",
+  heroTitle: "hero-title",
+  heroLead: "hero-lead",
+  heroActions: "hero-actions",
+  heroPrimaryBtn: "hero-primary-btn",
+  heroStoryLink: "hero-story-link",
+  heroMedia: "hero-media",
+  heroImageCard: "hero-image-card",
+  heroImage: "hero-image",
+  marqueeStrip: "marquee-strip",
+  marqueeTrack: "marquee-track",
+  marqueeGroup: "marquee-group",
+  marqueeUnit: "marquee-unit",
+  marqueeStar: "marquee-star",
+  editorialSection: "editorial-section",
+  editorialPanel: "editorial-panel",
+  editorialImage: "editorial-image",
+  editorialContent: "editorial-content",
+  editorialEyebrow: "editorial-eyebrow",
+  editorialTitle: "editorial-title",
+  editorialText: "editorial-text",
+  editorialCode: "editorial-code",
+  editorialBtn: "editorial-btn",
+  footerRoot: "footer-root",
+  footerGrid: "footer-grid",
+  footerBrand: "footer-brand",
+  footerBrandRow: "footer-brand-row",
+  footerBrandDot: "footer-brand-dot",
+  footerBrandName: "footer-brand-name",
+  footerBrandText: "footer-brand-text",
+  footerColumnTitle: "footer-column-title",
+  footerList: "footer-list",
+  footerLink: "footer-link",
+  footerMuted: "footer-muted",
+  productGridSection: "product-grid-section",
+  productGridHead: "product-grid-head",
+  productGridIntro: "product-grid-intro",
+  productGridEyebrow: "product-grid-eyebrow",
+  productGridTitle: "product-grid-title",
+  productGridFilters: "product-grid-filters",
+  productFilterBtn: "product-filter-btn",
+  productFilterBtnActive: "product-filter-btn-active",
+  productFilterBtnIdle: "product-filter-btn-idle",
+  productGridList: "product-grid-list",
+  productGridMoreWrap: "product-grid-more-wrap",
+  productGridMoreBtn: "product-grid-more-btn",
+  productCardRoot: "product-card-root",
+  productCardRaised: "product-card-raised",
+  productCardBadge: "product-card-badge",
+  productCardBadgeSale: "product-card-badge-sale",
+  productCardMedia: "product-card-media",
+  productCardImage: "product-card-image",
+  productCardImageZoom: "product-card-image-zoom",
+  productCardOverlay: "product-card-overlay",
+  productCardOverlayVisible: "product-card-overlay-visible",
+  productCardQuickAdd: "product-card-quick-add",
+  productCardSizeRow: "product-card-size-row",
+  productCardSizeBtn: "product-card-size-btn",
+  productCardBody: "product-card-body",
+  productCardName: "product-card-name",
+  productCardVariant: "product-card-variant",
+  productCardPriceRow: "product-card-price-row",
+  productCardPrice: "product-card-price",
+  productCardOldPrice: "product-card-old-price",
+  toast: "toast",
+  userMenuRoot: "user-menu-root",
+  userMenuAvatar: "user-menu-avatar",
+  userMenuBackdrop: "user-menu-backdrop",
+  userMenuPanel: "user-menu-panel",
+  userMenuHeader: "user-menu-header",
+  userMenuHeaderRow: "user-menu-header-row",
+  userMenuAvatarLg: "user-menu-avatar-lg",
+  userMenuIdentity: "user-menu-identity",
+  userMenuName: "user-menu-name",
+  userMenuEmail: "user-menu-email",
+  userMenuBody: "user-menu-body",
+  userMenuItem: "user-menu-item",
+  userMenuFooter: "user-menu-footer",
+  userMenuLogout: "user-menu-logout",
+  cartPanelBackdrop: "cart-panel-backdrop",
+  cartPanelDrawer: "cart-panel-drawer",
+  cartPanelHeader: "cart-panel-header",
+  cartPanelTitle: "cart-panel-title",
+  cartPanelClose: "cart-panel-close",
+  cartPanelBody: "cart-panel-body",
+  cartPanelItems: "cart-panel-items",
+  cartPanelEmpty: "cart-panel-empty",
+  cartPanelEmptyBtn: "cart-panel-empty-btn",
+  cartPanelProgressBox: "cart-panel-progress-box",
+  cartPanelProgressText: "cart-panel-progress-text",
+  cartPanelProgressTrack: "cart-panel-progress-track",
+  cartPanelProgressFill: "cart-panel-progress-fill",
+  cartPanelPromoRow: "cart-panel-promo-row",
+  cartPanelPromoInput: "cart-panel-promo-input",
+  cartPanelPromoBtn: "cart-panel-promo-btn",
+  cartPanelPromoBtnApplied: "cart-panel-promo-btn-applied",
+  cartPanelSummary: "cart-panel-summary",
+  cartPanelRow: "cart-panel-row",
+  cartPanelTotalRow: "cart-panel-total-row",
+  cartPanelCheckoutBtn: "cart-panel-checkout-btn",
+  cartPanelHint: "cart-panel-hint",
+  cartItemRoot: "cart-item-root",
+  cartItemRemoving: "cart-item-removing",
+  cartItemImage: "cart-item-image",
+  cartItemContent: "cart-item-content",
+  cartItemTop: "cart-item-top",
+  cartItemName: "cart-item-name",
+  cartItemVariant: "cart-item-variant",
+  cartItemRemove: "cart-item-remove",
+  cartItemBottom: "cart-item-bottom",
+  cartItemQty: "cart-item-qty",
+  cartItemQtyBtn: "cart-item-qty-btn",
+  cartItemQtyValue: "cart-item-qty-value",
+  cartItemLineTotal: "cart-item-line-total",
+  productModalBackdrop: "product-modal-backdrop",
+  productModalDialog: "product-modal-dialog",
+  productModalClose: "product-modal-close",
+  productModalMedia: "product-modal-media",
+  productModalImage: "product-modal-image",
+  productModalContent: "product-modal-content",
+  productModalCategory: "product-modal-category",
+  productModalTitle: "product-modal-title",
+  productModalPriceRow: "product-modal-price-row",
+  productModalPrice: "product-modal-price",
+  productModalPriceOld: "product-modal-price-old",
+  productModalDiscount: "product-modal-discount",
+  productModalDesc: "product-modal-desc",
+  productModalSizeLabel: "product-modal-size-label",
+  productModalSizeList: "product-modal-size-list",
+  productModalSizeBtn: "product-modal-size-btn",
+  productModalSizeBtnActive: "product-modal-size-btn-active",
+  productModalActions: "product-modal-actions",
+  productModalActionGhost: "product-modal-action-ghost",
+  productModalActionPrimary: "product-modal-action-primary",
+  productModalNotice: "product-modal-notice",
+  productModalAccordions: "product-modal-accordions",
+  productModalAccordion: "product-modal-accordion",
+  productModalAccordionHead: "product-modal-accordion-head",
+  productModalAccordionBody: "product-modal-accordion-body",
+  productModalTableWrap: "product-modal-table-wrap",
+  productModalTable: "product-modal-table",
+  productModalTableHead: "product-modal-table-head",
+  productModalTableCell: "product-modal-table-cell",
+  collectionHero: "collection-hero",
+  collectionHeroInner: "collection-hero-inner",
+  collectionFade: "collection-fade",
+  collectionFade1: "collection-fade-1",
+  collectionFade2: "collection-fade-2",
+  collectionLabel: "collection-label",
+  collectionTitle: "collection-title",
+  collectionSubtitle: "collection-subtitle",
+  collectionCircle: "collection-circle",
+  collectionCircleLg: "collection-circle-lg",
+  collectionCircleSm: "collection-circle-sm",
+  collectionMeta: "collection-meta",
+  collectionCount: "collection-count",
+  collectionFilters: "collection-filters",
+  collectionEmpty: "collection-empty",
+  collectionEmptyTitle: "collection-empty-title",
+  collectionEmptyText: "collection-empty-text",
+  saleBanner: "sale-banner",
+  saleBannerTitle: "sale-banner-title",
+  saleBannerText: "sale-banner-text",
+  saleFilters: "sale-filters",
+  saleFilterBtn: "sale-filter-btn",
+  saleFilterBtnActive: "sale-filter-btn-active",
+  saleFilterBtnIdle: "sale-filter-btn-idle",
+  saleGrid: "sale-grid",
+  saleCardWrap: "sale-card-wrap",
+  saleEmpty: "sale-empty",
+  pageSection: "page-section",
+  productPageBack: "product-page-back",
+  productPageLayout: "product-page-layout",
+  productPageImageWrap: "product-page-image-wrap",
+  productPageImage: "product-page-image",
+  productPageInfo: "product-page-info",
+  productPageCategory: "product-page-category",
+  productPageTitle: "product-page-title",
+  productPagePriceRow: "product-page-price-row",
+  productPageOldPrice: "product-page-old-price",
+  productPagePrice: "product-page-price",
+  productPageDiscount: "product-page-discount",
+  productPageDesc: "product-page-desc",
+  productPageSizeBlock: "product-page-size-block",
+  productPageSizeLabel: "product-page-size-label",
+  productPageSizeList: "product-page-size-list",
+  productPageSizeBtn: "product-page-size-btn",
+  productPageSizeBtnActive: "product-page-size-btn-active",
+  productPageAddBtn: "product-page-add-btn",
+  productPageAdded: "product-page-added",
+  productPageDetails: "product-page-details",
+  productPageAcc: "product-page-acc",
+  productPageAccBtn: "product-page-acc-btn",
+  productPageAccIcon: "product-page-acc-icon",
+  productPageAccBody: "product-page-acc-body",
+  authPasswordWrap: "auth-password-wrap",
+  authPasswordToggle: "auth-password-toggle",
+  cartPage: "cart-page",
+  cartPageHeader: "cart-page-header",
+  cartPageTitle: "cart-page-title",
+  cartPageSubtitle: "cart-page-subtitle",
+  cartPageEmpty: "cart-page-empty",
+  cartPageEmptyBtn: "cart-page-empty-btn",
+  cartPageLayout: "cart-page-layout",
+  cartPageItems: "cart-page-items",
+  cartPageItem: "cart-page-item",
+  cartPageItemRemoving: "cart-page-item-removing",
+  cartPageItemImage: "cart-page-item-image",
+  cartPageItemDetails: "cart-page-item-details",
+  cartPageItemName: "cart-page-item-name",
+  cartPageItemVariant: "cart-page-item-variant",
+  cartPageQty: "cart-page-qty",
+  cartPageQtyBtn: "cart-page-qty-btn",
+  cartPagePriceBox: "cart-page-price-box",
+  cartPagePrice: "cart-page-price",
+  cartPageEach: "cart-page-each",
+  cartPageRemove: "cart-page-remove",
+  cartPageSummary: "cart-page-summary",
+  cartPageSummaryTitle: "cart-page-summary-title",
+  cartPagePromoInput: "cart-page-promo-input",
+  cartPagePromoBtn: "cart-page-promo-btn",
+  cartPagePromoApplied: "cart-page-promo-applied",
+  cartPageRow: "cart-page-row",
+  cartPageRowDiscount: "cart-page-row-discount",
+  cartPageTotal: "cart-page-total",
+  cartPageCheckout: "cart-page-checkout",
+  cartPageHint: "cart-page-hint",
+  checkoutPage: "checkout-page",
+  checkoutBack: "checkout-back",
+  checkoutStep: "checkout-step",
+  checkoutTitle: "checkout-title",
+  checkoutProgress: "checkout-progress",
+  checkoutProgressItem: "checkout-progress-item",
+  checkoutProgressDot: "checkout-progress-dot",
+  checkoutProgressDotDone: "checkout-progress-dot-done",
+  checkoutProgressDotActive: "checkout-progress-dot-active",
+  checkoutProgressDotIdle: "checkout-progress-dot-idle",
+  checkoutProgressLabel: "checkout-progress-label",
+  checkoutProgressLabelActive: "checkout-progress-label-active",
+  checkoutProgressLabelIdle: "checkout-progress-label-idle",
+  checkoutProgressLine: "checkout-progress-line",
+  checkoutProgressLineDone: "checkout-progress-line-done",
+  checkoutProgressLineIdle: "checkout-progress-line-idle",
+  checkoutLayout: "checkout-layout",
+  checkoutMain: "checkout-main",
+  checkoutCard: "checkout-card",
+  checkoutCardTitle: "checkout-card-title",
+  checkoutFormGrid2: "checkout-form-grid-2",
+  checkoutTextarea: "checkout-textarea",
+  checkoutSummary: "checkout-summary",
+  checkoutSummaryTitle: "checkout-summary-title",
+  checkoutSummaryRow: "checkout-summary-row",
+  checkoutSummaryDiscount: "checkout-summary-discount",
+  checkoutSummaryTotal: "checkout-summary-total",
+  checkoutSubmit: "checkout-submit",
+  checkoutHint: "checkout-hint",
+  trackingPage: "tracking-page",
+  trackingTitle: "tracking-title",
+  trackingTimeline: "tracking-timeline",
+  trackingLineBg: "tracking-line-bg",
+  trackingLineProgress: "tracking-line-progress",
+  trackingStepList: "tracking-step-list",
+  trackingStepItem: "tracking-step-item",
+  trackingStepDot: "tracking-step-dot",
+  trackingStepDotDone: "tracking-step-dot-done",
+  trackingStepDotActive: "tracking-step-dot-active",
+  trackingStepDotIdle: "tracking-step-dot-idle",
+  trackingStepText: "tracking-step-text",
+  trackingStepLabel: "tracking-step-label",
+  trackingStepSub: "tracking-step-sub",
+  trackingCard: "tracking-card",
+  trackingCardTitle: "tracking-card-title",
+  trackingInfoGrid: "tracking-info-grid",
+  trackingInfoItem: "tracking-info-item",
+  trackingInfoLabel: "tracking-info-label",
+  trackingInfoValue: "tracking-info-value",
+  trackingHomeBtn: "tracking-home-btn",
+  storyHero: "story-hero",
+  storyHeroTitle: "story-hero-title",
+  storyHeroSubtitle: "story-hero-subtitle",
+  storySection: "story-section",
+  storySectionTitle: "story-section-title",
+  storyValuesGrid: "story-values-grid",
+  storyValueItem: "story-value-item",
+  storyValueIcon: "story-value-icon",
+  storyValueTitle: "story-value-title",
+  storyValueDesc: "story-value-desc",
+  storyTimelineSection: "story-timeline-section",
+  storyTimelineItem: "story-timeline-item",
+  storyTimelineYear: "story-timeline-year",
+  storyTimelineText: "story-timeline-text",
+  storyCtaSection: "story-cta-section",
+  storyCtaText: "story-cta-text",
+  storyCtaBtn: "story-cta-btn",
+  accountPage: "account-page",
+  accountTitle: "account-title",
+  accountSuccess: "account-success",
+  accountError: "account-error",
+  accountCard: "account-card",
+  accountSectionTitle: "account-section-title",
+  accountGrid2: "account-grid-2",
+  accountDivider: "account-divider",
+  accountPasswordWrap: "account-password-wrap",
+  accountPasswordToggle: "account-password-toggle",
+  accountSaveBtn: "account-save-btn",
+  accountSaveBtnLoading: "account-save-btn-loading",
+  accountSaveBtnReady: "account-save-btn-ready",
+  // ... giữ lại các preset cũ nếu cần
 };
 
 /* ── Composite Component Styles ── */
@@ -407,7 +610,7 @@ export const components = {
   },
 };
 
-export default {
+export const theme = {
   colors,
   gradients,
   shadows,
@@ -420,3 +623,5 @@ export default {
   tw,
   components,
 };
+
+export default theme;
