@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-//import ProductTable from "../../components/admin/ProductTable";
+import ProductTable from "../../components/admin/ProductTable";
 import ProductModal from "../../components/admin/ProductModal";
 import NotificationBell from "../../components/admin/NotificationBell";
 import { useNotification } from "../../context/NotificationContext";
