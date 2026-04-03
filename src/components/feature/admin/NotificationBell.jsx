@@ -1,4 +1,4 @@
 // NotificationBell feature component
-export default function NotificationBell(props) {
+export default function NotificationBell() {
   // ...original NotificationBell logic...
 }

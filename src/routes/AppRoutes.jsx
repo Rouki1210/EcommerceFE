@@ -3,7 +3,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
   useLocation,
 } from "react-router-dom";
 import Layout from "../components/feature/Layout";

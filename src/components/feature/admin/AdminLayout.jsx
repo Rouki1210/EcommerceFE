@@ -1,4 +1,4 @@
 // AdminLayout feature component
-export default function AdminLayout(props) {
+export default function AdminLayout() {
   // ...original AdminLayout logic...
 }

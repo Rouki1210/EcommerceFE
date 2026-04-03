@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Header from "../../components/feature/admin/Header";
-import { colors, shadows, keyframes } from "../../assets/theme/theme";
 
 function SettingRow({ label, desc, children }) {
   return (

@@ -1,4 +1,4 @@
 // Topproducts feature component
-export default function Topproducts(props) {
+export default function Topproducts() {
   // ...original Topproducts logic...
 }

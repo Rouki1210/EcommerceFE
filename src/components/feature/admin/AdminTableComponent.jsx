@@ -1,4 +1,4 @@
 // AdminTableComponent feature component
-export default function AdminTableComponent(props) {
+export default function AdminTableComponent() {
   // ...original AdminTableComponent logic...
 }

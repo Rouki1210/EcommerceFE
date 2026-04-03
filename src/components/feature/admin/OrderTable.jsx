@@ -1,4 +1,4 @@
 // OrderTable feature component
-export default function OrderTable(props) {
+export default function OrderTable() {
   // ...original OrderTable logic...
 }

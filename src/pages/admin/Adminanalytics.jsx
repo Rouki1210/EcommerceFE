@@ -14,7 +14,6 @@ import {
   Bar,
   Legend,
 } from "recharts";
-import { colors, shadows, keyframes } from "../../assets/theme/theme";
 
 const monthlyData = [
   { month: "Jan", revenue: 4000, orders: 40, users: 80 },

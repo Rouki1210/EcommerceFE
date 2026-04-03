@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAdmin } from "../../api/authApi";
-import { colors, keyframes } from "../../assets/theme/theme";
+import { keyframes } from "../../assets/theme/theme";
 import "../../assets/styles/admin.css";
 
 export default function AdminLogin() {

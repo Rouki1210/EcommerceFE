@@ -1,4 +1,4 @@
 // AdminForm feature component
-export default function AdminForm(props) {
+export default function AdminForm() {
   // ...original AdminForm logic...
 }

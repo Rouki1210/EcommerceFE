@@ -1,4 +1,4 @@
 // Producttable feature component
-export default function Producttable(props) {
+export default function Producttable() {
   // ...original Producttable logic...
 }

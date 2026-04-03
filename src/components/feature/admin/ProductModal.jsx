@@ -1,4 +1,4 @@
 // ProductModal feature component
-export default function ProductModal(props) {
+export default function ProductModal() {
   // ...original ProductModal logic...
 }
