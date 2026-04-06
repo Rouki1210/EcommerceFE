@@ -1,4 +1,5 @@
-// UploadImage feature component
-export default function UploadImage() {
-  // ...original UploadImage logic...
+import ImageUpload from "./ImageUpload";
+
+export default function UploadImage(props) {
+  return <ImageUpload {...props} />;
 }

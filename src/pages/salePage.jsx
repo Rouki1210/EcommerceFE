@@ -1,16 +1,32 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { useOutletContext } from "react-router-dom";
 import ProductCard from "../components/feature/ProductCard";
+import {
+  filterCatalogProducts,
+  useCatalogNumberParam,
+  useCatalogSearchAndCategory,
+} from "../hooks/useCatalogQueryState";
 import { useProducts } from "../hooks/useProducts";
 import { tw } from "../assets/theme/theme";
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
+import { cx } from "@lib/cx";
 
 const DISCOUNT_TIERS = [80, 90, 100];
+const SALE_CATEGORY_SCOPE = ["All"];
 
 export default function SalePage() {
-  const [selectedDiscount, setSelectedDiscount] = useState(null);
-  const navigate = useNavigate();
+  const { value: selectedDiscount, setValue: setSelectedDiscount } =
+    useCatalogNumberParam({
+      paramKey: "discount",
+      allowedValues: DISCOUNT_TIERS,
+      fallback: null,
+    });
+  const { normalizedQuery } = useCatalogSearchAndCategory({
+    categories: SALE_CATEGORY_SCOPE,
+    syncCategoryWithUrl: false,
+    syncSearchWithUrl: true,
+    searchParamKey: "q",
+  });
+  const { addToCart, openProductModal } = useOutletContext();
   const { products = [] } = useProducts();
 
   const saleProducts = useMemo(() => {
@@ -36,8 +52,17 @@ export default function SalePage() {
         return discountPercent >= selectedDiscount;
       });
     }
+
+    if (normalizedQuery) {
+      filtered = filterCatalogProducts(filtered, { normalizedQuery });
+    }
+
     return filtered;
-  }, [selectedDiscount, products]);
+  }, [selectedDiscount, products, normalizedQuery]);
+
+  const handleDiscountChange = (nextDiscount) => {
+    setSelectedDiscount(nextDiscount);
+  };
 
   const getTierBtnClassName = (value) =>
     cx(
@@ -58,7 +83,8 @@ export default function SalePage() {
 
       <div className={tw.saleFilters}>
         <button
-          onClick={() => setSelectedDiscount(null)}
+          type="button"
+          onClick={() => handleDiscountChange(null)}
           className={getTierBtnClassName(null)}
         >
           All Discounts
@@ -66,7 +92,8 @@ export default function SalePage() {
         {DISCOUNT_TIERS.map((d) => (
           <button
             key={d}
-            onClick={() => setSelectedDiscount(d)}
+            type="button"
+            onClick={() => handleDiscountChange(d)}
             className={getTierBtnClassName(d)}
           >
             {d}% and up
@@ -77,12 +104,12 @@ export default function SalePage() {
       {saleProducts.length > 0 ? (
         <div className={tw.saleGrid}>
           {saleProducts.map((product) => (
-            <div
-              key={product.id}
-              onClick={() => navigate(`/product/${product.id}`)}
-              className={tw.saleCardWrap}
-            >
-              <ProductCard product={product} />
+            <div key={product.id} className={tw.saleCardWrap}>
+              <ProductCard
+                product={product}
+                onAddToCart={addToCart}
+                onOpenQuickView={openProductModal}
+              />
             </div>
           ))}
         </div>

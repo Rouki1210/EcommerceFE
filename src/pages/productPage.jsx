@@ -13,8 +13,12 @@ export default function ProductPage() {
     () => products.find((p) => String(p.id) === String(id)),
     [products, id],
   );
-  const shippingThreshold =
-    import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD || 100;
+  const rawShippingThreshold = Number(
+    import.meta.env.VITE_REACT_APP_SHIPPING_THRESHOLD,
+  );
+  const shippingThreshold = Number.isFinite(rawShippingThreshold)
+    ? rawShippingThreshold
+    : 100;
 
   usePageTitle(product?.name || "Product");
 

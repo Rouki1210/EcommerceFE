@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SHIPPING_THRESHOLD } from "../data/constants";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { tw } from "../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const COUNTRIES = [
   "Vietnam",

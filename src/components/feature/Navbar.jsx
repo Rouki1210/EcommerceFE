@@ -1,11 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { UserDropdown } from "./user";
 import { useProducts } from "../../hooks/useProducts";
+import { useDismissibleLayer } from "../../hooks/useDismissibleLayer";
+import { useListKeyboardNavigation } from "../../hooks/useListKeyboardNavigation";
+import {
+  getCatalogSuggestions,
+  normalizeCatalogText,
+  useCatalogSearchAndCategory,
+} from "../../hooks/useCatalogQueryState";
 import { tw } from "../../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
+const SEARCHABLE_PATHS = new Set(["/", "/women", "/men", "/sale"]);
 
 function Highlight({ text, query }) {
   if (!query || !text) return <span>{text || ""}</span>;
@@ -29,15 +37,21 @@ export default function Navbar({
   onSearch,
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(-1);
   const inputRef = useRef(null);
   const wrapperRef = useRef(null);
+  const suggestionListboxId = useId();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { products } = useProducts();
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const isSearchableRoute = SEARCHABLE_PATHS.has(pathname);
+  const { query, setQuery } = useCatalogSearchAndCategory({
+    categories: ["All"],
+    syncCategoryWithUrl: false,
+    syncSearchWithUrl: isSearchableRoute,
+    searchParamKey: "q",
+  });
 
   const NAV_LINKS = [
     { label: "New Arrivals", to: "/" },
@@ -46,32 +60,34 @@ export default function Navbar({
     { label: "Sale", to: "/sale" },
   ];
 
-  const q = query.trim().toLowerCase();
-  const suggestions = q
-    ? products
-        .filter(
-          (p) =>
-            p.name.toLowerCase().includes(q) ||
-            (typeof p.category === "object" ? p.category?.name : p.category)
-              ?.toLowerCase()
-              .includes(q) ||
-            (p.variant || "").toLowerCase().includes(q),
-        )
-        .slice(0, 6)
-    : [];
+  const q = normalizeCatalogText(query);
+  const suggestions = useMemo(
+    () => getCatalogSuggestions(products, q, 6),
+    [products, q],
+  );
+  const {
+    activeIndex,
+    setActiveIndex,
+    resetActiveIndex,
+    handleArrowNavigation,
+    jumpToFirst,
+    jumpToLast,
+  } = useListKeyboardNavigation({
+    itemCount: suggestions.length,
+  });
 
   const showDropdown = expanded && focused && query.trim().length > 0;
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setFocused(false);
-        setActiveIdx(-1);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  useDismissibleLayer({
+    isOpen: expanded || focused,
+    onDismiss: () => {
+      setFocused(false);
+      resetActiveIndex();
+    },
+    closeOnEscape: false,
+    closeOnOutsidePress: true,
+    outsidePressRef: wrapperRef,
+  });
 
   const openSearch = () => {
     setExpanded(true);
@@ -82,19 +98,21 @@ export default function Navbar({
     setExpanded(false);
     setQuery("");
     setFocused(false);
-    setActiveIdx(-1);
+    resetActiveIndex();
     onSearch?.("");
   };
 
   const handleChange = (e) => {
-    setQuery(e.target.value);
-    setActiveIdx(-1);
-    onSearch?.(e.target.value);
+    const nextValue = e.target.value;
+    setQuery(nextValue);
+    resetActiveIndex();
+    onSearch?.(nextValue);
   };
 
   const selectSuggestion = (product) => {
     setQuery("");
     setFocused(false);
+    setExpanded(false);
     navigate(`/product/${product.id}`);
   };
 
@@ -105,15 +123,46 @@ export default function Navbar({
     }
     if (!showDropdown) return;
 
-    if (e.key === "ArrowDown") {
+    if (handleArrowNavigation(e)) {
+      return;
+    }
+
+    if (e.key === "Home") {
       e.preventDefault();
-      setActiveIdx((i) => Math.min(i + 1, suggestions.length - 1));
-    } else if (e.key === "ArrowUp") {
+      jumpToFirst();
+      return;
+    }
+
+    if (e.key === "End") {
       e.preventDefault();
-      setActiveIdx((i) => Math.max(i - 1, -1));
-    } else if (e.key === "Enter" && activeIdx >= 0) {
+      jumpToLast();
+      return;
+    }
+
+    if (e.key === "Enter" && activeIndex >= 0) {
       e.preventDefault();
-      selectSuggestion(suggestions[activeIdx]);
+      const activeSuggestion = suggestions[activeIndex];
+      if (!activeSuggestion) {
+        return;
+      }
+
+      selectSuggestion(activeSuggestion);
+    } else if (e.key === "Enter") {
+      const trimmedQuery = query.trim();
+      if (!trimmedQuery) return;
+
+      e.preventDefault();
+      setFocused(false);
+      setExpanded(false);
+
+      if (isSearchableRoute) {
+        setQuery(trimmedQuery, { replace: false });
+      } else {
+        navigate({
+          pathname: "/",
+          search: `?q=${encodeURIComponent(trimmedQuery)}`,
+        });
+      }
     }
   };
 
@@ -140,7 +189,11 @@ export default function Navbar({
   return (
     <nav className={tw.navbar}>
       <div className={tw.navbarContainer}>
-        <button onClick={onLogoClick} className={tw.navbarLogoLink}>
+        <button
+          type="button"
+          onClick={onLogoClick}
+          className={tw.navbarLogoLink}
+        >
           <span className={tw.navbarLogoDot} />
           <span className={cx("heading", tw.navbarLogoText)}>Maison</span>
         </button>
@@ -165,6 +218,7 @@ export default function Navbar({
           <div className={tw.navbarSearchWrap} ref={wrapperRef}>
             <div className={searchShellClassName}>
               <button
+                type="button"
                 onClick={expanded ? closeSearch : openSearch}
                 className={tw.navbarIconBtn}
                 aria-label={expanded ? "Close search" : "Open search"}
@@ -205,6 +259,15 @@ export default function Navbar({
                 placeholder="Search products..."
                 className={searchInputClassName}
                 autoComplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={showDropdown}
+                aria-controls={suggestionListboxId}
+                aria-activedescendant={
+                  activeIndex >= 0 && suggestions[activeIndex]
+                    ? `${suggestionListboxId}-option-${activeIndex}`
+                    : undefined
+                }
               />
             </div>
 
@@ -219,15 +282,20 @@ export default function Navbar({
                       </p>
                     </div>
 
-                    <ul>
+                    <ul id={suggestionListboxId} role="listbox">
                       {suggestions.map((product, i) => (
                         <li key={product.id}>
                           <button
+                            id={`${suggestionListboxId}-option-${i}`}
+                            type="button"
+                            role="option"
+                            aria-selected={activeIndex === i}
                             onMouseDown={() => selectSuggestion(product)}
-                            onMouseEnter={() => setActiveIdx(i)}
+                            onMouseEnter={() => setActiveIndex(i)}
                             className={cx(
                               tw.navbarSuggestionItem,
-                              activeIdx === i && tw.navbarSuggestionItemActive,
+                              activeIndex === i &&
+                                tw.navbarSuggestionItemActive,
                             )}
                           >
                             <img
@@ -316,7 +384,11 @@ export default function Navbar({
             </Link>
           )}
 
-          <button onClick={onCartOpen} className={tw.navbarCartBtn}>
+          <button
+            type="button"
+            onClick={onCartOpen}
+            className={tw.navbarCartBtn}
+          >
             <svg
               width="14"
               height="14"

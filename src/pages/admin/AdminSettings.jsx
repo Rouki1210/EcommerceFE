@@ -1,5 +1,9 @@
 import { useState } from "react";
 import Header from "../../components/feature/admin/Header";
+import {
+  ADMIN_ACCENT_GRADIENT_STYLE,
+  ADMIN_PRIMARY_SHADOW_BUTTON_CLASS,
+} from "../../components/feature/admin/adminToolbarPresets";
 
 function SettingRow({ label, desc, children }) {
   return (
@@ -31,7 +35,7 @@ function Toggle({ value, onChange }) {
 const inputCls =
   "w-full bg-slate-50 border border-black/[0.08] rounded-lg px-3.5 py-2.5 text-slate-900 text-[13px] outline-none focus:border-yellow-400 transition-colors";
 
-export default function Adminsettings() {
+export default function AdminSettings() {
   const [profile, setProfile] = useState({
     name: "Admin User",
     email: "admin@shop.com",
@@ -74,9 +78,7 @@ export default function Adminsettings() {
           <div className="flex items-center gap-4 mb-6">
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black text-black shadow-lg shadow-yellow-400/30"
-              style={{
-                background: "linear-gradient(135deg, #eab308, #f59e0b)",
-              }}
+              style={ADMIN_ACCENT_GRADIENT_STYLE}
             >
               A
             </div>
@@ -197,12 +199,12 @@ export default function Adminsettings() {
           className={`text-[13px] font-bold px-8 py-3 rounded-xl cursor-pointer tracking-wide transition-all duration-300 border ${
             saved
               ? "bg-emerald-400/15 border-emerald-400 text-emerald-500 shadow-none"
-              : "border-transparent text-black shadow-lg shadow-yellow-400/30 hover:shadow-yellow-400/50"
+              : ADMIN_PRIMARY_SHADOW_BUTTON_CLASS
           }`}
           style={{
             background: saved
               ? undefined
-              : "linear-gradient(135deg, #eab308, #f59e0b)",
+              : ADMIN_ACCENT_GRADIENT_STYLE.background,
           }}
         >
           {saved ? "✓ Saved!" : "Save Changes"}

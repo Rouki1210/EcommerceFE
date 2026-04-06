@@ -1,6 +1,6 @@
 import { tw } from "../../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function EditorialBanner({ onCtaClick }) {
   return (

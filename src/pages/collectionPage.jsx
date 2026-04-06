@@ -1,28 +1,51 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
 import ProductCard from "../components/feature/ProductCard";
+import {
+  filterCatalogProducts,
+  getCatalogCategoriesFromProducts,
+  useCatalogSearchAndCategory,
+} from "../hooks/useCatalogQueryState";
 import { useProducts } from "../hooks/useProducts";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { tw } from "../assets/theme/theme";
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
+import { cx } from "@lib/cx";
 
 export default function CollectionPage({ gender, title, subtitle }) {
   usePageTitle(title);
-  const { addToCart } = useOutletContext();
+  const { addToCart, openProductModal } = useOutletContext();
   const { products } = useProducts();
 
-  const baseProducts = products.filter(
-    (p) => p.gender === gender || p.gender === "unisex",
+  const baseProducts = useMemo(
+    () => products.filter((p) => p.gender === gender || p.gender === "unisex"),
+    [gender, products],
   );
 
-  const categories = ["All", ...new Set(baseProducts.map((p) => p.category))];
-  const [activeCategory, setActiveCategory] = useState("All");
+  const categories = useMemo(
+    () => getCatalogCategoriesFromProducts(baseProducts),
+    [baseProducts],
+  );
 
-  const filtered =
-    activeCategory === "All"
-      ? baseProducts
-      : baseProducts.filter((p) => p.category === activeCategory);
+  const { activeCategory, setActiveCategory, normalizedQuery } =
+    useCatalogSearchAndCategory({
+      categories,
+      initialCategory: "All",
+      syncSearchWithUrl: true,
+      syncCategoryWithUrl: true,
+      searchParamKey: "q",
+      categoryParamKey: "category",
+    });
+
+  const filtered = useMemo(() => {
+    return filterCatalogProducts(baseProducts, {
+      activeCategory,
+      normalizedQuery,
+    });
+  }, [activeCategory, baseProducts, normalizedQuery]);
+
+  const handleCategoryChange = (nextCategory) => {
+    setActiveCategory(nextCategory);
+  };
 
   const getFilterBtnClassName = (cat) =>
     cx(
@@ -72,7 +95,8 @@ export default function CollectionPage({ gender, title, subtitle }) {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                type="button"
+                onClick={() => handleCategoryChange(cat)}
                 className={getFilterBtnClassName(cat)}
               >
                 {cat}
@@ -87,6 +111,7 @@ export default function CollectionPage({ gender, title, subtitle }) {
                 key={product.id}
                 product={product}
                 onAddToCart={addToCart}
+                onOpenQuickView={openProductModal}
               />
             ))}
           </div>

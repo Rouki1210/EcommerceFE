@@ -1,6 +1,6 @@
 import { tw } from "../../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function CartItem({ item, onUpdateQty, onRemove, isRemoving }) {
   const rowClassName = cx(tw.cartItemRoot, isRemoving && tw.cartItemRemoving);

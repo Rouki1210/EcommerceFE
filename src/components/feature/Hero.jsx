@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { tw } from "../../assets/theme/theme";
 import HeroModelCard from "../base/HeroModelCard";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const HERO_MODEL_IMAGES = {
   primary:

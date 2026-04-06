@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { cx } from "@lib/cx";
 import {
   Box,
   Button,
@@ -9,8 +10,6 @@ import {
   OrderTrackingTimeline,
   tw,
 } from "../assets/theme/theme";
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const TRACKING_STEPS = [
   { label: "Order Placed", icon: "✓", sub: "We've received your order" },

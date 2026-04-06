@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SHIPPING_THRESHOLD } from "../data/constants";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { cx } from "@lib/cx";
+import {
+  calculateCartPricing,
+  getCartItemLineTotal,
+  getCartItemUnitPrice,
+  isValidPromoCode,
+} from "../lib/cartPricing";
 import {
   selectCartItems,
   updateQty,
   removeItem,
 } from "../features/cart/cartSlice";
 import { tw } from "../assets/theme/theme";
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function ShoppingCart() {
   const navigate = useNavigate();
@@ -25,23 +30,27 @@ export default function ShoppingCart() {
     state?.promoApplied ?? false,
   );
   const [removingId, setRemovingId] = useState(null);
+  const removeTimeoutRef = useRef(null);
 
-  const calculatePricing = () => {
-    const subtotal = cart.reduce(
-      (sum, item) => sum + parseFloat(item.price || 0) * item.qty,
-      0,
-    );
-    const shippingThreshold = SHIPPING_THRESHOLD || 100;
-    const shipping = subtotal >= shippingThreshold ? 0 : 15;
-    const discount = promoApplied ? subtotal * 0.1 : 0;
-    const total = subtotal - discount + shipping;
-    return { subtotal, shipping, discount, total, promoApplied };
-  };
+  useEffect(() => {
+    return () => {
+      if (removeTimeoutRef.current) {
+        clearTimeout(removeTimeoutRef.current);
+      }
+    };
+  }, []);
 
-  const pricing = calculatePricing();
+  const pricing = useMemo(
+    () =>
+      calculateCartPricing(cart, {
+        promoApplied,
+        shippingThreshold: SHIPPING_THRESHOLD,
+      }),
+    [cart, promoApplied],
+  );
 
   const handleApplyPromo = () => {
-    if (promoCode.toLowerCase() === "save10") {
+    if (isValidPromoCode(promoCode)) {
       setPromoApplied(true);
     }
   };
@@ -59,8 +68,15 @@ export default function ShoppingCart() {
   };
 
   const handleRemove = (id) => {
+    if (removeTimeoutRef.current) {
+      clearTimeout(removeTimeoutRef.current);
+    }
+
     setRemovingId(id);
-    setTimeout(() => dispatch(removeItem(id)), 350);
+    removeTimeoutRef.current = setTimeout(() => {
+      dispatch(removeItem(id));
+      removeTimeoutRef.current = null;
+    }, 350);
   };
 
   const promoBtnClassName = cx(
@@ -135,11 +151,11 @@ export default function ShoppingCart() {
 
                       <div className={tw.cartPagePriceBox}>
                         <p className={tw.cartPagePrice}>
-                          ${(parseFloat(item.price || 0) * item.qty).toFixed(2)}
+                          ${getCartItemLineTotal(item).toFixed(2)}
                         </p>
                         {item.qty > 1 && (
                           <p className={tw.cartPageEach}>
-                            ${parseFloat(item.price || 0).toFixed(2)} each
+                            ${getCartItemUnitPrice(item).toFixed(2)} each
                           </p>
                         )}
                       </div>

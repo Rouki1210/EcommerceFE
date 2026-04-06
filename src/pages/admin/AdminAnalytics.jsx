@@ -85,7 +85,7 @@ const summaryStats = [
   },
 ];
 
-export default function Adminanalytics() {
+export default function AdminAnalytics() {
   return (
     <div className="flex flex-col gap-6 animate-[fadeSlideUp_0.5s_ease_both]">
       <Header title="Analytics" subtitle="Insights" />

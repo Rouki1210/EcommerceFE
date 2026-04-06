@@ -19,9 +19,14 @@ export function useCart() {
   const toastMsg = useSelector(selectToastMsg);
 
   useEffect(() => {
+    if (!toastMsg) {
+      return undefined;
+    }
+
     const timer = setTimeout(() => {
-      if (toastMsg) dispatch(clearToast());
+      dispatch(clearToast());
     }, 2200);
+
     return () => clearTimeout(timer);
   }, [toastMsg, dispatch]);
 

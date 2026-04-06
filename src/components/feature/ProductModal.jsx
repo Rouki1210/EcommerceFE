@@ -1,43 +1,119 @@
-import { useEffect, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { tw } from "../../assets/theme/theme";
+import AccordionItem from "../base/AccordionItem";
 import ProductPriceRow from "../base/ProductPriceRow";
 import ProductSizeSelector from "../base/ProductSizeSelector";
+import { cx } from "@lib/cx";
+import { useDismissibleLayer } from "../../hooks/useDismissibleLayer";
 import {
   PRODUCT_UI_COPY,
   buildVariantWithSize,
   getCategoryLabel,
 } from "../base/productUiConfig";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
-
-export default function ProductModal({ product, onClose, onAddToCart }) {
+const ProductModal = forwardRef(function ProductModal(
+  {
+    product,
+    onClose,
+    onAddToCart,
+    isOpen = true,
+    closeOnBackdrop = true,
+    closeOnEscape = true,
+    closeOnAddToCart = false,
+    addToCartNoticeTimeout = 2000,
+  },
+  ref,
+) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
   const [careOpen, setCareOpen] = useState(false);
   const [added, setAdded] = useState(false);
+  const dialogRef = useRef(null);
+  const addNoticeTimeoutRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const titleId = useId();
+  const descriptionId = useId();
+
+  const requestClose = useCallback(() => {
+    onClose?.();
+  }, [onClose]);
+
+  const setDialogRefs = useCallback(
+    (node) => {
+      dialogRef.current = node;
+
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref && typeof ref === "object") {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
+  useDismissibleLayer({
+    isOpen: isOpen && Boolean(product),
+    onDismiss: requestClose,
+    closeOnEscape,
+    closeOnOutsidePress: closeOnBackdrop,
+    outsidePressRef: dialogRef,
+    lockBodyScroll: true,
+    initialFocusRef: closeButtonRef,
+  });
 
   useEffect(() => {
-    if (product?.sizes?.length) setSelectedSize(product.sizes[0]);
-    const handler = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handler);
-      document.body.style.overflow = "";
-    };
-  }, [onClose, product]);
+    if (Array.isArray(product?.sizes) && product.sizes.length > 0) {
+      setSelectedSize(product.sizes[0]);
+      return;
+    }
 
-  if (!product) return null;
+    setSelectedSize(null);
+  }, [product?.id, product?.sizes]);
+
+  useEffect(() => {
+    setSizeChartOpen(false);
+    setCareOpen(false);
+    setAdded(false);
+  }, [product?.id]);
+
+  useEffect(() => {
+    return () => {
+      if (addNoticeTimeoutRef.current) {
+        clearTimeout(addNoticeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (!isOpen || !product) return null;
 
   const careSteps = product.care ? product.care.split(" · ") : [];
 
   const handleAddToCart = () => {
+    if (typeof onAddToCart !== "function") return;
+
     const updatedVariant = buildVariantWithSize(product, selectedSize);
     onAddToCart({ ...product, variant: updatedVariant, selectedSize });
+
+    if (addNoticeTimeoutRef.current) {
+      clearTimeout(addNoticeTimeoutRef.current);
+    }
+
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    addNoticeTimeoutRef.current = setTimeout(
+      () => setAdded(false),
+      addToCartNoticeTimeout,
+    );
+
+    if (closeOnAddToCart) {
+      requestClose();
+    }
   };
 
   const categoryLabel = getCategoryLabel(product.category);
@@ -45,14 +121,21 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
   const sizeChart = product.sizeChart;
 
   return (
-    <div className={tw.productModalBackdrop} onClick={onClose}>
+    <div className={tw.productModalBackdrop} aria-hidden="true">
       <div
+        ref={setDialogRefs}
         className={tw.productModalDialog}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
       >
         <button
+          ref={closeButtonRef}
+          type="button"
           className={tw.productModalClose}
-          onClick={onClose}
+          onClick={requestClose}
           aria-label="Close"
         >
           ×
@@ -68,7 +151,7 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
         <div className={tw.productModalContent}>
           <p className={tw.productModalCategory}>{categoryLabel}</p>
-          <h2 className={cx("heading", tw.productModalTitle)}>
+          <h2 id={titleId} className={cx("heading", tw.productModalTitle)}>
             {product.name}
           </h2>
 
@@ -82,7 +165,9 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
             currentFirst
           />
 
-          <p className={tw.productModalDesc}>{product.description}</p>
+          <p id={descriptionId} className={tw.productModalDesc}>
+            {product.description}
+          </p>
 
           <ProductSizeSelector
             label={PRODUCT_UI_COPY.selectSizeLabel}
@@ -97,12 +182,14 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
 
           <div className={tw.productModalActions}>
             <button
+              type="button"
               className={tw.productModalActionGhost}
               onClick={() => setSizeChartOpen((prev) => !prev)}
             >
               {sizeChartOpen ? "Hide size chart" : "Size chart"}
             </button>
             <button
+              type="button"
               className={tw.productModalActionPrimary}
               onClick={handleAddToCart}
             >
@@ -113,85 +200,80 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           </div>
 
           {added && (
-            <div className={tw.productModalNotice}>
+            <div
+              className={tw.productModalNotice}
+              role="status"
+              aria-live="polite"
+            >
               Item has been added to your cart.
             </div>
           )}
 
           <div className={tw.productModalAccordions}>
-            <div className={tw.productModalAccordion}>
-              <button
-                className={tw.productModalAccordionHead}
-                onClick={() => setSizeChartOpen((prev) => !prev)}
-              >
-                <span>Size chart</span>
-                <span>{sizeChartOpen ? "−" : "+"}</span>
-              </button>
-              {sizeChartOpen && (
-                <div className={tw.productModalAccordionBody}>
-                  {sizeChart?.headers?.length ? (
-                    <div className={tw.productModalTableWrap}>
-                      <table className={tw.productModalTable}>
-                        <thead className={tw.productModalTableHead}>
-                          <tr>
-                            {sizeChart.headers.map((header) => (
-                              <th
-                                key={header}
-                                className={tw.productModalTableCell}
-                              >
-                                {header}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {sizeChart.rows?.map((row, idx) => (
-                            <tr key={`${row[0]}-${idx}`}>
-                              {row.map((cell) => (
-                                <td
-                                  key={`${row[0]}-${cell}`}
-                                  className={tw.productModalTableCell}
-                                >
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
+            <AccordionItem
+              title="Size chart"
+              isOpen={sizeChartOpen}
+              onOpenChange={setSizeChartOpen}
+              rootClassName={tw.productModalAccordion}
+              buttonClassName={tw.productModalAccordionHead}
+              bodyClassName={tw.productModalAccordionBody}
+            >
+              {sizeChart?.headers?.length ? (
+                <div className={tw.productModalTableWrap}>
+                  <table className={tw.productModalTable}>
+                    <thead className={tw.productModalTableHead}>
+                      <tr>
+                        {sizeChart.headers.map((header) => (
+                          <th key={header} className={tw.productModalTableCell}>
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sizeChart.rows?.map((row, idx) => (
+                        <tr key={`${row[0]}-${idx}`}>
+                          {row.map((cell) => (
+                            <td
+                              key={`${row[0]}-${cell}`}
+                              className={tw.productModalTableCell}
+                            >
+                              {cell}
+                            </td>
                           ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  ) : (
-                    <p>Size details are currently unavailable.</p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className={tw.productModalAccordion}>
-              <button
-                className={tw.productModalAccordionHead}
-                onClick={() => setCareOpen((prev) => !prev)}
-              >
-                <span>Care instructions</span>
-                <span>{careOpen ? "−" : "+"}</span>
-              </button>
-              {careOpen && (
-                <div className={tw.productModalAccordionBody}>
-                  {careSteps.length > 0 ? (
-                    <ul>
-                      {careSteps.map((step) => (
-                        <li key={step}>• {step}</li>
+                        </tr>
                       ))}
-                    </ul>
-                  ) : (
-                    <p>No care notes available.</p>
-                  )}
+                    </tbody>
+                  </table>
                 </div>
+              ) : (
+                <p>Size details are currently unavailable.</p>
               )}
-            </div>
+            </AccordionItem>
+
+            <AccordionItem
+              title="Care instructions"
+              isOpen={careOpen}
+              onOpenChange={setCareOpen}
+              rootClassName={tw.productModalAccordion}
+              buttonClassName={tw.productModalAccordionHead}
+              bodyClassName={tw.productModalAccordionBody}
+            >
+              {careSteps.length > 0 ? (
+                <ul>
+                  {careSteps.map((step) => (
+                    <li key={step}>• {step}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No care notes available.</p>
+              )}
+            </AccordionItem>
           </div>
         </div>
       </div>
     </div>
   );
-}
+});
+
+export default ProductModal;

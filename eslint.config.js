@@ -51,74 +51,149 @@ export default defineConfig([
         },
       ],
       eqeqeq: "error",
-      "boundaries/element-types": [
+      "boundaries/dependencies": [
         "error",
         {
           default: "disallow",
           rules: [
             {
-              from: "routes",
-              allow: [
-                "routes",
-                "pages",
-                "components",
-                "hooks",
-                "context",
-                "assets",
-              ],
+              from: { type: "routes" },
+              allow: {
+                to: {
+                  type: [
+                    "routes",
+                    "pages",
+                    "components",
+                    "hooks",
+                    "context",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "pages",
-              allow: [
-                "pages",
-                "components",
-                "hooks",
-                "features",
-                "api",
-                "data",
-                "context",
-                "assets",
-              ],
+              from: { type: "pages" },
+              allow: {
+                to: {
+                  type: [
+                    "pages",
+                    "components",
+                    "hooks",
+                    "features",
+                    "api",
+                    "data",
+                    "context",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "components",
-              allow: [
-                "components",
-                "hooks",
-                "features",
-                "api",
-                "data",
-                "context",
-                "assets",
-              ],
+              from: { type: "components" },
+              allow: {
+                to: {
+                  type: [
+                    "components",
+                    "hooks",
+                    "features",
+                    "api",
+                    "data",
+                    "context",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "hooks",
-              allow: ["hooks", "features", "api", "data", "context", "assets"],
+              from: { type: "hooks" },
+              allow: {
+                to: {
+                  type: [
+                    "hooks",
+                    "features",
+                    "api",
+                    "data",
+                    "context",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "features",
-              allow: ["features", "api", "data", "assets"],
+              from: { type: "features" },
+              allow: {
+                to: {
+                  type: ["features", "api", "data", "assets", "lib"],
+                },
+              },
             },
             {
-              from: "context",
-              allow: ["context", "features", "hooks", "api", "data", "assets"],
+              from: { type: "context" },
+              allow: {
+                to: {
+                  type: [
+                    "context",
+                    "features",
+                    "hooks",
+                    "api",
+                    "data",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "app",
-              allow: ["app", "features", "hooks", "context", "api", "assets"],
+              from: { type: "app" },
+              allow: {
+                to: {
+                  type: [
+                    "app",
+                    "features",
+                    "hooks",
+                    "context",
+                    "api",
+                    "assets",
+                    "lib",
+                  ],
+                },
+              },
             },
             {
-              from: "data",
-              allow: ["data", "assets"],
+              from: { type: "data" },
+              allow: {
+                to: {
+                  type: ["data", "assets", "lib"],
+                },
+              },
             },
             {
-              from: "api",
-              allow: ["api", "assets"],
+              from: { type: "api" },
+              allow: {
+                to: {
+                  type: ["api", "assets", "lib"],
+                },
+              },
             },
             {
-              from: "assets",
-              allow: ["assets", "components"],
+              from: { type: "assets" },
+              allow: {
+                to: {
+                  type: ["assets", "components", "lib"],
+                },
+              },
+            },
+            {
+              from: { type: "lib" },
+              allow: {
+                to: {
+                  type: ["lib", "assets"],
+                },
+              },
             },
           ],
         },
@@ -135,6 +210,7 @@ export default defineConfig([
         { type: "components", pattern: "src/components/**" },
         { type: "features", pattern: "src/features/**" },
         { type: "hooks", pattern: "src/hooks/**" },
+        { type: "lib", pattern: "src/lib/**" },
         { type: "context", pattern: "src/context/**" },
         { type: "api", pattern: "src/api/**" },
         { type: "data", pattern: "src/data/**" },

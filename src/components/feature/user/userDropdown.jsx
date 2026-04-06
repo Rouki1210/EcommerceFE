@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../features/auth/authSlice";
+import { useDismissibleLayer } from "../../../hooks/useDismissibleLayer";
+import { useListKeyboardNavigation } from "../../../hooks/useListKeyboardNavigation";
 import { tw } from "../../../assets/theme/theme";
 
 export default function UserDropdown() {
@@ -10,6 +12,49 @@ export default function UserDropdown() {
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const firstMenuItemRef = useRef(null);
+  const ordersMenuItemRef = useRef(null);
+  const logoutMenuItemRef = useRef(null);
+  const menuId = useId();
+  const {
+    activeIndex,
+    setActiveIndex,
+    resetActiveIndex,
+    handleArrowNavigation,
+    jumpToFirst,
+    jumpToLast,
+  } = useListKeyboardNavigation({ itemCount: 3 });
+  const closeMenu = useCallback(() => {
+    setOpen(false);
+    resetActiveIndex();
+  }, [resetActiveIndex]);
+
+  useDismissibleLayer({
+    isOpen: open,
+    onDismiss: closeMenu,
+    initialFocusRef: firstMenuItemRef,
+    closeOnOutsidePress: true,
+    outsidePressRef: dropdownRef,
+  });
+
+  const focusMenuItem = useCallback((index) => {
+    const refs = [firstMenuItemRef, ordersMenuItemRef, logoutMenuItemRef];
+    refs[index]?.current?.focus?.();
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      jumpToFirst();
+    }
+  }, [open, jumpToFirst]);
+
+  useEffect(() => {
+    if (!open || activeIndex < 0) {
+      return;
+    }
+
+    focusMenuItem(activeIndex);
+  }, [open, activeIndex, focusMenuItem]);
 
   // Lấy chữ cái đầu để hiển thị avatar
   const initials = user
@@ -20,34 +65,44 @@ export default function UserDropdown() {
     ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()
     : "";
 
-  // Đóng dropdown khi click ra ngoài
-  useEffect(() => {
-    const handler = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
   const handleLogout = () => {
     dispatch(logout());
-    setOpen(false);
+    closeMenu();
     navigate("/");
   };
 
   const goTo = (path) => {
-    setOpen(false);
+    closeMenu();
     navigate(path);
+  };
+
+  const handleMenuKeyDown = (event) => {
+    if (handleArrowNavigation(event)) {
+      return;
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault();
+      jumpToFirst();
+      return;
+    }
+
+    if (event.key === "End") {
+      event.preventDefault();
+      jumpToLast();
+    }
   };
 
   return (
     <div className={tw.userMenuRoot} ref={dropdownRef}>
       <button
+        type="button"
         onClick={() => setOpen((prev) => !prev)}
         className={tw.userMenuAvatar}
         aria-label="Account menu"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={menuId}
         title={fullName}
       >
         {initials}
@@ -55,9 +110,15 @@ export default function UserDropdown() {
 
       {open && (
         <>
-          <div className={tw.userMenuBackdrop} onClick={() => setOpen(false)} />
+          <div className={tw.userMenuBackdrop} aria-hidden="true" />
 
-          <div className={tw.userMenuPanel}>
+          <div
+            id={menuId}
+            className={tw.userMenuPanel}
+            role="menu"
+            aria-label="Account options"
+            onKeyDown={handleMenuKeyDown}
+          >
             <div className={tw.userMenuHeader}>
               <div className={tw.userMenuHeaderRow}>
                 <div className={tw.userMenuAvatarLg}>{initials}</div>
@@ -70,16 +131,22 @@ export default function UserDropdown() {
 
             <div className={tw.userMenuBody}>
               <button
+                ref={firstMenuItemRef}
                 type="button"
                 onClick={() => goTo("/profile")}
+                onMouseEnter={() => setActiveIndex(0)}
                 className={tw.userMenuItem}
+                role="menuitem"
               >
                 Account settings
               </button>
               <button
+                ref={ordersMenuItemRef}
                 type="button"
                 onClick={() => goTo("/orders")}
+                onMouseEnter={() => setActiveIndex(1)}
                 className={tw.userMenuItem}
+                role="menuitem"
               >
                 My orders
               </button>
@@ -87,9 +154,12 @@ export default function UserDropdown() {
 
             <div className={tw.userMenuFooter}>
               <button
+                ref={logoutMenuItemRef}
                 type="button"
                 onClick={handleLogout}
+                onMouseEnter={() => setActiveIndex(2)}
                 className={tw.userMenuLogout}
+                role="menuitem"
               >
                 Log out
               </button>

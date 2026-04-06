@@ -1,46 +1,80 @@
-import { useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { SHIPPING_THRESHOLD } from "../../data/constants";
 import CardItem from "./CardItem";
 import { tw } from "../../assets/theme/theme";
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
+import { cx } from "@lib/cx";
+import { useDismissibleLayer } from "../../hooks/useDismissibleLayer";
+import {
+  calculateCartPricing,
+  getCartItemCount,
+  getFreeShippingProgress,
+  isValidPromoCode,
+} from "../../lib/cartPricing";
 
 function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [removingId, setRemovingId] = useState(null);
+  const drawerRef = useRef(null);
+  const removeTimeoutRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const dialogTitleId = useId();
+
+  useDismissibleLayer({
+    isOpen: true,
+    onDismiss: onClose,
+    lockBodyScroll: true,
+    initialFocusRef: closeButtonRef,
+    closeOnOutsidePress: true,
+    outsidePressRef: drawerRef,
+  });
+
+  useEffect(() => {
+    return () => {
+      if (removeTimeoutRef.current) {
+        clearTimeout(removeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleRemove = (id) => {
+    if (removeTimeoutRef.current) {
+      clearTimeout(removeTimeoutRef.current);
+    }
+
     setRemovingId(id);
-    setTimeout(() => {
+    removeTimeoutRef.current = setTimeout(() => {
       onRemoveItem(id);
       setRemovingId(null);
+      removeTimeoutRef.current = null;
     }, 350);
   };
 
   const applyPromo = () => {
-    if (promoCode.toUpperCase() === "SAVE10") setPromoApplied(true);
+    if (isValidPromoCode(promoCode)) setPromoApplied(true);
   };
 
-  const subtotal = cart.reduce(
-    (s, i) => s + parseFloat(i.price || 0) * i.qty,
-    0,
+  const pricing = useMemo(
+    () =>
+      calculateCartPricing(cart, {
+        promoApplied,
+        shippingThreshold: SHIPPING_THRESHOLD,
+      }),
+    [cart, promoApplied],
   );
-  const discount = promoApplied ? subtotal * 0.1 : 0;
-  const shipping = subtotal >= SHIPPING_THRESHOLD ? 0 : 15;
-  const total = subtotal - discount + shipping;
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-  const progressPct = Math.min((subtotal / SHIPPING_THRESHOLD) * 100, 100);
-  const remainingForFreeShipping = Math.max(SHIPPING_THRESHOLD - subtotal, 0);
+  const cartCount = useMemo(() => getCartItemCount(cart), [cart]);
+  const { progressPct, remainingForFreeShipping } = useMemo(
+    () =>
+      getFreeShippingProgress(pricing.subtotal, {
+        shippingThreshold: SHIPPING_THRESHOLD,
+      }),
+    [pricing.subtotal],
+  );
 
   const handleCheckout = () => {
     onCheckout({
       cart,
-      subtotal,
-      discount,
-      shipping,
-      total,
-      promoApplied,
+      ...pricing,
       promoCode,
     });
   };
@@ -52,14 +86,22 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
 
   return (
     <>
-      <div className={tw.cartPanelBackdrop} onClick={onClose} />
+      <div className={tw.cartPanelBackdrop} aria-hidden="true" />
 
-      <aside className={tw.cartPanelDrawer}>
+      <aside
+        ref={drawerRef}
+        className={tw.cartPanelDrawer}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={dialogTitleId}
+      >
         <header className={tw.cartPanelHeader}>
-          <h3 className={cx("heading", tw.cartPanelTitle)}>
+          <h3 id={dialogTitleId} className={cx("heading", tw.cartPanelTitle)}>
             Cart ({cartCount})
           </h3>
           <button
+            ref={closeButtonRef}
+            type="button"
             className={tw.cartPanelClose}
             onClick={onClose}
             aria-label="Close cart"
@@ -72,7 +114,11 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
           {cart.length === 0 ? (
             <div className={tw.cartPanelEmpty}>
               <p>Your cart is empty.</p>
-              <button className={tw.cartPanelEmptyBtn} onClick={onClose}>
+              <button
+                type="button"
+                className={tw.cartPanelEmptyBtn}
+                onClick={onClose}
+              >
                 Continue Shopping
               </button>
             </div>
@@ -106,12 +152,15 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
 
               <div className={tw.cartPanelPromoRow}>
                 <input
+                  type="text"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
                   placeholder="Promo code"
                   className={tw.cartPanelPromoInput}
+                  aria-label="Promo code"
                 />
                 <button
+                  type="button"
                   className={promoBtnClassName}
                   onClick={applyPromo}
                   disabled={promoApplied}
@@ -123,27 +172,30 @@ function CartPanel({ cart, onUpdateQty, onClose, onRemoveItem, onCheckout }) {
               <div className={tw.cartPanelSummary}>
                 <div className={tw.cartPanelRow}>
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>${pricing.subtotal.toFixed(2)}</span>
                 </div>
-                {discount > 0 && (
+                {pricing.discount > 0 && (
                   <div className={tw.cartPanelRow}>
                     <span>Discount</span>
-                    <span>-${discount.toFixed(2)}</span>
+                    <span>-${pricing.discount.toFixed(2)}</span>
                   </div>
                 )}
                 <div className={tw.cartPanelRow}>
                   <span>Shipping</span>
                   <span>
-                    {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                    {pricing.shipping === 0
+                      ? "Free"
+                      : `$${pricing.shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className={tw.cartPanelTotalRow}>
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>${pricing.total.toFixed(2)}</span>
                 </div>
               </div>
 
               <button
+                type="button"
                 className={tw.cartPanelCheckoutBtn}
                 onClick={handleCheckout}
               >

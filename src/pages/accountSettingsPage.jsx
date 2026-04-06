@@ -5,8 +5,8 @@ import { updateProfile } from "../features/auth/authSlice";
 import { changePasswordApi, updateProfileApi } from "../api/authApi";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { Box, Button, Card, Divider, Input, tw } from "../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 const PROFILE_KEYS = ["firstName", "lastName"];
 const PROFILE_ROWS = [
   [

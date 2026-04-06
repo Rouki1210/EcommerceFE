@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import {
   BrowserRouter,
-  Routes,
+  Navigate,
   Route,
+  Routes,
   useLocation,
 } from "react-router-dom";
 import Layout from "../components/feature/Layout";
@@ -18,17 +19,15 @@ import MyOrdersPage from "../pages/myOrdersPage";
 import OrderTracking from "../pages/orderTracking";
 import CheckoutPage from "../pages/checkoutPage";
 import OurStoryPage from "../pages/ourStoryPage";
-/* ========== ADMIN COMPONENTS - COMMENTED OUT TEMPORARILY ==========
 import AdminLayout from "../components/feature/admin/AdminLayout";
 import ProtectedRoute from "../components/feature/admin/ProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
-import Admindashboard from "../pages/admin/Admindashboard";
-import Adminproducts from "../pages/admin/Adminproducts";
-import Adminorders from "../pages/admin/Adminorders";
-import Adminusers from "../pages/admin/Adminusers";
-import Adminanalytics from "../pages/admin/Adminanalytics";
-import Adminsettings from "../pages/admin/Adminsettings";
-========== END ADMIN COMPONENTS ========== */
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminProducts from "../pages/admin/AdminProducts";
+import AdminOrders from "../pages/admin/AdminOrders";
+import AdminUsers from "../pages/admin/AdminUsers";
+import AdminAnalytics from "../pages/admin/AdminAnalytics";
+import AdminSettings from "../pages/admin/AdminSettings";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -80,9 +79,8 @@ function AppRoutes() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* ========== ADMIN ROUTES - COMMENTED OUT TEMPORARILY ========== */}
-        {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
-        {/* <Route
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
           path="/admin"
           element={
             <ProtectedRoute>
@@ -91,13 +89,13 @@ function AppRoutes() {
           }
         >
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<Admindashboard />} />
-          <Route path="products" element={<Adminproducts />} />
-          <Route path="orders" element={<Adminorders />} />
-          <Route path="users" element={<Adminusers />} />
-          <Route path="analytics" element={<Adminanalytics />} />
-          <Route path="settings" element={<Adminsettings />} />
-        </Route> */}
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { tw } from "../../assets/theme/theme";
+import { cx } from "@lib/cx";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const FOOTER_LINKS = {
   "New Arrivals": "/",

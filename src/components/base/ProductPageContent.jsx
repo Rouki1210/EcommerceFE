@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { tw } from "../../assets/theme/theme";
+import { cx } from "@lib/cx";
 import Button from "./Button";
 import ProductPriceRow from "./ProductPriceRow";
 import ProductSizeSelector from "./ProductSizeSelector";
@@ -10,26 +11,39 @@ import {
   getCategoryLabel,
 } from "./productUiConfig";
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
-
-export default function ProductPageContent({
-  loading,
-  product,
-  shippingThreshold,
-  onBack,
-  onGoHome,
-  onAddToCart,
-}) {
+const ProductPageContent = forwardRef(function ProductPageContent(
+  {
+    loading,
+    product,
+    shippingThreshold,
+    onBack,
+    onGoHome,
+    onAddToCart,
+    onSizeChange,
+    addToCartNoticeTimeout = 2000,
+  },
+  ref,
+) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [added, setAdded] = useState(false);
+  const addNoticeTimeoutRef = useRef(null);
 
   useEffect(() => {
-    if (product?.sizes?.length) {
+    if (Array.isArray(product?.sizes) && product.sizes.length) {
       setSelectedSize(product.sizes[0]);
       return;
     }
+
     setSelectedSize(null);
   }, [product?.id, product?.sizes]);
+
+  useEffect(() => {
+    return () => {
+      if (addNoticeTimeoutRef.current) {
+        clearTimeout(addNoticeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -51,7 +65,7 @@ export default function ProductPageContent({
           </p>
           <Button
             type="button"
-            onClick={onGoHome}
+            onClick={() => onGoHome?.()}
             className={tw.productGridMoreBtn}
           >
             {PRODUCT_UI_COPY.backToHome}
@@ -61,21 +75,35 @@ export default function ProductPageContent({
     );
   }
 
+  const hasSizeOptions =
+    Array.isArray(product.sizes) && product.sizes.length > 0;
+
+  const handleSelectSize = (size) => {
+    setSelectedSize(size);
+    onSizeChange?.(size);
+  };
+
   const handleAddToCart = () => {
     if (typeof onAddToCart !== "function") return;
 
     const updatedVariant = buildVariantWithSize(product, selectedSize);
     onAddToCart({ ...product, variant: updatedVariant, selectedSize });
 
+    if (addNoticeTimeoutRef.current) {
+      clearTimeout(addNoticeTimeoutRef.current);
+    }
+
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    addNoticeTimeoutRef.current = setTimeout(() => {
+      setAdded(false);
+    }, addToCartNoticeTimeout);
   };
 
   return (
-    <section className={tw.pageSection}>
+    <section ref={ref} className={tw.pageSection}>
       <Button
         type="button"
-        onClick={onBack}
+        onClick={() => onBack?.()}
         className={cx("btn-link", tw.productPageBack)}
       >
         {PRODUCT_UI_COPY.back}
@@ -85,7 +113,7 @@ export default function ProductPageContent({
         <div className={tw.productPageImageWrap}>
           <img
             src={product.image}
-            alt={product.name}
+            alt={product.name || "Product image"}
             className={tw.productPageImage}
           />
         </div>
@@ -94,7 +122,9 @@ export default function ProductPageContent({
           <p className={tw.productPageCategory}>
             {getCategoryLabel(product.category)}
           </p>
-          <h1 className={cx("heading", tw.productPageTitle)}>{product.name}</h1>
+          <h1 className={cx("heading", tw.productPageTitle)}>
+            {product.name || "Untitled product"}
+          </h1>
 
           <ProductPriceRow
             price={product.price}
@@ -113,7 +143,7 @@ export default function ProductPageContent({
             label={PRODUCT_UI_COPY.sizeLabel}
             sizes={product.sizes}
             selectedSize={selectedSize}
-            onSelect={setSelectedSize}
+            onSelect={handleSelectSize}
             wrapperClassName={tw.productPageSizeBlock}
             labelClassName={tw.productPageSizeLabel}
             listClassName={tw.productPageSizeList}
@@ -123,6 +153,7 @@ export default function ProductPageContent({
 
           <Button
             type="button"
+            disabled={hasSizeOptions && !selectedSize}
             onClick={handleAddToCart}
             className={tw.productPageAddBtn}
           >
@@ -131,11 +162,11 @@ export default function ProductPageContent({
               : PRODUCT_UI_COPY.addToCartPage}
           </Button>
 
-          {added && (
+          {added ? (
             <p className={tw.productPageAdded}>
               {PRODUCT_UI_COPY.addedNoticePage}
             </p>
-          )}
+          ) : null}
 
           <ProductDetailAccordions
             description={product.description}
@@ -150,4 +181,6 @@ export default function ProductPageContent({
       </div>
     </section>
   );
-}
+});
+
+export default ProductPageContent;

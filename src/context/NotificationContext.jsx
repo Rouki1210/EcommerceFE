@@ -2,61 +2,63 @@ import { useState, useCallback } from "react";
 import NotificationContext from "./notificationContextValue";
 
 export function NotificationProvider({ children }) {
-    const [notifications, setNotifications] = useState([
-        // Seed data mẫu
-        {
-            id: 1,
-            type: "order",
-            title: "New Order",
-            message: "Nguyen Van A just placed order #ORD-8821",
-            time: "2 min ago",
-            read: false,
-            icon: "📦",
-        },
-    ]);
+  const [notifications, setNotifications] = useState([
+    // Seed data mẫu
+    {
+      id: 1,
+      type: "order",
+      title: "New Order",
+      message: "Nguyen Van A just placed order #ORD-8821",
+      time: "2 min ago",
+      read: false,
+      icon: "📦",
+    },
+  ]);
 
-    // Thêm notification mới
-    const addNotification = useCallback((notif) => {
-        const newNotif = {
-            id: Date.now(),
-            read: false,
-            time: "Just now",
-            ...notif,
-        };
-        setNotifications(prev => [newNotif, ...prev]);
-    }, []);
+  // Thêm notification mới
+  const addNotification = useCallback((notif) => {
+    const newNotif = {
+      id: Date.now(),
+      read: false,
+      time: "Just now",
+      ...notif,
+    };
+    setNotifications((prev) => [newNotif, ...prev]);
+  }, []);
 
-    // Đánh dấu đã đọc 1 cái
-    const markAsRead = useCallback((id) => {
-        setNotifications(prev =>
-            prev.map(n => n.id === id ? { ...n, read: true } : n)
-        );
-    }, []);
-
-    // Đánh dấu đã đọc tất cả
-    const markAllAsRead = useCallback(() => {
-        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    }, []);
-
-    // Xoá 1 notification
-    const removeNotification = useCallback((id) => {
-        setNotifications(prev => prev.filter(n => n.id !== id));
-    }, []);
-
-    const unreadCount = notifications.filter(n => !n.read).length;
-
-    return (
-        <NotificationContext.Provider value={{
-            notifications,
-            unreadCount,
-            addNotification,
-            markAsRead,
-            markAllAsRead,
-            removeNotification,
-        }}>
-            {children}
-        </NotificationContext.Provider>
+  // Đánh dấu đã đọc 1 cái
+  const markAsRead = useCallback((id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
     );
+  }, []);
+
+  // Đánh dấu đã đọc tất cả
+  const markAllAsRead = useCallback(() => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  }, []);
+
+  // Xoá 1 notification
+  const removeNotification = useCallback((id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }, []);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  return (
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        unreadCount,
+        addNotification,
+        markAsRead,
+        markAllAsRead,
+        removeNotification,
+      }}
+    >
+      {children}
+    </NotificationContext.Provider>
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

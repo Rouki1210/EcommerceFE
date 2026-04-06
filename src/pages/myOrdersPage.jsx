@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useOrders } from "../hooks/useOrders";
+import { cx } from "@lib/cx";
 import {
   Box,
   Button,
@@ -46,8 +47,6 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   currency: "USD",
   maximumFractionDigits: 2,
 });
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 const formatCurrency = (amount) =>
   currencyFormatter.format(Number.isFinite(amount) ? amount : 0);
