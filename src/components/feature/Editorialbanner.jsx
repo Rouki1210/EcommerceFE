@@ -7,7 +7,7 @@ export default function EditorialBanner({ onCtaClick }) {
     <section className={tw.editorialSection}>
       <div className={tw.editorialPanel}>
         <img
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=500&fit=crop"
+          src=""
           alt="editorial"
           className={tw.editorialImage}
         />

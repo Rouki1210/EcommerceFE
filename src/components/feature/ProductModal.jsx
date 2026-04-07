@@ -9,19 +9,6 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
   const [careOpen, setCareOpen] = useState(false);
   const [added, setAdded] = useState(false);
 
-  useEffect(() => {
-    if (product?.sizes?.length) setSelectedSize(product.sizes[0]);
-    const handler = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handler);
-      document.body.style.overflow = "";
-    };
-  }, [onClose, product]);
-
   if (!product) return null;
 
   const discount =
@@ -57,13 +44,7 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
         className={tw.productModalDialog}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          className={tw.productModalClose}
-          onClick={onClose}
-          aria-label="Close"
-        >
-          ×
-        </button>
+
 
         <div className={tw.productModalMedia}>
           <img
@@ -78,24 +59,6 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
           <h2 className={cx("heading", tw.productModalTitle)}>
             {product.name}
           </h2>
-
-          <div className={tw.productModalPriceRow}>
-            <span className={tw.productModalPrice}>
-              ${Number(product.price).toFixed(2)}
-            </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <>
-                <span className={tw.productModalPriceOld}>
-                  ${Number(product.originalPrice).toFixed(2)}
-                </span>
-                {discount && (
-                  <span className={tw.productModalDiscount}>
-                    Save {discount}%
-                  </span>
-                )}
-              </>
-            )}
-          </div>
 
           <p className={tw.productModalDesc}>{product.description}</p>
 

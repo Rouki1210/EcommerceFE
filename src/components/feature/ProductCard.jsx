@@ -23,19 +23,6 @@ function ProductCard({ product, onAddToCart }) {
     }
   };
 
-  const handleSelectSize = (e, size) => {
-    e.stopPropagation();
-    const colorPart = product.variant?.split(" / ")[0] ?? product.name;
-    onAddToCart({
-      ...product,
-      variant: `${colorPart} / ${size}`,
-      selectedSize: size,
-    });
-    setAdded(true);
-    setShowSizes(false);
-    setTimeout(() => setAdded(false), 1800);
-  };
-
   const goToDetail = () => navigate(`/product/${product.id}`);
 
   const cardClassName = cx(tw.productCardRoot, hovered && tw.productCardRaised);

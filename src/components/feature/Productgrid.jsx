@@ -34,18 +34,6 @@ function ProductGrid({ onAddToCart, onViewDetail }) {
           <p className={tw.productGridEyebrow}>Curated Picks</p>
           <h2 className={cx("heading", tw.productGridTitle)}>New Arrivals</h2>
         </div>
-
-        <div className={tw.productGridFilters}>
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={getFilterBtnClassName(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className={tw.productGridList}>

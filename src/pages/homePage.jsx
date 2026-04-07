@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Hero onShopNow={scrollToProducts} />
+      <Hero />
       <MarqueeStrip />
       <ProductGrid onAddToCart={addToCart} onViewDetail={openProductModal} />
       <EditorialBanner onCtaClick={openCart} />

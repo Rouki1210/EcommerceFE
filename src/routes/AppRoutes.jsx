@@ -45,16 +45,16 @@ function AppRoutes() {
       <Routes>
         {/* User routes */}
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<CollectionPage
+                gender="women"
+                title="Women's Collection"
+                subtitle="Refined essentials for the modern woman"
+              />} />
           <Route path="/shopping-cart" element={<ShoppingCart />} />
           <Route
             path="/women"
             element={
-              <CollectionPage
-                gender="women"
-                title="Women's Collection"
-                subtitle="Refined essentials for the modern woman"
-              />
+              <Home/>
             }
           />
           <Route
@@ -68,35 +68,16 @@ function AppRoutes() {
             }
           />
           <Route path="/sale" element={<SalePage />} />
-          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/product/:id" element={<CheckoutPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/order-tracking" element={<OrderTracking />} />
-          <Route path="/our-story" element={<OurStoryPage />} />
+          <Route path="/order-tracking" element={<OurStoryPage  />} />
+          <Route path="/our-story" element={< OrderTracking/>} />
           <Route path="/profile" element={<AccountSettingsPage />} />
         </Route>
 
         {/* Auth routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-
-        {/* ========== ADMIN ROUTES - COMMENTED OUT TEMPORARILY ========== */}
-        {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
-        {/* <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<Admindashboard />} />
-          <Route path="products" element={<Adminproducts />} />
-          <Route path="orders" element={<Adminorders />} />
-          <Route path="users" element={<Adminusers />} />
-          <Route path="analytics" element={<Adminanalytics />} />
-          <Route path="settings" element={<Adminsettings />} />
-        </Route> */}
       </Routes>
     </BrowserRouter>
   );
